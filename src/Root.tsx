@@ -1,44 +1,31 @@
 import "./index.css";
 import { Composition } from "remotion";
-import { HelloWorld } from "./HelloWorld";
-import { Logo } from "./HelloWorld/Logo";
-
-// Each <Composition> is an entry in the sidebar!
+import { VIDEO } from "./brand";
+import { MyGuest, totalFrames } from "./MyGuest";
+import { EndCard } from "./components/EndCard";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* Vídeo institucional MyGuest — vertical 9:16 para redes sociais.
+          Render: npx remotion render MyGuest out/myguest.mp4 */}
       <Composition
-        // You can take the "id" to render a video:
-        // npx remotion render HelloWorld
-        id="HelloWorld"
-        component={HelloWorld}
-        durationInFrames={150}
-        fps={30}
-        width={1920}
-        height={1080}
-        // You can override these props for each render:
-        // https://www.remotion.dev/docs/parametrized-rendering
-        defaultProps={{
-          titleText: "Welcome to Remotion",
-          titleColor: "#000000",
-          logoColor1: "#91EAE4",
-          logoColor2: "#86A8E7",
-        }}
+        id="MyGuest"
+        component={MyGuest}
+        durationInFrames={totalFrames(VIDEO.fps)}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
       />
 
-      {/* Mount any React component to make it show up in the sidebar and work on it individually! */}
+      {/* Cartão final isolado, para reaproveitar em outras peças. */}
       <Composition
-        id="OnlyLogo"
-        component={Logo}
-        durationInFrames={150}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={{
-          logoColor1: "#91dAE2",
-          logoColor2: "#86A8E7",
-        }}
+        id="CartaoFinal"
+        component={EndCard}
+        durationInFrames={Math.round(VIDEO.fps * 3.6)}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
       />
     </>
   );
