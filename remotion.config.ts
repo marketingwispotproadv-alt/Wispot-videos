@@ -8,5 +8,8 @@ import { enableTailwind } from '@remotion/tailwind-v4';
 
 Config.setRspack(true);
 Config.setVideoImageFormat("jpeg");
+// CRF 23 no lugar do padrão (18): arquivo bem menor e sem diferença visível
+// depois que as redes sociais reprocessam o vídeo
+Config.setCrf(23);
 Config.setOverwriteOutput(true);
 Config.overrideBundlerConfig(enableTailwind);
