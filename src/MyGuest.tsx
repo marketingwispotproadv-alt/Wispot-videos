@@ -5,9 +5,12 @@ import { VIDEO } from "./brand";
 import { SCENES } from "./data/script";
 import { ComplianceBadges } from "./components/ComplianceBadges";
 import { EndCard } from "./components/EndCard";
+import { Headline } from "./components/Headline";
+import { ProductLockup } from "./components/ProductLockup";
 import { Scene } from "./components/Scene";
 import { SectionLabel } from "./components/SectionLabel";
 import { VoucherCard } from "./components/VoucherCard";
+import type { SceneVariant } from "./components/Scene";
 import { WhiteLabelPhone } from "./components/WhiteLabelPhone";
 
 export const END_CARD_SECONDS = 3.6;
@@ -28,14 +31,15 @@ const overlayFor = (clip: string): React.ReactNode => {
     case "8446":
       return (
         <>
-          <SectionLabel>Acesso por voucher</SectionLabel>
+          <ProductLockup outAt={4.1} />
+          <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={4.35} />
           <VoucherCard at={4.35} />
         </>
       );
     case "8450":
       return (
         <>
-          <SectionLabel>Autenticação white label</SectionLabel>
+          <Headline eyebrow="AUTENTICAÇÃO" title="Com a sua marca" at={0.3} />
           <WhiteLabelPhone at={0.9} swapAt={8.75} />
         </>
       );
@@ -50,6 +54,14 @@ const overlayFor = (clip: string): React.ReactNode => {
       return null;
   }
 };
+
+/**
+ * Nos clipes 8446 e 8450 a câmera está só na mesa, sem a apresentadora em
+ * quadro. Neles a tela inteira vira peça de marca — só a locução do clipe é
+ * aproveitada.
+ */
+const variantFor = (clip: string): SceneVariant =>
+  clip === "8446" || clip === "8450" ? "brand" : "footage";
 
 export const MyGuest: React.FC = () => {
   const durations = sceneFrames(VIDEO.fps);
@@ -66,6 +78,7 @@ export const MyGuest: React.FC = () => {
             <Scene
               scene={scene}
               durationInFrames={durations[i]}
+              variant={variantFor(scene.clip)}
               fadeToBrand={i === SCENES.length - 1}
             >
               {overlayFor(scene.clip)}

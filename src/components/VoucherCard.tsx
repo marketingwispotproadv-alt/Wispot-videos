@@ -1,6 +1,6 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COLORS, FONT_FAMILY, GRADIENT } from "../brand";
+import { COLORS, FONT_FAMILY, GRADIENT, SAFE_X } from "../brand";
 
 const Row: React.FC<{
   label: string;
@@ -19,12 +19,10 @@ const Row: React.FC<{
     durationInFrames: 12,
   });
   // a linha nasce apagada e acende quando é citada, ficando acesa depois
-  const on = interpolate(
-    frame - Math.round(activeAt * fps),
-    [0, 7],
-    [0, 1],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-  );
+  const on = interpolate(frame - Math.round(activeAt * fps), [0, 7], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -32,8 +30,8 @@ const Row: React.FC<{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "20px 26px",
-        borderRadius: 20,
+        padding: "26px 32px",
+        borderRadius: 22,
         background: `rgba(37,168,224,${0.03 + on * 0.11})`,
         border: `2px solid rgba(37,168,224,${0.14 + on * 0.5})`,
         opacity: enter,
@@ -44,7 +42,7 @@ const Row: React.FC<{
         style={{
           fontFamily: FONT_FAMILY,
           fontWeight: 600,
-          fontSize: 32,
+          fontSize: 36,
           color: COLORS.gray,
           opacity: 0.55 + on * 0.45,
         }}
@@ -55,7 +53,7 @@ const Row: React.FC<{
         style={{
           fontFamily: FONT_FAMILY,
           fontWeight: 800,
-          fontSize: 34,
+          fontSize: 38,
           color: on > 0.5 ? COLORS.blueDeep : "rgba(81,77,75,0.4)",
         }}
       >
@@ -82,13 +80,13 @@ export const VoucherCard: React.FC<{ at: number }> = ({ at }) => {
     <div
       style={{
         position: "absolute",
-        left: 100,
-        right: 100,
-        top: 620,
-        borderRadius: 40,
+        left: SAFE_X,
+        right: SAFE_X,
+        top: 560,
+        borderRadius: 44,
         overflow: "hidden",
-        background: "rgba(255,255,255,0.96)",
-        boxShadow: "0 32px 80px rgba(0,0,0,0.42)",
+        background: "rgba(255,255,255,0.97)",
+        boxShadow: "0 36px 90px rgba(0,0,0,0.34)",
         opacity: enter,
         transform: `translateY(${interpolate(enter, [0, 1], [56, 0])}px) scale(${interpolate(enter, [0, 1], [0.94, 1])})`,
       }}
@@ -96,28 +94,28 @@ export const VoucherCard: React.FC<{ at: number }> = ({ at }) => {
       <div
         style={{
           background: GRADIENT,
-          padding: "22px 32px",
+          padding: "26px 36px",
           fontFamily: FONT_FAMILY,
           fontWeight: 800,
-          fontSize: 32,
-          letterSpacing: 1.4,
+          fontSize: 34,
+          letterSpacing: 1.6,
           color: COLORS.white,
         }}
       >
         MYGUEST · VOUCHER DE ACESSO
       </div>
 
-      <div style={{ padding: "36px 32px 38px", display: "grid", gap: 18 }}>
+      <div style={{ padding: "42px 36px 44px", display: "grid", gap: 20 }}>
         <div
           style={{
-            border: `4px dashed ${COLORS.blue}`,
-            borderRadius: 24,
-            padding: "26px 0",
+            border: `5px dashed ${COLORS.blue}`,
+            borderRadius: 28,
+            padding: "34px 0",
             textAlign: "center",
             fontFamily: FONT_FAMILY,
             fontWeight: 900,
-            fontSize: 82,
-            letterSpacing: 8,
+            fontSize: 100,
+            letterSpacing: 10,
             color: COLORS.blue,
           }}
         >

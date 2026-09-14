@@ -9,37 +9,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { COLORS, FONT_FAMILY, GRADIENT } from "../brand";
-
-/** Ondas do ícone da marca, pulsando atrás do logo. */
-const Ripples: React.FC = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  return (
-    <>
-      {[0, 1, 2].map((i) => {
-        const p = ((frame / fps) * 0.42 + i / 3) % 1;
-        return (
-          <div
-            key={i}
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              width: 700,
-              height: 700,
-              marginLeft: -350,
-              marginTop: -350,
-              borderRadius: 999,
-              border: "3px solid rgba(255,255,255,0.4)",
-              opacity: interpolate(p, [0, 0.15, 1], [0, 0.26, 0]),
-              transform: `scale(${interpolate(p, [0, 1], [0.45, 1.7])})`,
-            }}
-          />
-        );
-      })}
-    </>
-  );
-};
+import { Ripples } from "./Ripples";
 
 export const EndCard: React.FC = () => {
   const frame = useCurrentFrame();
@@ -67,7 +37,7 @@ export const EndCard: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: GRADIENT }}>
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-        <Ripples />
+        <Ripples size={700} opacity={0.26} />
       </AbsoluteFill>
 
       <AbsoluteFill

@@ -61,12 +61,18 @@ Estrutura do vídeo:
 | Cena | Clipe | Bloco do roteiro | Gráfico |
 | --- | --- | --- | --- |
 | 1 | 8445 | Abertura — o gancho | — |
-| 2 | 8446 | Acesso por voucher | Card de voucher |
-| 3 | 8450 | Autenticação personalizada | Portal em white label |
+| 2 | 8446 | Acesso por voucher | Tela cheia de marca: lockup do MyGuest e card de voucher |
+| 3 | 8450 | Autenticação personalizada | Tela cheia de marca: portal em white label |
 | 4 | 8452 | "E o controle é completo" | — |
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |
 | 6 | 8455 | Fechamento — CTA | — |
 | 7 | — | — | Cartão final |
+
+Nos clipes 8446 e 8450 a câmera está só na mesa, sem a apresentadora em quadro.
+Essas duas cenas rodam na variante `brand` (`variantFor`, em `src/MyGuest.tsx`):
+a tela inteira vira peça de marca e o clipe fica por baixo, desfocado, só como
+textura — é dele que vem a locução. Nelas a legenda também inverte, porque azul
+sobre azul sumiria: a palavra ativa fica em pílula branca com texto azul.
 
 Para reajustar um corte, mexa em `trimStart` / `trimEnd` da cena; para mover um
 gráfico, nos tempos passados em `overlayFor` (`src/MyGuest.tsx`).

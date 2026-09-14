@@ -4,10 +4,20 @@ import { COLORS, FONT_FAMILY, SAFE_X } from "../brand";
 import type { CaptionChunk } from "../data/script";
 
 /**
- * Legenda sincronizada palavra a palavra. Mostra um trecho por vez e realça a
- * palavra que está sendo dita; termos-chave (`hl`) recebem a cor da marca.
+ * `footage` = legenda sobre a imagem: texto branco, palavra ativa em azul.
+ * `brand` = legenda sobre o degradê da marca, onde azul sobre azul sumiria:
+ * a palavra ativa inverte para pílula branca com texto azul.
  */
-export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
+export type CaptionVariant = "footage" | "brand";
+
+/**
+ * Legenda sincronizada palavra a palavra. Mostra um trecho por vez e realça a
+ * palavra que está sendo dita; termos-chave (`hl`) recebem destaque.
+ */
+export const Captions: React.FC<{
+  chunks: CaptionChunk[];
+  variant?: CaptionVariant;
+}> = ({ chunks, variant = "footage" }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -26,6 +36,7 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
     config: { damping: 200, mass: 0.5 },
     durationInFrames: 9,
   });
+  const onBrand = variant === "brand";
 
   return (
     <div
@@ -46,6 +57,13 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
       {chunk.words.map((w, i) => {
         const active = t >= w.start && t < w.end;
         const spoken = t >= w.start;
+        const color = active
+          ? onBrand
+            ? COLORS.blueDeep
+            : COLORS.white
+          : w.hl && !onBrand
+            ? COLORS.blue
+            : COLORS.white;
         return (
           <span
             key={i}
@@ -55,19 +73,21 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
               fontSize: 68,
               lineHeight: 1.16,
               letterSpacing: -1,
-              color: active
-                ? COLORS.white
-                : w.hl
-                  ? COLORS.blue
-                  : COLORS.white,
-              background: active ? COLORS.blue : "transparent",
+              color,
+              background: active
+                ? onBrand
+                  ? COLORS.white
+                  : COLORS.blue
+                : "transparent",
               borderRadius: 16,
               padding: "2px 14px",
               // palavras ainda não ditas ficam levemente recuadas
-              opacity: spoken ? 1 : 0.55,
+              opacity: spoken ? 1 : onBrand ? 0.66 : 0.55,
               textShadow: active
                 ? "none"
-                : "0 4px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.7)",
+                : onBrand
+                  ? "0 3px 14px rgba(0,0,0,0.3)"
+                  : "0 4px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.7)",
               transform: `scale(${active ? 1.04 : 1})`,
             }}
           >
