@@ -3,6 +3,7 @@ import { AbsoluteFill } from "remotion";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
+import { blurWhip } from "./transitions/blurWhip";
 import "./fonts";
 import { VIDEO } from "./brand";
 import { SCENES } from "./data/script";
@@ -82,17 +83,40 @@ const variantFor = (clip: string): SceneVariant =>
   clip === "8446" || clip === "8450" ? "brand" : "footage";
 
 /**
+ * A emenda que vem depois da cena `index`.
+ *
  * As cenas de marca entram pela direita, como quem passa de tela em tela.
  *
- * Entre os planos da apresentadora não dá para usar fade: o enquadramento é
- * quase o mesmo, e a dissolvência sobrepõe dois rostos e duas legendas ao mesmo
- * tempo. Slide de baixo resolve — nada se superpõe e a emenda fica com cara de
- * vertical mesmo. Para o cartão final, aí sim fade: a imagem é outra.
+ * Entre os planos da apresentadora o enquadramento é quase o mesmo, e fade ali
+ * sobrepõe dois rostos e duas legendas ao mesmo tempo. O borrão resolve: as
+ * cenas se cruzam viradas em rastro, e a emenda passa como movimento.
+ *
+ * Para o cartão final, fade: a imagem é outra, não há o que se confundir.
+ *
+ * Devolve o elemento pronto, e não um componente que o embrulhe: a
+ * TransitionSeries identifica os filhos comparando `child.type`, e qualquer
+ * wrapper no meio a faz rejeitar a árvore.
  */
-const presentationFor = (index: number) => {
-  if (index <= 2) return slide({ direction: "from-right" });
-  if (index === TRANSITIONS.length - 1) return fade();
-  return slide({ direction: "from-bottom" });
+const transitionAfter = (index: number): React.ReactNode => {
+  const timing = linearTiming({ durationInFrames: TRANSITIONS[index] });
+
+  if (index <= 2) {
+    return (
+      <TransitionSeries.Transition
+        presentation={slide({ direction: "from-right" })}
+        timing={timing}
+      />
+    );
+  }
+  if (index === TRANSITIONS.length - 1) {
+    return <TransitionSeries.Transition presentation={fade()} timing={timing} />;
+  }
+  return (
+    <TransitionSeries.Transition
+      presentation={blurWhip({ maxBlur: 42, zoom: 0.1 })}
+      timing={timing}
+    />
+  );
 };
 
 export const MyGuest: React.FC = () => {
@@ -112,10 +136,7 @@ export const MyGuest: React.FC = () => {
                 {overlayFor(scene.clip)}
               </Scene>
             </TransitionSeries.Sequence>
-            <TransitionSeries.Transition
-              presentation={presentationFor(i)}
-              timing={linearTiming({ durationInFrames: TRANSITIONS[i] })}
-            />
+            {transitionAfter(i)}
           </React.Fragment>
         ))}
         <TransitionSeries.Sequence

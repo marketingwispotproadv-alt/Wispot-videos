@@ -70,11 +70,16 @@ Estrutura do vídeo:
 
 ## Emendas e trilha
 
-As transições ficam em `TRANSITIONS` e `presentationFor` (`src/MyGuest.tsx`).
+As transições ficam em `TRANSITIONS` e `transitionAfter` (`src/MyGuest.tsx`).
 As cenas de marca entram deslizando pela direita; entre os planos da
-apresentadora o slide vem de baixo. Fade só na entrada do cartão final: entre
-dois planos quase idênticos dela, a dissolvência sobrepõe dois rostos e duas
-legendas ao mesmo tempo.
+apresentadora entra o borrão de `src/transitions/blurWhip.tsx`. Fade só na
+entrada do cartão final: entre dois planos quase idênticos dela, a dissolvência
+sobrepõe dois rostos e duas legendas ao mesmo tempo, e o borrão resolve isso
+virando as duas cenas em rastro.
+
+`transitionAfter` devolve o elemento pronto em vez de um componente que o
+embrulhe — a `TransitionSeries` identifica os filhos comparando `child.type`, e
+qualquer wrapper no meio faz o render falhar.
 
 Cada emenda consome o tempo dela das duas cenas vizinhas, e todas caem em
 trechos mudos das pontas — por isso nenhuma fala se sobrepõe. Ao mexer num
