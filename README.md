@@ -6,7 +6,7 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 
 | ID | Formato | Duração | O que é |
 | --- | --- | --- | --- |
-| `MyGuest` | 1080×1920 (9:16) | ~48,7 s | Vídeo institucional do MyGuest, com locução, legendas sincronizadas e gráficos de marca |
+| `MyGuest` | 1080×1920 (9:16) | ~46,1 s | Vídeo institucional do MyGuest, com locução, trilha, legendas sincronizadas e gráficos de marca |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final isolado, para reaproveitar em outras peças |
 
 ## Comandos
@@ -67,6 +67,22 @@ Estrutura do vídeo:
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |
 | 6 | 8455 | Fechamento — CTA | — |
 | 7 | — | — | Cartão final |
+
+## Emendas e trilha
+
+As transições ficam em `TRANSITIONS` e `presentationFor` (`src/MyGuest.tsx`).
+As cenas de marca entram deslizando pela direita; entre os planos da
+apresentadora o slide vem de baixo. Fade só na entrada do cartão final: entre
+dois planos quase idênticos dela, a dissolvência sobrepõe dois rostos e duas
+legendas ao mesmo tempo.
+
+Cada emenda consome o tempo dela das duas cenas vizinhas, e todas caem em
+trechos mudos das pontas — por isso nenhuma fala se sobrepõe. Ao mexer num
+corte, confira se a emenda continua caindo no silêncio.
+
+A trilha (`public/audio/music.mp3`, fornecida pela Wispot) foi cortada em 48 s e
+normalizada a −20 LUFS. O volume é controlado em `src/components/MusicBed.tsx`:
+fica baixo sob a locução e sobe no cartão final, que não tem fala.
 
 Nos clipes 8446 e 8450 a câmera está só na mesa, sem a apresentadora em quadro.
 Essas duas cenas rodam na variante `brand` (`variantFor`, em `src/MyGuest.tsx`):

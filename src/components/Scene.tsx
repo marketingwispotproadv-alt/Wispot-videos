@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  AbsoluteFill,
-  interpolate,
-  OffthreadVideo,
-  staticFile,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
-import { GRADIENT } from "../brand";
+import { AbsoluteFill, OffthreadVideo, staticFile, useVideoConfig } from "remotion";
 import type { SceneDef } from "../data/script";
 import { BrandBackdrop } from "./BrandBackdrop";
 import { Captions } from "./Captions";
@@ -24,27 +16,11 @@ export type SceneVariant = "footage" | "brand";
 
 export const Scene: React.FC<{
   scene: SceneDef;
-  durationInFrames: number;
   variant?: SceneVariant;
-  fadeToBrand?: boolean;
   children?: React.ReactNode;
-}> = ({
-  scene,
-  durationInFrames,
-  variant = "footage",
-  fadeToBrand,
-  children,
-}) => {
-  const frame = useCurrentFrame();
+}> = ({ scene, variant = "footage", children }) => {
   const { fps } = useVideoConfig();
   const onBrand = variant === "brand";
-
-  const fade = fadeToBrand
-    ? interpolate(frame, [durationInFrames - 9, durationInFrames - 1], [0, 1], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-      })
-    : 0;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
@@ -65,9 +41,6 @@ export const Scene: React.FC<{
       <Watermark />
       {children}
       <Captions chunks={scene.chunks} variant={variant} />
-      {fade > 0 ? (
-        <AbsoluteFill style={{ background: GRADIENT, opacity: fade }} />
-      ) : null}
     </AbsoluteFill>
   );
 };

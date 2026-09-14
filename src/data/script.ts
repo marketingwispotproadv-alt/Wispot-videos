@@ -59,10 +59,10 @@ export const SCENES: SceneDef[] = [
   },
   {
     clip: "8452",
-    trimStart: 0.75,
+    trimStart: 1.05,
     trimEnd: 2.69,
     chunks: [
-      { words: [{ text: "E", start: 0.25, end: 0.39 }, { text: "o", start: 0.39, end: 0.47 }, { text: "controle", start: 0.47, end: 0.87 }, { text: "é", start: 0.87, end: 1.09 }, { text: "completo.", start: 1.09, end: 1.47 }] },
+      { words: [{ text: "E", start: 0, end: 0.09 }, { text: "o", start: 0.09, end: 0.17 }, { text: "controle", start: 0.17, end: 0.57 }, { text: "é", start: 0.57, end: 0.79 }, { text: "completo.", start: 0.79, end: 1.17 }] },
     ],
   },
   {
