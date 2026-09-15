@@ -3,11 +3,11 @@ import { Composition } from "remotion";
 import { VIDEO } from "./brand";
 import { MyGuest, totalFrames } from "./MyGuest";
 import { EndCard } from "./components/EndCard";
-import {
-  ProAdvanced,
-  totalFrames as proAdvancedFrames,
-} from "./proadv/ProAdvanced";
-import { EndCard as ProAdvancedEndCard } from "./proadv/components/EndCard";
+import { proadvancedFirewall } from "./pieces/proadvancedFirewall";
+import { BrandProvider } from "./template/BrandContext";
+import { EndCard as PieceEndCard } from "./template/components/EndCard";
+import { Piece } from "./template/Piece";
+import { totalFrames as pieceFrames } from "./template/timing";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -33,21 +33,33 @@ export const RemotionRoot: React.FC = () => {
         height={VIDEO.height}
       />
 
-      {/* Firewall gerenciado — ProAdvanced, vertical 9:16.
-          Render: npx remotion render ProAdvanced out/proadvanced.mp4 */}
+      {/* Peças montadas com o template de `src/template`.
+          Render: npx remotion render ProAdvancedFirewall out/proadvanced.mp4 */}
       <Composition
-        id="ProAdvanced"
-        component={ProAdvanced}
-        durationInFrames={proAdvancedFrames(VIDEO.fps)}
+        id={proadvancedFirewall.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedFirewall }}
+        durationInFrames={pieceFrames(
+          proadvancedFirewall.scenes,
+          proadvancedFirewall.endCard.seconds,
+          VIDEO.fps,
+        )}
         fps={VIDEO.fps}
         width={VIDEO.width}
         height={VIDEO.height}
       />
 
+      {/* Cartão final isolado, para reaproveitar em outras peças. */}
       <Composition
-        id="ProAdvancedCartaoFinal"
-        component={ProAdvancedEndCard}
-        durationInFrames={Math.round(VIDEO.fps * 4)}
+        id={`${proadvancedFirewall.id}CartaoFinal`}
+        component={() => (
+          <BrandProvider brand={proadvancedFirewall.brand}>
+            <PieceEndCard config={proadvancedFirewall.endCard} />
+          </BrandProvider>
+        )}
+        durationInFrames={Math.round(
+          VIDEO.fps * proadvancedFirewall.endCard.seconds,
+        )}
         fps={VIDEO.fps}
         width={VIDEO.width}
         height={VIDEO.height}

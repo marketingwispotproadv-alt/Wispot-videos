@@ -1,0 +1,107 @@
+/**
+ * O estilo desta peça — plano do apresentador cortado em muitos takes, legenda
+ * palavra a palavra e fichas que se acumulam — virou modelo. Estes são os tipos
+ * que uma peça nova precisa preencher; o resto (`src/template`) não muda.
+ */
+
+export type Brand = {
+  name: string;
+  colors: {
+    /** cor que carrega a marca: pílula da palavra ativa, fichas, etiqueta */
+    primary: string;
+    /** variação clara: topo do degradê e termo-chave ainda não dito */
+    primaryLight: string;
+    /** cinza institucional */
+    neutral: string;
+    white: string;
+    /** fundo escuro, para a ficha de risco */
+    ink: string;
+  };
+  gradient: string;
+  fontFamily: string;
+  logo: {
+    /** lockup completo em branco, para fundo de marca ou imagem escura */
+    lockupWhite: string;
+    /** lockup completo colorido, para fundo branco */
+    lockupColor: string;
+    iconWhite: string;
+    iconColor: string;
+  };
+};
+
+export type CaptionWord = {
+  text: string;
+  start: number;
+  end: number;
+  /** termo que carrega o sentido da frase: ganha a cor da marca */
+  hl?: boolean;
+};
+
+export type CaptionChunk = { words: CaptionWord[] };
+
+export type SceneDef = {
+  /** nome do arquivo em `clipsDir`, sem extensão */
+  clip: string;
+  /** corte no material original, em segundos */
+  trimStart: number;
+  trimEnd: number;
+  /**
+   * Legenda em trechos curtos, com tempo em segundos contados do início da
+   * cena já cortada. O silêncio antes da primeira palavra e depois da última é
+   * o que sobra para a emenda — `src/template/timing.ts` mede isso sozinho.
+   */
+  chunks: CaptionChunk[];
+};
+
+/**
+ * `ok` = o que está sob controle.
+ * `question` = a dúvida que o roteiro levanta.
+ * `risk` = o que saiu do padrão.
+ */
+export type Tone = "ok" | "question" | "risk";
+
+export type RuleItem = {
+  text: string;
+  tone?: Tone;
+  /**
+   * Segundo em que a ficha entra, contado do início da cena. Sem isto, a ficha
+   * já está em cena desde o primeiro quadro — é a que veio do take anterior, e
+   * é isso que faz takes seguidos lerem como um bloco só.
+   */
+  at?: number;
+};
+
+export type Overlay = {
+  /** etiqueta do bloco do roteiro, abaixo da assinatura */
+  label?: string;
+  items?: RuleItem[];
+};
+
+export type EndCardConfig = {
+  /** duas linhas curtas; a quebra é sua */
+  tagline: string[];
+  /** o que vai na pílula branca, normalmente o site */
+  callToAction: string;
+  seconds: number;
+};
+
+export type MusicConfig = {
+  /** caminho em `public/`, já normalizado a −20 LUFS */
+  src: string;
+  /** volume sob a locução e no cartão final */
+  under?: number;
+  over?: number;
+};
+
+export type PieceConfig = {
+  /** id da composição no Remotion Studio */
+  id: string;
+  brand: Brand;
+  /** pasta em `public/` com os clipes já convertidos */
+  clipsDir: string;
+  scenes: SceneDef[];
+  /** gráficos por clipe, na chave do `clip` da cena */
+  overlays?: Record<string, Overlay>;
+  endCard: EndCardConfig;
+  music?: MusicConfig;
+};

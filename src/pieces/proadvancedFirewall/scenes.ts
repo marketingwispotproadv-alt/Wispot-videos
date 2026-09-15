@@ -1,42 +1,17 @@
-// Gerado da transcrição dos 16 takes (faster-whisper large-v3, word timestamps),
-// com o roteiro passado como contexto para os nomes de marca saírem certos.
-// Os tempos das legendas são relativos ao início da cena já cortada.
+// Gerado de `tools/build_scenes.py` a partir dos 16 takes (faster-whisper
+// large-v3, word timestamps), com o roteiro passado como contexto para os
+// nomes de marca saírem certos.
 //
-// O corte de cada cena começa 0,20 s antes da primeira palavra e termina 0,30 s
-// depois da última — folga suficiente para as emendas caírem no silêncio.
+// O corte de cada cena começa 0,20 s antes da primeira palavra e termina
+// 0,30 s depois da última — folga suficiente para as emendas caírem no
+// silêncio. `src/template/timing.ts` mede essa folga e decide a emenda.
 
-export type CaptionWord = {
-  text: string;
-  start: number;
-  end: number;
-  /** termo que carrega o sentido da frase: ganha a cor da marca */
-  hl?: boolean;
-};
-
-export type CaptionChunk = { words: CaptionWord[] };
-
-/** Blocos do roteiro. O bloco decide o gráfico e o tratamento da cena. */
-export type Block =
-  | "abertura"
-  | "oQueFaz"
-  | "regrasEnvelhecem"
-  | "gestao"
-  | "fechamento";
-
-export type SceneDef = {
-  clip: string;
-  block: Block;
-  /** corte no material original, em segundos */
-  trimStart: number;
-  trimEnd: number;
-  chunks: CaptionChunk[];
-};
+import type { SceneDef } from "../../template/types";
 
 export const SCENES: SceneDef[] = [
   {
     // "Ter um firewall não significa que a sua empresa está protegida."
     clip: "8413",
-    block: "abertura",
     trimStart: 0.76,
     trimEnd: 3.92,
     chunks: [
@@ -48,7 +23,6 @@ export const SCENES: SceneDef[] = [
   {
     // "O que faz diferença é como ele está configurado e gerenciado."
     clip: "8414",
-    block: "abertura",
     trimStart: 0.56,
     trimEnd: 5.4,
     chunks: [
@@ -60,7 +34,6 @@ export const SCENES: SceneDef[] = [
   {
     // "O firewall é uma das principais camadas de segurança de rede."
     clip: "8415",
-    block: "oQueFaz",
     trimStart: 0.38,
     trimEnd: 5.1,
     chunks: [
@@ -72,18 +45,16 @@ export const SCENES: SceneDef[] = [
   {
     // "Ele controla o tráfego e define os acessos."
     clip: "8417",
-    block: "oQueFaz",
     trimStart: 0.0,
     trimEnd: 4.12,
     chunks: [
-      { words: [{ text: "Ele", start: 0.2, end: 1.3 }, { text: "controla", start: 1.3, end: 1.88 }, { text: "o", start: 1.88, end: 2.06 }, { text: "tráfego", start: 2.06, end: 2.62 }] },
-      { words: [{ text: "e", start: 2.62, end: 2.9 }, { text: "define", start: 2.9, end: 3.26 }, { text: "os", start: 3.26, end: 3.42 }, { text: "acessos.", start: 3.42, end: 4.02 }] },
+      { words: [{ text: "Ele", start: 0.0, end: 1.1 }, { text: "controla", start: 1.1, end: 1.68 }, { text: "o", start: 1.68, end: 1.86 }, { text: "tráfego", start: 1.86, end: 2.42 }] },
+      { words: [{ text: "e", start: 2.42, end: 2.7 }, { text: "define", start: 2.7, end: 3.06 }, { text: "os", start: 3.06, end: 3.22 }, { text: "acessos.", start: 3.22, end: 3.82 }] },
     ],
   },
   {
     // "E ajuda a bloquear conexões que representam ameaça."
     clip: "8419",
-    block: "oQueFaz",
     trimStart: 0.58,
     trimEnd: 5.48,
     chunks: [
@@ -95,7 +66,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Mas essas regras não podem ficar paradas no tempo."
     clip: "8420",
-    block: "regrasEnvelhecem",
     trimStart: 0.18,
     trimEnd: 3.98,
     chunks: [
@@ -107,7 +77,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Porta que não deveria estar mais aberta."
     clip: "8421",
-    block: "regrasEnvelhecem",
     trimStart: 0.24,
     trimEnd: 2.56,
     chunks: [
@@ -118,7 +87,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Acesso antigo ou configurações desatualizadas."
     clip: "8424",
-    block: "regrasEnvelhecem",
     trimStart: 5.36,
     trimEnd: 8.92,
     chunks: [
@@ -129,7 +97,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Podem criar brechas mesmo com o firewall instalado."
     clip: "8426",
-    block: "regrasEnvelhecem",
     trimStart: 0.26,
     trimEnd: 3.68,
     chunks: [
@@ -140,7 +107,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Na Pro Advanced, o firewall é gerenciado continuamente."
     clip: "8427",
-    block: "gestao",
     trimStart: 0.28,
     trimEnd: 4.94,
     chunks: [
@@ -152,7 +118,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Revisamos regras, acompanhamos o ambiente."
     clip: "8429",
-    block: "gestao",
     trimStart: 0.18,
     trimEnd: 2.68,
     chunks: [
@@ -163,7 +128,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Ajustamos as configurações de acordo com as necessidades."
     clip: "8430",
-    block: "gestao",
     trimStart: 0.5,
     trimEnd: 4.24,
     chunks: [
@@ -174,7 +138,6 @@ export const SCENES: SceneDef[] = [
   {
     // "E os riscos de operações."
     clip: "8434",
-    block: "gestao",
     trimStart: 0.26,
     trimEnd: 2.66,
     chunks: [
@@ -185,7 +148,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Firewall não é só instalar e deixar funcionando."
     clip: "8435",
-    block: "fechamento",
     trimStart: 0.2,
     trimEnd: 3.96,
     chunks: [
@@ -196,7 +158,6 @@ export const SCENES: SceneDef[] = [
   {
     // "É manter a operação atualizada todos os dias."
     clip: "8438",
-    block: "fechamento",
     trimStart: 2.6,
     trimEnd: 6.14,
     chunks: [
@@ -207,7 +168,6 @@ export const SCENES: SceneDef[] = [
   {
     // "Fale com a Pro Advanced e saiba como está a segurança da sua rede."
     clip: "8439",
-    block: "fechamento",
     trimStart: 0.64,
     trimEnd: 4.72,
     chunks: [

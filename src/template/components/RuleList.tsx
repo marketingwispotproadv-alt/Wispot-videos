@@ -1,32 +1,15 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COLORS, FONT_FAMILY, blueAlpha } from "../../brands/proadvanced";
+import { useBrand } from "../BrandContext";
 import { GRAPHICS_TOP, SAFE_X } from "../layout";
-
-/**
- * `ok` = o que o firewall faz, e o que a ProAdvanced faz.
- * `question` = a dúvida da abertura: instalado não quer dizer protegido.
- * `risk` = a regra que envelheceu.
- *
- * O manual da ProAdvanced não tem cor de alerta — só azul, cinza e branco. O
- * risco então não é vermelho: é a mesma ficha escurecida, de borda tracejada,
- * como algo que saiu do padrão. O azul fica reservado para o que está sob
- * controle, e a diferença entre as duas colunas se lê sozinha.
- */
-export type Tone = "ok" | "question" | "risk";
-
-export type RuleItem = {
-  text: string;
-  tone?: Tone;
-  /** segundo em que entra; sem isso, já está em cena desde o primeiro quadro */
-  at?: number;
-};
+import type { RuleItem, Tone } from "../types";
 
 const GLYPH: Record<Tone, string> = { ok: "✓", question: "?", risk: "!" };
 
 const Row: React.FC<{ item: RuleItem }> = ({ item }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors, fontFamily } = useBrand();
   const tone = item.tone ?? "ok";
 
   // sem `at`, a ficha vem da cena anterior e não deve reanimar no corte
@@ -52,7 +35,7 @@ const Row: React.FC<{ item: RuleItem }> = ({ item }) => {
         gap: 22,
         padding: "22px 34px",
         borderRadius: 22,
-        background: risk ? "rgba(27,28,28,0.62)" : blueAlpha(0.88),
+        background: risk ? `${colors.ink}9E` : `${colors.primary}E0`,
         border: risk
           ? "2px dashed rgba(255,255,255,0.45)"
           : "2px solid rgba(255,255,255,0.18)",
@@ -67,9 +50,9 @@ const Row: React.FC<{ item: RuleItem }> = ({ item }) => {
           width: 52,
           height: 52,
           borderRadius: 999,
-          background: risk ? COLORS.gray : COLORS.white,
-          color: risk ? COLORS.white : COLORS.blue,
-          fontFamily: FONT_FAMILY,
+          background: risk ? colors.neutral : colors.white,
+          color: risk ? colors.white : colors.primary,
+          fontFamily,
           fontWeight: 800,
           fontSize: 32,
           display: "flex",
@@ -81,12 +64,12 @@ const Row: React.FC<{ item: RuleItem }> = ({ item }) => {
       </span>
       <span
         style={{
-          fontFamily: FONT_FAMILY,
+          fontFamily,
           fontWeight: 700,
           fontSize: 44,
           lineHeight: 1.16,
           letterSpacing: -0.5,
-          color: COLORS.white,
+          color: colors.white,
         }}
       >
         {item.text}
@@ -95,7 +78,14 @@ const Row: React.FC<{ item: RuleItem }> = ({ item }) => {
   );
 };
 
-/** Fichas que vão se acumulando ao longo de um bloco do roteiro. */
+/**
+ * Fichas que vão se acumulando ao longo de um bloco do roteiro.
+ *
+ * Um manual de marca raramente tem cor de alerta. O risco aqui não é vermelho:
+ * é a mesma ficha escurecida, de borda tracejada, como algo que saiu do padrão.
+ * A cor da marca fica reservada para o que está sob controle, e a diferença
+ * entre as duas se lê sozinha.
+ */
 export const RuleList: React.FC<{ items: RuleItem[]; top?: number }> = ({
   items,
   top = GRAPHICS_TOP,

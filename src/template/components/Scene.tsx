@@ -8,12 +8,12 @@ import {
   useVideoConfig,
 } from "remotion";
 import { Scrim } from "../../components/Scrim";
-import type { SceneDef } from "../data/script";
+import type { SceneDef } from "../types";
 import { Captions } from "./Captions";
 import { Watermark } from "./Watermark";
 
 /**
- * Uma cena é um take. São dezesseis, todos com o mesmo enquadramento — mesma
+ * Uma cena é um take. São muitos, todos com o mesmo enquadramento — mesma
  * cadeira, mesmo fundo, mesma distância —, então corte seco entre dois deles
  * salta aos olhos.
  *
@@ -25,11 +25,12 @@ import { Watermark } from "./Watermark";
  */
 export const Scene: React.FC<{
   scene: SceneDef;
+  clipsDir: string;
   durationInFrames: number;
   /** +1 fecha o quadro ao longo da cena, -1 abre */
   push?: 1 | -1;
   children?: React.ReactNode;
-}> = ({ scene, durationInFrames, push = 1, children }) => {
+}> = ({ scene, clipsDir, durationInFrames, push = 1, children }) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
@@ -44,7 +45,7 @@ export const Scene: React.FC<{
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       <OffthreadVideo
-        src={staticFile(`proadv/clips/${scene.clip}.mp4`)}
+        src={staticFile(`${clipsDir}/${scene.clip}.mp4`)}
         trimBefore={Math.round(scene.trimStart * fps)}
         trimAfter={Math.round(scene.trimEnd * fps)}
         style={{

@@ -1,6 +1,6 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COLORS, FONT_FAMILY, GRADIENT } from "../../brands/proadvanced";
+import { useBrand } from "../BrandContext";
 import { SAFE_X } from "../layout";
 
 /** Etiqueta que nomeia o bloco do roteiro, ancorada abaixo da assinatura. */
@@ -10,6 +10,7 @@ export const SectionLabel: React.FC<{
 }> = ({ children, at = 0.1 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors, gradient, fontFamily } = useBrand();
   const enter = spring({
     frame: frame - Math.round(at * fps),
     fps,
@@ -28,8 +29,8 @@ export const SectionLabel: React.FC<{
         gap: 13,
         padding: "14px 28px",
         borderRadius: 999,
-        background: GRADIENT,
-        boxShadow: "0 10px 32px rgba(32,163,214,0.42)",
+        background: gradient,
+        boxShadow: `0 10px 32px ${colors.primaryLight}6B`,
         opacity: enter,
         transform: `translateX(${interpolate(enter, [0, 1], [-36, 0])}px)`,
       }}
@@ -39,17 +40,17 @@ export const SectionLabel: React.FC<{
           width: 11,
           height: 11,
           borderRadius: 999,
-          background: COLORS.white,
+          background: colors.white,
           opacity: 0.9,
         }}
       />
       <span
         style={{
-          fontFamily: FONT_FAMILY,
+          fontFamily,
           fontWeight: 700,
           fontSize: 32,
           letterSpacing: 0.4,
-          color: COLORS.white,
+          color: colors.white,
         }}
       >
         {children}

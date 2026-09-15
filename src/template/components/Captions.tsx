@@ -1,21 +1,22 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COLORS, FONT_FAMILY } from "../../brands/proadvanced";
-import { SAFE_X } from "../layout";
-import type { CaptionChunk } from "../data/script";
+import { useBrand } from "../BrandContext";
+import { CAPTION_BOTTOM, SAFE_X } from "../layout";
+import type { CaptionChunk } from "../types";
 
 /**
  * Legenda sincronizada palavra a palavra: mostra um trecho por vez e acende a
- * palavra que está sendo dita. Os trechos são curtos de propósito — são
- * dezesseis takes emendados, e linha curta deixa o corte respirar.
+ * palavra que está sendo dita. Os trechos são curtos de propósito — a peça é
+ * feita de muitos takes emendados, e linha curta deixa o corte respirar.
  *
- * A palavra ativa vira pílula azul; os termos que carregam o sentido da frase
- * (`hl`) já entram em azul antes de serem ditos, para o olho pegar a ideia
- * mesmo em vídeo mudo.
+ * A palavra ativa vira pílula da cor da marca; os termos que carregam o
+ * sentido (`hl`) já entram coloridos antes de serem ditos, para o olho pegar a
+ * ideia mesmo com o vídeo mudo — que é como a maior parte das pessoas assiste.
  */
 export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors, fontFamily } = useBrand();
   const t = frame / fps;
   const LEAD = 0.16;
 
@@ -40,7 +41,7 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
         position: "absolute",
         left: SAFE_X,
         right: SAFE_X,
-        bottom: 236,
+        bottom: CAPTION_BOTTOM,
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
@@ -57,13 +58,17 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
           <span
             key={i}
             style={{
-              fontFamily: FONT_FAMILY,
+              fontFamily,
               fontWeight: 800,
               fontSize: 66,
               lineHeight: 1.14,
               letterSpacing: -1,
-              color: active ? COLORS.white : w.hl ? COLORS.blueLight : COLORS.white,
-              background: active ? COLORS.blue : "transparent",
+              color: active
+                ? colors.white
+                : w.hl
+                  ? colors.primaryLight
+                  : colors.white,
+              background: active ? colors.primary : "transparent",
               borderRadius: 14,
               padding: "2px 14px",
               opacity: spoken ? 1 : 0.58,

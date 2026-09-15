@@ -8,12 +8,14 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { COLORS, FONT_FAMILY, LOGO } from "../../brands/proadvanced";
+import { useBrand } from "../BrandContext";
+import type { EndCardConfig } from "../types";
 import { BrandBackdrop } from "./BrandBackdrop";
 
-export const EndCard: React.FC = () => {
+export const EndCard: React.FC<{ config: EndCardConfig }> = ({ config }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { colors, fontFamily, logo } = useBrand();
 
   const step = (delay: number, mass: number) =>
     spring({
@@ -23,26 +25,22 @@ export const EndCard: React.FC = () => {
       durationInFrames: 20,
     });
 
-  const logo = step(0, 0.9);
+  const mark = step(0, 0.9);
   const line = step(11, 0.7);
-  const site = step(22, 0.7);
+  const cta = step(22, 0.7);
 
   return (
     <AbsoluteFill>
       <BrandBackdrop />
       <AbsoluteFill
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 90,
-        }}
+        style={{ alignItems: "center", justifyContent: "center", padding: 90 }}
       >
         <Img
-          src={staticFile(LOGO.white)}
+          src={staticFile(logo.lockupWhite)}
           style={{
             width: 780,
-            opacity: logo,
-            transform: `scale(${interpolate(logo, [0, 1], [0.88, 1])})`,
+            opacity: mark,
+            transform: `scale(${interpolate(mark, [0, 1], [0.88, 1])})`,
             filter: "drop-shadow(0 12px 40px rgba(0,0,0,0.3))",
           }}
         />
@@ -61,7 +59,7 @@ export const EndCard: React.FC = () => {
         <div
           style={{
             marginTop: 46,
-            fontFamily: FONT_FAMILY,
+            fontFamily,
             fontWeight: 600,
             fontSize: 46,
             lineHeight: 1.36,
@@ -71,9 +69,12 @@ export const EndCard: React.FC = () => {
             transform: `translateY(${interpolate(line, [0, 1], [22, 0])}px)`,
           }}
         >
-          Firewall gerenciado,
-          <br />
-          proteção atualizada todo dia.
+          {config.tagline.map((row, i) => (
+            <React.Fragment key={row}>
+              {i > 0 ? <br /> : null}
+              {row}
+            </React.Fragment>
+          ))}
         </div>
 
         <div
@@ -81,17 +82,17 @@ export const EndCard: React.FC = () => {
             marginTop: 58,
             padding: "26px 54px",
             borderRadius: 999,
-            background: COLORS.white,
-            fontFamily: FONT_FAMILY,
+            background: colors.white,
+            fontFamily,
             fontWeight: 800,
             fontSize: 46,
-            color: COLORS.blue,
-            opacity: site,
-            transform: `translateY(${interpolate(site, [0, 1], [22, 0])}px)`,
+            color: colors.primary,
+            opacity: cta,
+            transform: `translateY(${interpolate(cta, [0, 1], [22, 0])}px)`,
             boxShadow: "0 18px 46px rgba(0,0,0,0.24)",
           }}
         >
-          proadvanced.com.br
+          {config.callToAction}
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

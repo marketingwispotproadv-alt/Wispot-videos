@@ -1,0 +1,18 @@
+Ter um firewall não significa, necessariamente, que a sua empresa está protegida.
+O que faz diferença é como ele está configurado e gerenciado.
+
+O firewall é uma das principais camadas de proteção da rede. Ele controla o
+tráfego, define acessos e ajuda a bloquear conexões que podem representar uma
+ameaça.
+
+Mas essas regras não podem ficar paradas no tempo. Porta que não deveria mais
+estar aberta, acesso antigo ou configuração desatualizada podem criar brechas
+mesmo com o firewall instalado.
+
+Na Pro Advanced, o firewall é gerenciado continuamente. Revisamos regras,
+acompanhamos o ambiente e ajustamos as configurações de acordo com as
+necessidades e os riscos da operação.
+
+Firewall não é só instalar e deixar funcionando. É manter a proteção atualizada
+todos os dias. Fale com a Pro Advanced e saiba como está a segurança da sua
+rede.

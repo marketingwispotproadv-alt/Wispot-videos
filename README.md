@@ -9,19 +9,19 @@ ProAdvanced.
 | --- | --- | --- | --- |
 | `MyGuest` | 1080×1920 (9:16) | ~44,8 s | Vídeo institucional do MyGuest (Wispot), com locução, trilha, legendas sincronizadas e gráficos de marca |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final do MyGuest, isolado |
-| `ProAdvanced` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
-| `ProAdvancedCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
+| `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
+| `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
 
-As duas marcas convivem no mesmo projeto. Os tokens ficam em `src/brands/`, e a
-peça da ProAdvanced tem componentes próprios em `src/proadv/` — o que é
-realmente neutro (`components/Scrim`, `transitions/blurWhip`) é compartilhado.
+O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
+A peça da ProAdvanced é montada com o template de `src/template/`; as duas
+compartilham `components/Scrim`, `transitions/blurWhip` e a fonte.
 
 ## Comandos
 
 ```bash
 npm run dev                                          # abre o Remotion Studio
 npx remotion render MyGuest out/myguest.mp4          # renderiza o vídeo da Wispot
-npx remotion render ProAdvanced out/proadvanced.mp4  # renderiza o da ProAdvanced
+npx remotion render ProAdvancedFirewall out/proadvanced.mp4  # renderiza o da ProAdvanced
 npm run lint                                         # eslint + tsc
 ```
 
@@ -130,9 +130,121 @@ aconteceu com os selos de conformidade neste corte.
 
 ---
 
+# O template
+
+O estilo da peça da ProAdvanced — plano do apresentador cortado em muitos
+takes, legenda palavra a palavra, fichas que se acumulam e cartão final de
+marca — está em `src/template/`, separado de qualquer marca. Uma peça nova é um
+arquivo de configuração e uma pasta de clipes.
+
+```
+src/template/          o estilo: não muda de peça para peça
+  types.ts             o que uma peça precisa preencher
+  timing.ts            mede a folga muda e decide cada emenda
+  Piece.tsx            a composição
+  components/          Scene, Captions, RuleList, SectionLabel, EndCard…
+src/brands/            tokens por marca
+src/pieces/            uma pasta por peça
+tools/                 conversão dos clipes e montagem do scenes.ts
+```
+
+## Fazer uma peça nova
+
+**1. Converter o material.** Um clipe por frase do roteiro.
+
+```bash
+tools/convert_clips.sh ~/brutos public/minhamarca/clips
+```
+
+**2. Montar as cenas e as legendas.**
+
+```bash
+python3 tools/build_scenes.py \
+  --clips public/minhamarca/clips \
+  --roteiro src/pieces/minhaPeca/roteiro.txt \
+  --out src/pieces/minhaPeca/scenes.ts \
+  --nomes "Minha Marca" \
+  --destaques "termo,outro termo"
+```
+
+A ferramenta transcreve com faster-whisper `large-v3` passando o roteiro como
+contexto, ancora o corte na primeira e na última palavra do roteiro com folga
+de 0,20 s na cabeça e 0,30 s na cauda, e **imprime uma lista do que precisa de
+olho humano**. Leia essa lista: é ali que estão os casos que ela não decide
+sozinha.
+
+**3. Conferir o texto.** A transcrição erra uma palavra aqui e ali — na peça da
+ProAdvanced foram três em dezesseis cenas. Compare com o roteiro e ajuste no
+`scenes.ts`, mantendo os tempos.
+
+**4. Escrever a configuração**, no formato de
+`src/pieces/proadvancedFirewall/index.ts`: marca, pasta dos clipes, fichas por
+clipe e cartão final. Registre no `src/Root.tsx`.
+
+## O que a ferramenta não decide
+
+**Take com mais de uma tentativa dentro do arquivo.** Acontece bastante: a
+pessoa erra, para, e refaz sem cortar a gravação. A ferramenta detecta trechos
+de fala separados por silêncio e avisa; você escolhe a tomada boa e passa
+`--regiao 8424:5.3-8.8`. Aí o áudio é cortado **antes** de transcrever — filtrar
+as palavras depois não serve, porque num take assim os tempos que o modelo
+devolve para o trecho ruim são justamente os que não dá para confiar.
+
+Na peça da ProAdvanced foram dois:
+
+| Clipe | O que tem dentro |
+| --- | --- |
+| `8424` | "Ok? Acesso antigo ou..." → "Confirmo... Não, é... Vamos lá." → a tomada boa aos 5,5 s |
+| `8438` | "Não, tira." → a tomada boa aos 2,9 s |
+
+**Alucinação em trecho mudo.** Pedir transcrição do silêncio entre as falas
+devolve "Tchau", "Boa noite", "Se inscreva no canal", "Seja bem-vindo" — frases
+que o modelo aprendeu de vídeo do YouTube e despeja quando não há fala. Ancorar
+o corte nas palavras do roteiro já as descarta. O que a ferramenta ainda faz é
+medir o nível de cada palavra descartada e avisar quando ela está alta demais
+para ser ruído — aí vale conferir na mão.
+
+## Por que as emendas são medidas, não escolhidas
+
+`src/template/timing.ts` olha cada cena, mede o silêncio antes da primeira
+palavra e depois da última, e emenda com o menor dos dois lados, até 6 quadros.
+Take que já começa falando não tem cabeça para a emenda morder, e ali entra
+corte seco sozinho — foi o que aconteceu com o `8417` da ProAdvanced.
+
+Isso importa porque a emenda consome o mesmo tempo das duas cenas vizinhas. Uma
+lista escrita à mão passa a mentir assim que um corte muda; medida do material,
+ela se corrige.
+
+## Por que borrão e não fade
+
+Os takes têm todos o mesmo enquadramento — mesma cadeira, mesmo fundo, mesma
+distância. Corte seco entre dois deles salta aos olhos, e fade é pior: sobrepõe
+dois rostos quase idênticos e o defeito fica evidente. O borrão de
+`src/transitions/blurWhip.tsx` vira o corte em rastro, e ele passa como
+movimento. Fade só na entrada do cartão final, que é a única imagem diferente
+da peça.
+
+O contrapeso ao enquadramento repetido é o empurrão de escala em
+`template/components/Scene.tsx`: cada cena entra 4,5% ampliada e vai fechando,
+alternando o sentido a cada take.
+
+## Fichas que atravessam o corte
+
+Em `RuleList`, ficha sem `at` já está em cena desde o primeiro quadro: é a que
+veio do take anterior. É isso que faz três takes seguidos lerem como um bloco
+só em vez de três saltos — "Controla o tráfego / Define acessos / Bloqueia
+ameaças" se monta ao longo de duas cenas.
+
+Manual de marca raramente tem cor de alerta. O risco então não é vermelho: é a
+mesma ficha escurecida, de borda tracejada. A cor da marca fica reservada para
+o que está sob controle.
+
+---
+
 # ProAdvanced — Firewall gerenciado
 
-Peça vertical de ~60 s. Fonte em `src/proadv/`, tokens em
+Peça vertical de ~60,5 s, montada com o template acima.
+Configuração em `src/pieces/proadvancedFirewall/`, tokens em
 `src/brands/proadvanced.ts`, material em `public/proadv/`.
 
 ## Identidade
@@ -185,66 +297,32 @@ do checkout — o histórico do git guarda.
 
 ## Roteiro e legendas
 
-`src/proadv/data/script.ts` guarda o corte e as legendas palavra a palavra,
-geradas com faster-whisper `large-v3` e *word timestamps*, passando o roteiro
-como `initial_prompt` — sem isso "firewall" saía como "falho", "faro" e "Fyro".
+`src/pieces/proadvancedFirewall/roteiro.txt` é o roteiro escrito;
+`scenes.ts` é o corte e a legenda que saíram dele, via
+`tools/build_scenes.py`. O comando que gerou esta peça:
 
-Duas armadilhas no caminho, que valem para a próxima peça:
+```bash
+python3 tools/build_scenes.py \
+  --clips public/proadv/clips \
+  --roteiro src/pieces/proadvancedFirewall/roteiro.txt \
+  --out src/pieces/proadvancedFirewall/scenes.ts \
+  --nomes "Pro Advanced" \
+  --regiao 8424:5.3-8.8 --regiao 8438:2.85-6.15 \
+  --destaques "protegida,gerenciado,ameaça,aberta,antigo,desatualizada,\
+brechas,continuamente,atualizada,segurança,Pro Advanced"
+```
 
-**Alucinação em trecho mudo.** Pedir transcrição do silêncio entre as falas
-devolve "Tchau", "Boa noite", "Se inscreva no canal" — frases que o modelo
-aprendeu de vídeo do YouTube e despeja quando não há fala. O que desmascara é o
-nível: esses trechos estavam 20 a 44 dB abaixo do pico da fala. Nenhum deles é
-real.
-
-**Take com começo falso.** Dois clipes têm mais de uma tentativa dentro do
-arquivo, e aí o áudio é real:
-
-| Clipe | O que tem dentro |
-| --- | --- |
-| `8424` | "Ok? Acesso antigo ou..." → "Confirmo... Não, é... Vamos lá." → a tomada boa aos 5,5 s |
-| `8438` | "Não, tira." → a tomada boa aos 2,9 s |
-
-O corte de cada cena é ancorado na **primeira e na última palavra do roteiro**,
-não no envelope de áudio: começa 0,20 s antes e termina 0,30 s depois. Assim
-nenhuma sobra entra, e sobra folga muda nas duas pontas para as emendas caírem
-no silêncio.
+O `scenes.ts` no repositório é o dessa saída **com três palavras corrigidas na
+mão** — "não" no `8421`, "Podem" no `8426` e um "o" que ficou maiúsculo no
+`8429`. Rodar o comando de novo não devolve o arquivo idêntico: o modelo não é
+determinista o bastante para cravar o mesmo início de palavra duas vezes, e os
+cortes saem alguns centésimos diferentes. Se regerar, confira o texto e
+renderize antes de substituir.
 
 Duas frases saíram diferentes do roteiro escrito e a legenda segue o que foi
-dito, como no MyGuest: no `8415` ele fala "camadas de **segurança de** rede"
-(roteiro: "de proteção da rede") e no `8438`, "É manter a **operação**
-atualizada" (roteiro: "a proteção atualizada").
-
-## Emendas
-
-Os dezesseis takes têm o mesmo enquadramento — mesma cadeira, mesmo fundo,
-mesma distância. Corte seco entre dois deles salta aos olhos, e fade sobrepõe
-dois rostos quase iguais, que é pior. A emenda é o borrão de
-`src/transitions/blurWhip.tsx`: 6 quadros, que é o que cabe nos 0,20 s de
-silêncio da cabeça e nos 0,30 s da cauda.
-
-O `8417` é o único take que já começa falando. Não há folga na cabeça dele para
-a emenda morder, e ali entra corte seco (`0` em `TRANSITIONS`).
-
-O contrapeso ao enquadramento repetido é o empurrão de escala em
-`components/Scene.tsx`: cada cena entra 4,5% ampliada e vai fechando, alternando
-o sentido a cada take. O quadro nunca fica parado e a emenda passa como
-movimento de câmera.
-
-## Gráficos
-
-As fichas (`components/RuleList.tsx`) **atravessam o corte**: uma ficha sem `at`
-já está em cena desde o primeiro quadro, porque veio do take anterior. É o que
-faz três takes seguidos lerem como um bloco só em vez de três saltos —
-"Controla o tráfego / Define acessos / Bloqueia ameaças" se monta ao longo de
-duas cenas, e as três da gestão contínua ao longo de três.
-
-O manual não tem cor de alerta: só azul, cinza e branco. O risco então não é
-vermelho — é a mesma ficha escurecida, de borda tracejada. O azul fica
-reservado para o que está sob controle, e a diferença se lê sozinha.
-
-O fundo do cartão final (`components/RayBurst.tsx`) são os raios do próprio
-símbolo, girando devagar.
+dito: no `8415` ele fala "camadas de **segurança de** rede" (roteiro: "de
+proteção da rede") e no `8438`, "É manter a **operação** atualizada" (roteiro:
+"a proteção atualizada").
 
 ## Falta a trilha
 
