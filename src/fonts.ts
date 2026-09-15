@@ -4,7 +4,8 @@ import { continueRender, delayRender, staticFile } from "remotion";
 /**
  * Montserrat servida do próprio projeto (`public/fonts`) em vez do Google
  * Fonts: assim o render não depende de rede e a fonte nunca falta num frame.
- * Arquivo variável, cobre os pesos 500–900 usados nas peças.
+ * Arquivo variável, declarado em 100–900: o manual da Wispot usa de 500 para
+ * cima, o da ProAdvanced pede Regular (400) e Bold (700).
  */
 const SUBSETS = [
   {
@@ -27,7 +28,7 @@ Promise.all(
       family: "Montserrat",
       url: staticFile(s.file),
       format: "woff2",
-      weight: "500 900",
+      weight: "100 900",
       style: "normal",
       display: "block",
       unicodeRange: s.unicodeRange,
