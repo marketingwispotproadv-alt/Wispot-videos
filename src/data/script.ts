@@ -67,13 +67,13 @@ export const SCENES: SceneDef[] = [
   },
   {
     clip: "8454",
-    trimStart: 2.0,
+    trimStart: 3.38,
     trimEnd: 10.25,
     chunks: [
-      { words: [{ text: "No", start: 0.36, end: 0.92 }, { text: "painel,", start: 0.92, end: 1.36 }, { text: "você", start: 1.42, end: 1.56 }, { text: "acompanha", start: 1.56, end: 1.98 }, { text: "quem", start: 1.98, end: 2.16 }, { text: "está", start: 2.16, end: 2.44 }] },
-      { words: [{ text: "na", start: 2.44, end: 2.6 }, { text: "rede,", start: 2.6, end: 2.86 }, { text: "aplica", start: 3.14, end: 3.42 }, { text: "as", start: 3.42, end: 3.58 }, { text: "políticas", start: 3.58, end: 3.86 }, { text: "de", start: 3.86, end: 4.1 }] },
-      { words: [{ text: "navegação", start: 4.1, end: 4.78 }, { text: "e", start: 4.78, end: 5.12 }, { text: "fique", start: 5.12, end: 5.24 }, { text: "em", start: 5.24, end: 5.4 }, { text: "conformidade", start: 5.4, end: 5.98 }] },
-      { words: [{ text: "com", start: 5.98, end: 6.3 }, { text: "a", start: 6.3, end: 6.42 }, { text: "LGPD", start: 6.42, end: 6.98, hl: true }, { text: "e", start: 6.98, end: 7.3 }, { text: "o", start: 7.3, end: 7.38 }, { text: "Marco", start: 7.38, end: 7.62, hl: true }, { text: "Civil.", start: 7.62, end: 7.84, hl: true }] },
+      { words: [{ text: "Você", start: 0.04, end: 0.18 }, { text: "acompanha", start: 0.18, end: 0.6 }, { text: "quem", start: 0.6, end: 0.78 }, { text: "está", start: 0.78, end: 1.06 }, { text: "na", start: 1.06, end: 1.22 }, { text: "rede,", start: 1.22, end: 1.48 }] },
+      { words: [{ text: "aplica", start: 1.76, end: 2.04 }, { text: "as", start: 2.04, end: 2.2 }, { text: "políticas", start: 2.2, end: 2.48 }, { text: "de", start: 2.48, end: 2.72 }, { text: "navegação", start: 2.72, end: 3.4 }] },
+      { words: [{ text: "e", start: 3.4, end: 3.74 }, { text: "fique", start: 3.74, end: 3.86 }, { text: "em", start: 3.86, end: 4.02 }, { text: "conformidade", start: 4.02, end: 4.6 }, { text: "com", start: 4.6, end: 4.92 }, { text: "a", start: 4.92, end: 5.04 }, { text: "LGPD", start: 5.04, end: 5.6, hl: true }] },
+      { words: [{ text: "e", start: 5.6, end: 5.92 }, { text: "o", start: 5.92, end: 6.0 }, { text: "Marco", start: 6.0, end: 6.24, hl: true }, { text: "Civil.", start: 6.24, end: 6.46, hl: true }] },
     ],
   },
   {

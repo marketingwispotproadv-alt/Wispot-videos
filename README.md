@@ -6,7 +6,7 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 
 | ID | Formato | Duração | O que é |
 | --- | --- | --- | --- |
-| `MyGuest` | 1080×1920 (9:16) | ~46,1 s | Vídeo institucional do MyGuest, com locução, trilha, legendas sincronizadas e gráficos de marca |
+| `MyGuest` | 1080×1920 (9:16) | ~44,8 s | Vídeo institucional do MyGuest, com locução, trilha, legendas sincronizadas e gráficos de marca |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final isolado, para reaproveitar em outras peças |
 
 ## Comandos
@@ -77,6 +77,7 @@ Estrutura do vídeo:
 | 3 | 8450 | Autenticação personalizada | Tela cheia de marca: portal em white label |
 | 4 | 8452 | "E o controle é completo" | — |
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |
+
 | 6 | 8455 | Fechamento — CTA | — |
 | 7 | — | — | Cartão final |
 
@@ -107,5 +108,13 @@ a tela inteira vira peça de marca e o clipe fica por baixo, desfocado, só como
 textura — é dele que vem a locução. Nelas a legenda também inverte, porque azul
 sobre azul sumiria: a palavra ativa fica em pílula branca com texto azul.
 
+Dois cortes existem por causa da apresentadora, não do texto: em 8452
+(`trimStart` 1,05) e em 8454 (`trimStart` 3,38) ela começa de olhos baixos, lendo
+o roteiro. Em 8454 o corte cai **depois** de "No painel,", que é dito justamente
+durante a olhada — quem carrega esse sentido passa a ser a etiqueta "Painel de
+controle" na tela, e a cena emenda em "Você acompanha quem está na rede".
+
 Para reajustar um corte, mexa em `trimStart` / `trimEnd` da cena; para mover um
-gráfico, nos tempos passados em `overlayFor` (`src/MyGuest.tsx`).
+gráfico, nos tempos passados em `overlayFor` (`src/MyGuest.tsx`). Ao encurtar uma
+cena, confira se os gráficos do fim dela ainda têm tempo de tela — foi o que
+aconteceu com os selos de conformidade neste corte.

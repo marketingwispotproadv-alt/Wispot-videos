@@ -8,8 +8,10 @@ const Badge: React.FC<{ label: string; at: number }> = ({ label, at }) => {
   const enter = spring({
     frame: frame - Math.round(at * fps),
     fps,
-    config: { damping: 14, mass: 0.7 },
-    durationInFrames: 18,
+    // entrada direta: depois do corte mais curto da cena, o segundo selo não tem
+    // tempo de sobra para um repique longo antes da emenda
+    config: { damping: 22, mass: 0.7 },
+    durationInFrames: 13,
   });
 
   return (

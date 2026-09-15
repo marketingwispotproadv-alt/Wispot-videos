@@ -66,7 +66,7 @@ const overlayFor = (clip: string): React.ReactNode => {
       return (
         <>
           <SectionLabel>Painel de controle</SectionLabel>
-          <ComplianceBadges lgpdAt={6.3} marcoAt={7.25} />
+          <ComplianceBadges lgpdAt={4.85} marcoAt={5.75} />
         </>
       );
     default:
