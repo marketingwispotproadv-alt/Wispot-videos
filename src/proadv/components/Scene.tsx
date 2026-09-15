@@ -1,0 +1,63 @@
+import React from "react";
+import {
+  AbsoluteFill,
+  interpolate,
+  OffthreadVideo,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { Scrim } from "../../components/Scrim";
+import type { SceneDef } from "../data/script";
+import { Captions } from "./Captions";
+import { Watermark } from "./Watermark";
+
+/**
+ * Uma cena é um take. São dezesseis, todos com o mesmo enquadramento — mesma
+ * cadeira, mesmo fundo, mesma distância —, então corte seco entre dois deles
+ * salta aos olhos.
+ *
+ * O contrapeso é este empurrão de escala: cada cena entra um pouco ampliada e
+ * vai fechando ao longo do take. O quadro nunca fica parado, e a emenda passa
+ * como movimento de câmera em vez de falha de continuidade. O sentido alterna
+ * de cena para cena (`push`) para dois takes seguidos não andarem para o mesmo
+ * lado.
+ */
+export const Scene: React.FC<{
+  scene: SceneDef;
+  durationInFrames: number;
+  /** +1 fecha o quadro ao longo da cena, -1 abre */
+  push?: 1 | -1;
+  children?: React.ReactNode;
+}> = ({ scene, durationInFrames, push = 1, children }) => {
+  const { fps } = useVideoConfig();
+  const frame = useCurrentFrame();
+
+  const AMOUNT = 0.045;
+  const from = push === 1 ? 1 + AMOUNT : 1;
+  const to = push === 1 ? 1 : 1 + AMOUNT;
+  const scale = interpolate(frame, [0, durationInFrames], [from, to], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: "#000" }}>
+      <OffthreadVideo
+        src={staticFile(`proadv/clips/${scene.clip}.mp4`)}
+        trimBefore={Math.round(scene.trimStart * fps)}
+        trimAfter={Math.round(scene.trimEnd * fps)}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          transform: `scale(${scale})`,
+        }}
+      />
+      <Scrim />
+      <Watermark />
+      {children}
+      <Captions chunks={scene.chunks} />
+    </AbsoluteFill>
+  );
+};
