@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  Img,
-  interpolate,
-  spring,
-  staticFile,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
-import { COLORS, FONT_FAMILY, SAFE_X } from "../brand";
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { FONT_FAMILY, SAFE_X } from "../brand";
+import { MyGuestLogo } from "./MyGuestLogo";
 
 /**
  * Abertura da cena do voucher: apresenta o produto enquanto a locução diz
@@ -37,37 +31,16 @@ export const ProductLockup: React.FC<{ outAt: number }> = ({ outAt }) => {
         position: "absolute",
         left: SAFE_X,
         right: SAFE_X,
-        top: 620,
+        top: 660,
         textAlign: "center",
         opacity: enter * (1 - exit),
         transform: `translateY(${interpolate(exit, [0, 1], [0, -40])}px) scale(${interpolate(enter, [0, 1], [0.92, 1])})`,
       }}
     >
-      <Img
-        src={staticFile("brand/icon-white.png")}
-        style={{
-          display: "block",
-          width: 240,
-          margin: "0 auto",
-          filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.25))",
-        }}
-      />
+      <MyGuestLogo width={600} />
       <div
         style={{
           marginTop: 44,
-          fontFamily: FONT_FAMILY,
-          fontWeight: 900,
-          fontSize: 132,
-          letterSpacing: -4,
-          lineHeight: 1,
-          color: COLORS.white,
-        }}
-      >
-        MyGuest
-      </div>
-      <div
-        style={{
-          marginTop: 28,
           fontFamily: FONT_FAMILY,
           fontWeight: 600,
           fontSize: 44,

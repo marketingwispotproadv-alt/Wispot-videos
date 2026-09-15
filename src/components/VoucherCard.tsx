@@ -1,6 +1,7 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { COLORS, FONT_FAMILY, GRADIENT, SAFE_X } from "../brand";
+import { Img, staticFile } from "remotion";
+import { COLORS, FONT_FAMILY, SAFE_X } from "../brand";
 
 const Row: React.FC<{
   label: string;
@@ -91,18 +92,33 @@ export const VoucherCard: React.FC<{ at: number }> = ({ at }) => {
         transform: `translateY(${interpolate(enter, [0, 1], [56, 0])}px) scale(${interpolate(enter, [0, 1], [0.94, 1])})`,
       }}
     >
+      {/* o card já é branco, então o logo entra direto, sem placa */}
       <div
         style={{
-          background: GRADIENT,
-          padding: "26px 36px",
-          fontFamily: FONT_FAMILY,
-          fontWeight: 800,
-          fontSize: 34,
-          letterSpacing: 1.6,
-          color: COLORS.white,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 24,
+          padding: "30px 36px",
+          borderBottom: `3px solid rgba(37,168,224,0.28)`,
         }}
       >
-        MYGUEST · VOUCHER DE ACESSO
+        <Img
+          src={staticFile("brand/myguest.png")}
+          style={{ display: "block", width: 290 }}
+        />
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontWeight: 800,
+            fontSize: 26,
+            letterSpacing: 1.6,
+            color: COLORS.gray,
+            opacity: 0.75,
+          }}
+        >
+          VOUCHER DE ACESSO
+        </span>
       </div>
 
       <div style={{ padding: "42px 36px 44px", display: "grid", gap: 20 }}>

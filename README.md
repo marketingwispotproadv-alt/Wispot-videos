@@ -29,8 +29,20 @@ O manual indica as famílias **Adineue Pro** e **Montserrat**. Adineue Pro é
 proprietária e não redistribuível, então o projeto usa **Montserrat** (carregada
 via `@remotion/google-fonts`) em todas as peças.
 
-O logo e o ícone em `public/brand/` foram extraídos em vetor do próprio manual e
-exportados em PNG com transparência, nas versões branca e azul.
+O logo e o ícone da Wispot em `public/brand/` foram extraídos em vetor do
+próprio manual e exportados em PNG com transparência, nas versões branca e azul.
+
+O logo do MyGuest (`public/brand/myguest.png`) veio de um JPEG de fundo branco.
+O recorte foi feito por componentes conexos de branco a partir da borda, e não
+por chave de cor — assim o branco de dentro do logo (o boneco e as frestas entre
+os quadrados) fica preservado.
+
+Ele sempre aparece sobre placa branca (`src/components/MyGuestLogo.tsx`), por
+dois motivos: o quadrado azul do logo é quase o mesmo azul institucional da
+Wispot e some solto sobre o degradê; e o JPEG de origem deixa franja de
+compressão nas bordas, que contra branco desaparece. A exceção é o card do
+voucher, que já é branco e recebe o logo direto. Se aparecer uma versão em
+vetor, é só trocar o arquivo.
 
 ## Material bruto
 

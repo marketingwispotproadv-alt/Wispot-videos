@@ -9,6 +9,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { COLORS, FONT_FAMILY, GRADIENT } from "../brand";
+import { MyGuestLogo } from "./MyGuestLogo";
 import { Ripples } from "./Ripples";
 
 export const EndCard: React.FC = () => {
@@ -50,7 +51,7 @@ export const EndCard: React.FC = () => {
         <Img
           src={staticFile("brand/logo-white.png")}
           style={{
-            width: 640,
+            width: 300,
             opacity: logo,
             transform: `scale(${interpolate(logo, [0, 1], [0.86, 1])})`,
             filter: "drop-shadow(0 12px 40px rgba(0,0,0,0.28))",
@@ -59,17 +60,12 @@ export const EndCard: React.FC = () => {
 
         <div
           style={{
-            marginTop: 54,
-            fontFamily: FONT_FAMILY,
-            fontWeight: 900,
-            fontSize: 128,
-            letterSpacing: -3,
-            color: COLORS.white,
+            marginTop: 52,
             opacity: name,
             transform: `translateY(${interpolate(name, [0, 1], [26, 0])}px)`,
           }}
         >
-          MyGuest
+          <MyGuestLogo width={560} />
         </div>
 
         <div
