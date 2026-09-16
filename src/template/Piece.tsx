@@ -62,7 +62,7 @@ const transitionAfter = (
 
 export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const { fps } = useVideoConfig();
-  const { overlays = {}, endCard, music } = config;
+  const { overlays = {}, endCard, music, flashBefore } = config;
   const style = resolveStyle(config.style);
 
   // O silêncio que passa do que o estilo pede sai aqui, uma vez, e tudo
@@ -74,14 +74,21 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const total = totalFrames(config.scenes, endCard.seconds, fps, style);
   const endCardFrom = endCardStart(config.scenes, endCard.seconds, fps, style);
 
-  // Onde cada cena começa na linha do tempo final, descontadas as emendas —
-  // é nesses quadros que o clarão cai.
-  const cuts = durations.reduce<number[]>((acc, d, i) => {
+  // Onde cada cena começa na linha do tempo final, descontadas as emendas.
+  const starts = durations.reduce<number[]>((acc, _, i) => {
     const prev = acc.length ? acc[acc.length - 1] : 0;
     return i === 0
       ? [0]
       : [...acc, prev + durations[i - 1] - transitions[i - 1]];
   }, []);
+
+  // O primeiro quadro não é corte; e, com `flashBefore`, só as cenas listadas
+  // recebem clarão e efeito.
+  const cuts = starts
+    .map((frame, i) => ({ frame, clip: scenes[i].clip }))
+    .slice(1)
+    .filter(({ clip }) => !flashBefore || flashBefore.includes(clip))
+    .map(({ frame }) => frame);
 
   return (
     <BrandProvider brand={config.brand}>
@@ -126,12 +133,10 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
             </TransitionSeries.Sequence>
           </TransitionSeries>
 
-          {style.flash ? (
-            <CutFlash cuts={cuts.slice(1)} config={style.flash} />
-          ) : null}
+          {style.flash ? <CutFlash cuts={cuts} config={style.flash} /> : null}
 
           {style.flashSfx ? (
-            <CutSfx cuts={cuts.slice(1)} config={style.flashSfx} />
+            <CutSfx cuts={cuts} config={style.flashSfx} />
           ) : null}
 
           {style.progressBar ? <ProgressBar totalFrames={total} /> : null}

@@ -186,6 +186,18 @@ export type PieceConfig = {
   scenes: SceneDef[];
   /** gráficos por clipe, na chave do `clip` da cena */
   overlays?: Record<string, Overlay>;
+  /**
+   * Cenas em que o corte ganha clarão e efeito, pelo `clip`.
+   *
+   * Clarão em todo corte vira papel de parede: a peça tem quinze deles, e o
+   * olho para de registrar o que se repete a cada três segundos. Marcando só
+   * onde o argumento vira — a abertura para a explicação, a explicação para o
+   * problema, o problema para a solução, a solução para o fecho — o clarão
+   * volta a significar alguma coisa.
+   *
+   * Sem isto, o clarão entra em todos os cortes.
+   */
+  flashBefore?: string[];
   endCard: EndCardConfig;
   music?: MusicConfig;
   /** sem isto, vale o padrão de `src/template/style.ts` */

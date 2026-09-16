@@ -3,16 +3,33 @@
 A trilha e os efeitos da peça vão aqui. Nada do `public/audio` da Wispot serve:
 aquela trilha foi licenciada para o MyGuest e não cobre vídeo de outra marca.
 
-## O que mandar
+## O que está aqui
 
-| | O quê | Formato |
-| --- | --- | --- |
-| `trilha.mp3` | instrumental, 60 s ou mais | mp3 ou wav |
-| `whoosh.wav` | opcional, para os cortes | wav curto |
-| `impacto.wav` | opcional, para o cartão final | wav curto |
+| Arquivo | O que é |
+| --- | --- |
+| `trilha.mp3` | *Funky Corporate Explainer*, de Alex Morgan, esticada para caber na peça |
+| `whoosh.wav` | efeito de corte, sintetizado em `tools/make_whoosh.py` |
 
-Manda como vier — eu corto no tamanho, normalizo a −20 LUFS e monto o volume:
-baixo sob a locução, subindo no cartão final.
+### Como a trilha foi esticada
+
+O original tem 38,52 s e a peça 56,75 s. Repetir a faixa e cortar no talho
+deixa a emenda à mostra, então o corte foi feito na grade musical:
+
+- batida medida por autocorrelação do envelope de ataque: 0,5413 s, ou
+  **110,8 BPM**; compasso de 2,1654 s;
+- a peça fica **introdução → miolo → miolo repetido por 9 compassos → cauda**,
+  com cruzamento de meia batida em cada emenda;
+- o miolo vai de 8,952 s a 30,605 s, que são dez compassos exatos.
+
+Guardar a cauda original importa: é ela que resolve a faixa embaixo do cartão
+final, em vez de o vídeo terminar com a música cortada no meio.
+
+Normalizada a −20 dBFS de RMS. O volume na peça é montado por
+`template/components/MusicBed.tsx`: baixo sob a locução, subindo no cartão
+final.
+
+**Conferido**: nenhuma queda de nível nas duas emendas. Se a emenda soar, é
+questão de ouvido e não de medida — vale escutar antes de publicar.
 
 ## Onde baixar
 

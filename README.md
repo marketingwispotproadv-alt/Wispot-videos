@@ -277,8 +277,8 @@ alternando o sentido a cada take.
 | Emendas | borrão de 6 quadros | corte seco |
 | Em cena | logo, etiqueta de bloco, fichas | só a legenda |
 | Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
-| Clarão no corte | — | 0,55 de opacidade, sobe em 2 e cai em 4 quadros |
-| Efeito no corte | — | *swish* sintetizado, a 0,26 de volume |
+| Clarão no corte | — | em 4 dos 15 cortes, 0,55 de opacidade |
+| Efeito no corte | — | *swish* sintetizado, nos mesmos 4 cortes |
 | Fio de progresso | — | sim |
 | Salto de quadro no corte | — | alterna entre cheio e 1,35× |
 | Silêncio mantido nas pontas | 0,22 s / 0,30 s | 0,08 s / 0,12 s |
@@ -326,6 +326,22 @@ Ele é desenhado **por cima** da peça, não como emenda da `TransitionSeries`.
 A diferença é audível: emenda sobrepõe as duas cenas e, com elas, as duas
 falas. Assim o corte continua seco no vídeo e no áudio, e o clarão é só uma
 camada branca em volta do quadro do corte.
+
+### Clarão em quatro cortes, não em quinze
+
+Clarão em todo corte vira papel de parede: a peça tem quinze deles e o olho
+para de registrar o que se repete a cada três segundos. `flashBefore`, na
+configuração da peça, marca só onde o argumento vira:
+
+| Entra em | Virada |
+| --- | --- |
+| `8415` | da abertura para a explicação |
+| `8420` | da explicação para o problema |
+| `8427` | do problema para a ProAdvanced |
+| `8435` | da solução para o fecho |
+
+Nos outros onze cortes fica só o salto de enquadramento. O efeito sonoro
+acompanha os mesmos quatro: *swish* sem clarão é som sem imagem.
 
 ### O efeito de corte é sintetizado aqui
 
@@ -448,10 +464,12 @@ dito: no `8415` ele fala "camadas de **segurança de** rede" (roteiro: "de
 proteção da rede") e no `8438`, "É manter a **operação** atualizada" (roteiro:
 "a proteção atualizada").
 
-## Falta a trilha
+## A trilha
 
-A peça está **sem música**. O `public/audio/music.mp3` é a trilha que a Wispot
-forneceu para o MyGuest e não deve ser reaproveitada em vídeo de outra marca.
-Quando chegar uma trilha da ProAdvanced, o `MusicBed` do MyGuest serve de
-modelo: corte no tamanho do vídeo, normalize a −20 LUFS e monte o volume baixo
-sob a locução, subindo no cartão final.
+*Funky Corporate Explainer*, de Alex Morgan, em `public/proadv/audio`. O
+original tem 38,52 s contra os 56,75 s da peça, e foi esticado na grade
+musical — 110,8 BPM, emendas em compasso inteiro, cauda original preservada
+para resolver embaixo do cartão final. O detalhe está no README daquela pasta.
+
+O `public/audio/music.mp3` continua sendo só da Wispot: foi licenciado para o
+MyGuest e não cobre vídeo de outra marca.

@@ -17,11 +17,16 @@ export const proadvancedFirewallRef: PieceConfig = {
   brand: PROADVANCED,
   clipsDir: "proadv/clips",
   scenes: SCENES,
+  // Os quatro pontos em que o roteiro vira: da abertura para a explicação, da
+  // explicação para o problema, do problema para a ProAdvanced, e daí para o
+  // fecho. Nos outros onze cortes, corte seco e nada mais.
+  flashBefore: ["8415", "8420", "8427", "8435"],
   endCard: {
     tagline: ["Firewall gerenciado,", "proteção atualizada todo dia."],
     callToAction: "proadvanced.com.br",
     seconds: 4,
   },
+  music: { src: "proadv/audio/trilha.mp3" },
   style: {
     ...LEGENDA_GRANDE,
     // Entra durante "Fale com a Pro Advanced", que é onde o roteiro chama.
