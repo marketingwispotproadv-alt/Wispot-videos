@@ -28,8 +28,8 @@ const OVERLAYS: Record<string, Overlay> = {
   "8415": { label: "O que ele faz" },
   "8417": {
     items: [
-      { text: "Controla o tráfego", at: 0.8 },
-      { text: "Define acessos", at: 2.4 },
+      { text: "Controla o tráfego", at: 0.3 },
+      { text: "Define acessos", at: 1.9 },
     ],
   },
   "8419": {

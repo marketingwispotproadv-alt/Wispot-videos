@@ -47,10 +47,20 @@ export type SceneDef = {
   trimEnd: number;
   /**
    * Legenda em trechos curtos, com tempo em segundos contados do início da
-   * cena já cortada. O silêncio antes da primeira palavra e depois da última é
-   * o que sobra para a emenda — `src/template/timing.ts` mede isso sozinho.
+   * cena já cortada.
    */
   chunks: CaptionChunk[];
+  /**
+   * Silêncio de verdade nas pontas da cena cortada, em segundos, medido do
+   * áudio.
+   *
+   * Não dá para deduzir isto dos tempos da legenda: o Whisper marca a primeira
+   * palavra cerca de 0,2 s antes de o som sair, e estica a última até o fim do
+   * segmento. Nos dezesseis takes da ProAdvanced a cabeça media 0,40 s onde a
+   * transcrição dizia 0,20, e três caudas que a transcrição dava como 0,30
+   * eram 0,00 — o borrão caía em cima da fala.
+   */
+  silence?: { head: number; tail: number };
 };
 
 /**
@@ -124,6 +134,18 @@ export type Style = {
   transitions: "blur" | "cut";
   /** assinatura da marca no canto */
   watermark: boolean;
+  /**
+   * Silêncio que fica em cada ponta da cena, em segundos. O que passar disso é
+   * aparado, e a legenda anda junto. Nunca acrescenta silêncio que não exista.
+   */
+  lead: { head: number; tail: number };
+  /**
+   * Salto de enquadramento a cada corte: as cenas alternam entre o quadro
+   * cheio e um recorte `punch` vezes mais fechado. É o que a referência faz —
+   * lá o salto é de ~35% — e é o que dá a sensação de transição sem haver
+   * transição nenhuma.
+   */
+  punch?: number;
   /** quanto a cena fecha ao longo do take (0.045 = 4,5%) */
   push: number;
   /**

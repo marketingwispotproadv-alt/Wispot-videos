@@ -16,6 +16,7 @@ import { SectionLabel } from "./components/SectionLabel";
 import {
   endCardStart,
   sceneFrames,
+  tightenAll,
   totalFrames,
   transitionsFor,
 } from "./timing";
@@ -58,13 +59,17 @@ const transitionAfter = (
 
 export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const { fps } = useVideoConfig();
-  const { scenes, overlays = {}, endCard, music } = config;
+  const { overlays = {}, endCard, music } = config;
   const style = resolveStyle(config.style);
 
+  // O silêncio que passa do que o estilo pede sai aqui, uma vez, e tudo
+  // adiante — duração, emendas, legenda — trabalha sobre a cena já apertada.
+  const scenes = tightenAll(config.scenes, style);
   const durations = sceneFrames(scenes, fps);
-  const transitions = transitionsFor(scenes, fps);
+  const transitions = transitionsFor(scenes, fps, style);
   const endCardFrames = Math.round(endCard.seconds * fps);
-  const total = totalFrames(scenes, endCard.seconds, fps);
+  const total = totalFrames(config.scenes, endCard.seconds, fps, style);
+  const endCardFrom = endCardStart(config.scenes, endCard.seconds, fps, style);
 
   return (
     <BrandProvider brand={config.brand}>
@@ -110,14 +115,18 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
           </TransitionSeries>
 
           {style.cta ? (
-            <CtaPill text={style.cta.text} at={style.cta.at} />
+            <CtaPill
+              text={style.cta.text}
+              at={style.cta.at}
+              until={endCardFrom}
+            />
           ) : null}
 
           {music ? (
             <MusicBed
               config={music}
               totalFrames={total}
-              endCardFrom={endCardStart(scenes, endCard.seconds, fps)}
+              endCardFrom={endCardFrom}
               fps={fps}
             />
           ) : null}

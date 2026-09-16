@@ -240,11 +240,46 @@ def chunk(words, max_words=4, max_span=2.0, gap=0.34):
     return out
 
 
+def measure_silence(db: np.ndarray, hop_s: float, start: float, end: float,
+                    floor_db: float) -> tuple[float, float]:
+    """
+    Silêncio de verdade nas pontas da cena cortada.
+
+    Não dá para tirar isto dos tempos da transcrição: o modelo marca a primeira
+    palavra cerca de 0,2 s antes de o som sair e estica a última até o fim do
+    segmento. Nos dezesseis takes da ProAdvanced ele inventava 0,2 s de folga
+    na cabeça e escondia caudas que eram zero — e é dessa folga que a emenda
+    vive.
+
+    O som só conta como fala se **se sustentar** por 60 ms. Sem essa regra, um
+    estalo de um quadro no começo do take passa por fala: foi o que escondeu um
+    segundo inteiro de silêncio no 8417 da ProAdvanced.
+    """
+    lo, hi = int(start / hop_s), int(end / hop_s)
+    window = db[lo:hi]
+    if not len(window):
+        return 0.0, 0.0
+    sustain = max(1, int(0.06 / hop_s))
+    loud = (window > floor_db).astype(int)
+    run = np.convolve(loud, np.ones(sustain, int), "valid")
+    solid = np.where(run == sustain)[0]
+    if not len(solid):
+        return 0.0, 0.0
+    head = solid[0] * hop_s
+    tail = (len(window) - (solid[-1] + sustain)) * hop_s
+    return round(head, 2), round(max(0.0, tail), 2)
+
+
 def render_ts(scenes, highlights: set[str]) -> str:
     lines = [
         "// Gerado por `tools/build_scenes.py`. Os tempos das legendas são",
-        "// relativos ao início da cena já cortada; a folga muda nas pontas é o",
-        "// que `src/template/timing.ts` mede para decidir cada emenda.",
+        "// relativos ao início da cena já cortada.",
+        "//",
+        "// `silence` é o silêncio de verdade nas pontas, medido do áudio — e não",
+        "// o que os tempos da transcrição sugerem, que erram para os dois lados:",
+        "// a primeira palavra vem marcada antes de o som sair, e a última fica",
+        "// esticada até o fim do segmento. `src/template/timing.ts` usa esse",
+        "// número para aparar o excesso e para decidir cada emenda.",
         "",
         'import type { SceneDef } from "../../template/types";',
         "",
@@ -258,6 +293,7 @@ def render_ts(scenes, highlights: set[str]) -> str:
             f'    clip: "{sc["clip"]}",',
             f'    trimStart: {sc["trimStart"]},',
             f'    trimEnd: {sc["trimEnd"]},',
+            "    silence: {{ head: {}, tail: {} }},".format(*sc["silence"]),
             "    chunks: [",
         ]
         for group in chunk(sc["words"]):
@@ -362,10 +398,13 @@ def main() -> int:
                 "clip": name,
                 "trimStart": round(start, 2),
                 "trimEnd": round(end, 2),
+                "silence": measure_silence(db, hop_s, start, end, floor_db),
                 "words": [{"t": w["t"], "s": round(w["s"] - start, 2),
                            "e": round(w["e"] - start, 2)} for w in words],
             })
+            sil = scenes[-1]["silence"]
             print(f"{name}  {start:5.2f}→{end:5.2f}  "
+                  f"mudo {sil[0]:.2f}/{sil[1]:.2f}  "
                   f"{' '.join(w['t'] for w in words)}")
 
     args.out.parent.mkdir(parents=True, exist_ok=True)

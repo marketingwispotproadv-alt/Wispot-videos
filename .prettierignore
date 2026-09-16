@@ -1,0 +1,5 @@
+# Dados gerados por ferramenta, em linha compacta de propósito: uma cena por
+# bloco e um trecho de legenda por linha. Reflowar isto multiplica o arquivo
+# por quatro e faz o diff brigar com o gerador a cada regeração.
+src/data/script.ts
+src/pieces/*/scenes.ts

@@ -8,6 +8,7 @@ import { proadvancedFirewallRef } from "./pieces/proadvancedFirewallRef";
 import { BrandProvider } from "./template/BrandContext";
 import { EndCard as PieceEndCard } from "./template/components/EndCard";
 import { Piece } from "./template/Piece";
+import { resolveStyle } from "./template/style";
 import { totalFrames as pieceFrames } from "./template/timing";
 
 export const RemotionRoot: React.FC = () => {
@@ -44,6 +45,7 @@ export const RemotionRoot: React.FC = () => {
           proadvancedFirewall.scenes,
           proadvancedFirewall.endCard.seconds,
           VIDEO.fps,
+          resolveStyle(proadvancedFirewall.style),
         )}
         fps={VIDEO.fps}
         width={VIDEO.width}
@@ -59,6 +61,7 @@ export const RemotionRoot: React.FC = () => {
           proadvancedFirewallRef.scenes,
           proadvancedFirewallRef.endCard.seconds,
           VIDEO.fps,
+          resolveStyle(proadvancedFirewallRef.style),
         )}
         fps={VIDEO.fps}
         width={VIDEO.width}

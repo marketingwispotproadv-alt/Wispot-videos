@@ -205,16 +205,52 @@ o corte nas palavras do roteiro já as descarta. O que a ferramenta ainda faz é
 medir o nível de cada palavra descartada e avisar quando ela está alta demais
 para ser ruído — aí vale conferir na mão.
 
-## Por que as emendas são medidas, não escolhidas
+## O silêncio é medido do áudio, não deduzido da transcrição
 
-`src/template/timing.ts` olha cada cena, mede o silêncio antes da primeira
-palavra e depois da última, e emenda com o menor dos dois lados, até 6 quadros.
-Take que já começa falando não tem cabeça para a emenda morder, e ali entra
-corte seco sozinho — foi o que aconteceu com o `8417` da ProAdvanced.
+`scenes.ts` guarda, por cena, o silêncio de verdade nas duas pontas
+(`silence: { head, tail }`), medido do envelope do áudio. `timing.ts` usa esse
+número para duas coisas: aparar o que passa do que o estilo pede, e decidir
+cada emenda.
 
-Isso importa porque a emenda consome o mesmo tempo das duas cenas vizinhas. Uma
-lista escrita à mão passa a mentir assim que um corte muda; medida do material,
-ela se corrige.
+Usar os tempos da legenda para isso não funciona, e a peça da ProAdvanced é a
+prova. O Whisper **marca a primeira palavra cerca de 0,2 s antes de o som
+sair** e **estica a última até o fim do segmento**. Ancorando o corte nesses
+tempos, as dezesseis cenas ficaram com:
+
+| | o que a transcrição dizia | o que o áudio tinha |
+| --- | --- | --- |
+| cabeça | 0,20 s | **0,40 s** |
+| cauda | 0,30 s | 0,00 a 0,20 s |
+
+Os dois erros machucam de um jeito diferente. Na cabeça, sobrava o dobro de
+silêncio — com corte seco em dezesseis cenas isso é mais de 6 s de ar morto, e
+foi o que apareceu assim que as emendas saíram. Na cauda faltava: três cenas
+tinham **zero** silêncio no fim, e o borrão de 6 quadros caía em cima da fala,
+sobrepondo as duas vozes por um sexto de segundo.
+
+### O som tem que se sustentar
+
+A primeira medição errou feio numa cena. O `8417` marcou 0,00 s de silêncio na
+cabeça quando tem **1,04 s**: um estalo de um quadro logo no começo do take
+passava do limiar e o detector dava a fala por começada. No vídeo isso virou
+uma pausa de mais de um segundo no meio da peça.
+
+A regra que resolve é simples: o som só conta como fala se **se sustentar por
+60 ms**. Estalo não sustenta.
+
+O mesmo take também tinha os tempos das palavras podres — o Whisper esticou
+"Ele" por 1,10 s para cobrir o silêncio que ele não sabia que existia. Nenhuma
+aparagem conserta tempo de palavra errado, então essa cena foi retranscrita com
+a janela já corrigida.
+
+`lead` é quanto silêncio o estilo quer manter em cada ponta. O que passa disso
+é aparado e a legenda anda junto, então os dois estilos partem do mesmo
+`scenes.ts`: o de borrão guarda os 0,22 s de que a emenda precisa, e o de corte
+seco fica com a fala quase colada, como na referência.
+
+A emenda, então, é o menor silêncio entre a cauda de quem sai e a cabeça de
+quem entra, até 6 quadros — e zero quando não cabe. Uma lista escrita à mão
+passa a mentir assim que um corte muda; medida do material, ela se corrige.
 
 ## Por que borrão e não fade
 
@@ -240,7 +276,9 @@ alternando o sentido a cada take.
 | Palavras por dizer | aparecem escurecidas | não aparecem; entram ao serem ditas |
 | Emendas | borrão de 6 quadros | corte seco |
 | Em cena | logo, etiqueta de bloco, fichas | só a legenda |
-| Empurrão | 4,5%, alternando o sentido | 12%, sempre fechando |
+| Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
+| Salto de quadro no corte | — | alterna entre cheio e 1,35× |
+| Silêncio mantido nas pontas | 0,22 s / 0,30 s | 0,08 s / 0,12 s |
 
 `LEGENDA_GRANDE` saiu de medir o vídeo de referência que a Wispot mandou, em
 720×1280:
@@ -253,8 +291,23 @@ alternando o sentido a cada take.
   dura um quadro só em todos eles, então não há emenda nenhuma;
 - nada de logo, etiqueta ou ficha: o único gráfico do vídeo é a legenda, mais
   uma pílula de chamada no último terço, a 71% da altura;
-- empurrão de ~3,6% por segundo, sempre fechando, e em duas das sete cenas ele
+- empurrão de ~3,6% por segundo, sempre fechando, e em cinco das sete cenas ele
   simplesmente não existe.
+
+### A transição que não é transição
+
+Os seis cortes são secos: a diferença entre quadros vizinhos dura um quadro em
+todos eles, o brilho não pisca e não há assobio no áudio — medi as três coisas
+procurando corte cruzado, flash e *whoosh*, e não há nenhum.
+
+O que dá a sensação de transição é outra coisa: **o enquadramento salta a cada
+corte**. Comparando o último quadro de uma cena com o primeiro da seguinte em
+várias escalas, o salto é de ~35% e alterna de sentido — fecha, abre, fecha,
+abre. Não é a pessoa se mexendo; 35% é recorte digital.
+
+`punch: 1.35` reproduz isso: cenas pares vão no quadro cheio, ímpares num
+recorte 1,35× mais fechado. Com o salto carregando o corte, o empurrão dentro
+da cena pode ser pequeno.
 
 O arquivo de referência não fica no repositório — é conteúdo de terceiro, e o
 que importava dele são estes números. Ele está no histórico do git, no commit

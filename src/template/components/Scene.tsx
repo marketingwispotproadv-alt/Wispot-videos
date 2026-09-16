@@ -31,8 +31,17 @@ export const Scene: React.FC<{
   durationInFrames: number;
   /** +1 fecha o quadro ao longo da cena, -1 abre */
   push?: 1 | -1;
+  /** recorte fixo da cena, que alterna de take para take no salto de quadro */
+  baseScale?: number;
   children?: React.ReactNode;
-}> = ({ scene, clipsDir, durationInFrames, push = 1, children }) => {
+}> = ({
+  scene,
+  clipsDir,
+  durationInFrames,
+  push = 1,
+  baseScale = 1,
+  children,
+}) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   const style = useStyle();
@@ -55,7 +64,7 @@ export const Scene: React.FC<{
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          transform: `scale(${scale})`,
+          transform: `scale(${(scale * baseScale).toFixed(4)})`,
           // a referência é bem mais saturada que a nossa sala; o tempero quente
           // por si só não fecha isso, porque ele desloca a cor sem encorpá-la
           filter: style.warmth

@@ -6,10 +6,12 @@ import { useBrand } from "../BrandContext";
  * Pílula de chamada no último terço, como a dos anúncios. Na referência ela
  * fica a 71% da altura do quadro e cresce ao entrar.
  */
-export const CtaPill: React.FC<{ text: string; at: number }> = ({
-  text,
-  at,
-}) => {
+export const CtaPill: React.FC<{
+  text: string;
+  at: number;
+  /** frame em que a pílula sai de cena: o cartão final tem chamada própria */
+  until: number;
+}> = ({ text, at, until }) => {
   const frame = useCurrentFrame();
   const { fps, height } = useVideoConfig();
   const { colors, fontFamily } = useBrand();
@@ -19,7 +21,7 @@ export const CtaPill: React.FC<{ text: string; at: number }> = ({
     config: { damping: 14, mass: 0.6 },
     durationInFrames: 18,
   });
-  if (enter === 0) return null;
+  if (enter === 0 || frame >= until) return null;
 
   return (
     <div
