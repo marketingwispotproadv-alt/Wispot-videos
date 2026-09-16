@@ -8,7 +8,9 @@ import { BrandProvider } from "./BrandContext";
 import { StyleProvider } from "./StyleContext";
 import { resolveStyle } from "./style";
 import { CtaPill } from "./components/CtaPill";
+import { CutFlash } from "./components/CutFlash";
 import { EndCard } from "./components/EndCard";
+import { ProgressBar } from "./components/ProgressBar";
 import { MusicBed } from "./components/MusicBed";
 import { RuleList } from "./components/RuleList";
 import { Scene } from "./components/Scene";
@@ -71,6 +73,15 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const total = totalFrames(config.scenes, endCard.seconds, fps, style);
   const endCardFrom = endCardStart(config.scenes, endCard.seconds, fps, style);
 
+  // Onde cada cena começa na linha do tempo final, descontadas as emendas —
+  // é nesses quadros que o clarão cai.
+  const cuts = durations.reduce<number[]>((acc, d, i) => {
+    const prev = acc.length ? acc[acc.length - 1] : 0;
+    return i === 0
+      ? [0]
+      : [...acc, prev + durations[i - 1] - transitions[i - 1]];
+  }, []);
+
   return (
     <BrandProvider brand={config.brand}>
       <StyleProvider style={style}>
@@ -113,6 +124,12 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
               <EndCard config={endCard} />
             </TransitionSeries.Sequence>
           </TransitionSeries>
+
+          {style.flash ? (
+            <CutFlash cuts={cuts.slice(1)} config={style.flash} />
+          ) : null}
+
+          {style.progressBar ? <ProgressBar totalFrames={total} /> : null}
 
           {style.cta ? (
             <CtaPill

@@ -277,6 +277,8 @@ alternando o sentido a cada take.
 | Emendas | borrão de 6 quadros | corte seco |
 | Em cena | logo, etiqueta de bloco, fichas | só a legenda |
 | Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
+| Clarão no corte | — | 0,55 de opacidade, sobe em 2 e cai em 4 quadros |
+| Fio de progresso | — | sim |
 | Salto de quadro no corte | — | alterna entre cheio e 1,35× |
 | Silêncio mantido nas pontas | 0,22 s / 0,30 s | 0,08 s / 0,12 s |
 
@@ -312,6 +314,17 @@ da cena pode ser pequeno.
 O arquivo de referência não fica no repositório — é conteúdo de terceiro, e o
 que importava dele são estes números. Ele está no histórico do git, no commit
 em que foi subido.
+
+### O clarão não vem da referência
+
+Medi o brilho quadro a quadro nos seis cortes dela e ele não oscila: não há
+clarão nenhum. O `flash` é escolha de montagem, pedida depois, e está lá como
+parâmetro para ser calibrado ou desligado.
+
+Ele é desenhado **por cima** da peça, não como emenda da `TransitionSeries`.
+A diferença é audível: emenda sobrepõe as duas cenas e, com elas, as duas
+falas. Assim o corte continua seco no vídeo e no áudio, e o clarão é só uma
+camada branca em volta do quadro do corte.
 
 ### O que não dá para copiar com a nossa grade
 

@@ -156,6 +156,16 @@ export type Style = {
   pushAlternates: boolean;
   /** tempero quente por cima da imagem, de 0 a 1 */
   warmth?: number;
+  /**
+   * Clarão nos cortes, desenhado por cima da peça. Não é emenda: o corte
+   * continua seco no vídeo e no áudio.
+   *
+   * Não vem da referência — lá o brilho não oscila em nenhum dos seis cortes.
+   * É escolha de montagem.
+   */
+  flash?: { intensity: number; rise: number; fall: number; color?: string };
+  /** fio de progresso no topo */
+  progressBar?: boolean;
   /** pílula de chamada, como a dos anúncios; entra no segundo indicado */
   cta?: { text: string; at: number };
 };

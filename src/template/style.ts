@@ -57,6 +57,10 @@ export const LEGENDA_GRANDE: Style = {
   push: 0.05,
   pushAlternates: false,
   warmth: 0.75,
+  // Curto e a meio caminho do branco. Clarão cheio em dezesseis cortes cansa,
+  // e o corte já tem o salto de enquadramento para marcá-lo.
+  flash: { intensity: 0.55, rise: 2, fall: 4 },
+  progressBar: true,
 };
 
 export const resolveStyle = (style?: Partial<Style>): Style => ({
