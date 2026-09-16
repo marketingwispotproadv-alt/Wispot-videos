@@ -346,13 +346,35 @@ grafia do roteiro é respeitada — nome próprio e início de frase em maiúscu
 
 ### O trecho entra e sai
 
-Cada trecho de legenda tem entrada e saída próprias: entra subindo com mola em
-7 quadros e sai nos 6 quadros antes de o próximo entrar, desaparecendo enquanto
-sobe e encolhe 4%. Antes ele sumia no talho, trocado de um quadro para o outro.
+Cada trecho entra subindo com mola em 7 quadros. A saída leva 6, mas **só
+acontece quando há silêncio entre um trecho e o seguinte**: colados, animar a
+saída apagaria a última palavra enquanto ela ainda está sendo dita. Aí o trecho
+dá lugar ao próximo e é a entrada dele que carrega o movimento.
 
-O último trecho de cada cena não tem próximo para se apoiar, então usa a última
-palavra como referência. Se o corte chegar antes, ele corta a saída, e isso não
-faz mal nenhum.
+Três detalhes de tempo que só aparecem no vídeo pronto, e que custaram um
+render cada:
+
+**O trecho não pode trocar antes da hora.** No modo `reveal` a troca acontece
+exatamente quando a primeira palavra do próximo começa. Antecipar em 0,05 s —
+que é o certo no modo `preview`, onde a linha inteira aparece de uma vez —
+abria um buraco: o trecho novo entrava em cena mas ainda não tinha palavra
+nenhuma para mostrar, e a tela ficava vazia por dois quadros. Pior, cortava a
+última palavra do trecho anterior enquanto ela ainda estava cinza, não dita.
+
+**A primeira linha de cada cena precisa travar em zero.** O corte já aparou o
+silêncio da cabeça, então a primeira palavra cai um pouco *antes* do primeiro
+quadro. Sem travar, a entrada chegava pronta e a linha aparecia de estalo.
+
+**Palavra longa não abre linha.** Na revelação palavra a palavra, ela fica
+sozinha em cena o tempo todo que durar. No firewall um "é" de 0,76 s ficou 0,7
+segundo sozinho na tela — parecia legenda travada, ou palavra dita antes da
+hora. A regra manda a palavra longa para a linha anterior, onde ela vira o
+fecho de "O que faz diferença é".
+
+A regra irmã: **linha final de uma palavra só não existe**, porque some antes
+de ser lida. As duas estão em `tools/build_scenes.py`. Juntas, tiraram os
+trechos de meio segundo: eram onze abaixo de 1 s, com mínimo de 0,49 s; ficaram
+cinco, com mínimo de 0,63 s.
 
 ### Clarão em quatro cortes, não em quinze
 

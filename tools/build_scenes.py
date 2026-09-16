@@ -226,18 +226,47 @@ def tidy(words, names: list[str], roteiro: str):
     return respell(joined, roteiro)
 
 
-def chunk(words, max_words=4, max_span=2.0, gap=0.34):
+MAX_WORDS, MAX_SPAN, GAP = 4, 2.2, 0.34
+LONG_WORD, MIN_TAIL = 0.45, 2
+
+
+def chunk(words):
+    """
+    Quebra a fala em linhas de legenda.
+
+    Duas regras existem por causa de como a linha se comporta na tela, e não
+    por causa da gramática:
+
+    - **palavra longa não abre linha**. Na revelação palavra a palavra ela
+      ficaria sozinha em cena pelo tempo todo que durar — no firewall, um "é"
+      de 0,76 s ficou 0,7 s sozinho, e parece legenda travada;
+    - **linha final de uma palavra só não existe**. Ela some antes de ser
+      lida; junta-se à anterior.
+    """
     out, cur = [], []
     for w in words:
-        if cur and (len(cur) >= max_words
-                    or w["s"] - cur[0]["s"] > max_span
-                    or w["s"] - cur[-1]["e"] > gap):
+        if cur and (len(cur) >= MAX_WORDS
+                    or w["e"] - cur[0]["s"] > MAX_SPAN
+                    or w["s"] - cur[-1]["e"] > GAP):
             out.append(cur)
             cur = []
         cur.append(w)
     if cur:
         out.append(cur)
-    return out
+
+    pulled = []
+    for line in out:
+        if (pulled and line and len(pulled[-1]) <= MAX_WORDS
+                and line[0]["e"] - line[0]["s"] > LONG_WORD):
+            pulled[-1] = pulled[-1] + [line[0]]
+            line = line[1:]
+        if line:
+            pulled.append(line)
+
+    if (len(pulled) > 1 and len(pulled[-1]) < MIN_TAIL
+            and len(pulled[-2]) <= MAX_WORDS + 1):
+        pulled = pulled[:-2] + [pulled[-2] + pulled[-1]]
+    return pulled
 
 
 def measure_silence(db: np.ndarray, hop_s: float, start: float, end: float,

@@ -28,9 +28,9 @@ export const SCENES: SceneDef[] = [
     trimEnd: 5.4,
     silence: { head: 0.4, tail: 0.16 },
     chunks: [
-      { words: [{ text: "O", start: 0.2, end: 0.4 }, { text: "que", start: 0.4, end: 0.54 }, { text: "faz", start: 0.54, end: 0.72 }, { text: "diferença", start: 0.72, end: 0.98 }] },
-      { words: [{ text: "é", start: 0.98, end: 1.74 }, { text: "como", start: 1.74, end: 2.06 }, { text: "ele", start: 2.06, end: 2.32 }, { text: "está", start: 2.32, end: 2.62 }] },
-      { words: [{ text: "configurado", start: 2.62, end: 3.8 }, { text: "e", start: 3.8, end: 3.9 }, { text: "gerenciado.", start: 3.9, end: 4.54, hl: true }] },
+      { words: [{ text: "O", start: 0.2, end: 0.4 }, { text: "que", start: 0.4, end: 0.54 }, { text: "faz", start: 0.54, end: 0.72 }, { text: "diferença", start: 0.72, end: 0.98 }, { text: "é", start: 0.98, end: 1.74 }] },
+      { words: [{ text: "como", start: 1.74, end: 2.06 }, { text: "ele", start: 2.06, end: 2.32 }, { text: "está", start: 2.32, end: 2.62 }, { text: "configurado", start: 2.62, end: 3.8 }] },
+      { words: [{ text: "e", start: 3.8, end: 3.9 }, { text: "gerenciado.", start: 3.9, end: 4.54, hl: true }] },
     ],
   },
   {
@@ -63,9 +63,8 @@ export const SCENES: SceneDef[] = [
     trimEnd: 5.48,
     silence: { head: 0.4, tail: 0.24 },
     chunks: [
-      { words: [{ text: "E", start: 0.2, end: 0.44 }, { text: "ajuda", start: 0.44, end: 0.78 }, { text: "a", start: 0.78, end: 1.04 }, { text: "bloquear", start: 1.04, end: 1.72 }] },
-      { words: [{ text: "conexões", start: 1.72, end: 2.78 }, { text: "que", start: 2.78, end: 3.16 }, { text: "representam", start: 3.16, end: 3.98 }] },
-      { words: [{ text: "ameaça.", start: 3.98, end: 4.6, hl: true }] },
+      { words: [{ text: "E", start: 0.2, end: 0.44 }, { text: "ajuda", start: 0.44, end: 0.78 }, { text: "a", start: 0.78, end: 1.04 }, { text: "bloquear", start: 1.04, end: 1.72 }, { text: "conexões", start: 1.72, end: 2.78 }] },
+      { words: [{ text: "que", start: 2.78, end: 3.16 }, { text: "representam", start: 3.16, end: 3.98 }, { text: "ameaça.", start: 3.98, end: 4.6, hl: true }] },
     ],
   },
   {
@@ -76,8 +75,7 @@ export const SCENES: SceneDef[] = [
     silence: { head: 0.5, tail: 0.19 },
     chunks: [
       { words: [{ text: "Mas", start: 0.2, end: 0.58 }, { text: "essas", start: 0.58, end: 0.78 }, { text: "regras", start: 0.78, end: 1.34 }, { text: "não", start: 1.34, end: 1.62 }] },
-      { words: [{ text: "podem", start: 1.62, end: 2.02 }, { text: "ficar", start: 2.02, end: 2.4 }, { text: "paradas", start: 2.4, end: 2.88 }, { text: "no", start: 2.88, end: 3.0 }] },
-      { words: [{ text: "tempo.", start: 3.0, end: 3.5 }] },
+      { words: [{ text: "podem", start: 1.62, end: 2.02 }, { text: "ficar", start: 2.02, end: 2.4 }, { text: "paradas", start: 2.4, end: 2.88 }, { text: "no", start: 2.88, end: 3.0 }, { text: "tempo.", start: 3.0, end: 3.5 }] },
     ],
   },
   {
@@ -123,8 +121,7 @@ export const SCENES: SceneDef[] = [
     silence: { head: 0.4, tail: 0.12 },
     chunks: [
       { words: [{ text: "Na", start: 0.2, end: 0.46 }, { text: "Pro Advanced,", start: 0.46, end: 0.9, hl: true }] },
-      { words: [{ text: "o", start: 1.36, end: 1.48 }, { text: "firewall", start: 1.48, end: 1.9 }, { text: "é", start: 1.9, end: 2.4 }, { text: "gerenciado", start: 2.4, end: 3.5 }] },
-      { words: [{ text: "continuamente.", start: 3.5, end: 4.36, hl: true }] },
+      { words: [{ text: "o", start: 1.36, end: 1.48 }, { text: "firewall", start: 1.48, end: 1.9 }, { text: "é", start: 1.9, end: 2.4 }, { text: "gerenciado", start: 2.4, end: 3.5 }, { text: "continuamente.", start: 3.5, end: 4.36, hl: true }] },
     ],
   },
   {
@@ -134,8 +131,7 @@ export const SCENES: SceneDef[] = [
     trimEnd: 2.68,
     silence: { head: 0.4, tail: 0.0 },
     chunks: [
-      { words: [{ text: "Revisamos", start: 0.2, end: 0.8 }, { text: "regras,", start: 0.8, end: 1.24 }, { text: "acompanhamos", start: 1.24, end: 1.86 }, { text: "o", start: 1.86, end: 1.98 }] },
-      { words: [{ text: "ambiente.", start: 1.98, end: 2.2 }] },
+      { words: [{ text: "Revisamos", start: 0.2, end: 0.8 }, { text: "regras,", start: 0.8, end: 1.24 }, { text: "acompanhamos", start: 1.24, end: 1.86 }, { text: "o", start: 1.86, end: 1.98 }, { text: "ambiente.", start: 1.98, end: 2.2 }] },
     ],
   },
   {
@@ -156,8 +152,7 @@ export const SCENES: SceneDef[] = [
     trimEnd: 2.66,
     silence: { head: 0.41, tail: 0.22 },
     chunks: [
-      { words: [{ text: "E", start: 0.2, end: 0.46 }, { text: "os", start: 0.46, end: 0.6 }, { text: "riscos", start: 0.6, end: 1.16 }, { text: "de", start: 1.16, end: 1.4 }] },
-      { words: [{ text: "operações.", start: 1.4, end: 2.1 }] },
+      { words: [{ text: "E", start: 0.2, end: 0.46 }, { text: "os", start: 0.46, end: 0.6 }, { text: "riscos", start: 0.6, end: 1.16 }, { text: "de", start: 1.16, end: 1.4 }, { text: "operações.", start: 1.4, end: 2.1 }] },
     ],
   },
   {
@@ -167,8 +162,8 @@ export const SCENES: SceneDef[] = [
     trimEnd: 3.96,
     silence: { head: 0.4, tail: 0.12 },
     chunks: [
-      { words: [{ text: "Firewall", start: 0.2, end: 0.72 }, { text: "não", start: 0.72, end: 1.04 }, { text: "é", start: 1.04, end: 1.26 }, { text: "só", start: 1.26, end: 1.54 }] },
-      { words: [{ text: "instalar", start: 1.54, end: 2.14 }, { text: "e", start: 2.14, end: 2.32 }, { text: "deixar", start: 2.32, end: 2.68 }, { text: "funcionando.", start: 2.68, end: 3.46 }] },
+      { words: [{ text: "Firewall", start: 0.2, end: 0.72 }, { text: "não", start: 0.72, end: 1.04 }, { text: "é", start: 1.04, end: 1.26 }, { text: "só", start: 1.26, end: 1.54 }, { text: "instalar", start: 1.54, end: 2.14 }] },
+      { words: [{ text: "e", start: 2.14, end: 2.32 }, { text: "deixar", start: 2.32, end: 2.68 }, { text: "funcionando.", start: 2.68, end: 3.46 }] },
     ],
   },
   {
@@ -178,8 +173,8 @@ export const SCENES: SceneDef[] = [
     trimEnd: 6.14,
     silence: { head: 0.42, tail: 0.02 },
     chunks: [
-      { words: [{ text: "É", start: 0.2, end: 0.42 }, { text: "manter", start: 0.42, end: 0.74 }, { text: "a", start: 0.74, end: 1.06 }, { text: "operação", start: 1.06, end: 1.68 }] },
-      { words: [{ text: "atualizada", start: 1.68, end: 2.46, hl: true }, { text: "todos", start: 2.46, end: 2.74 }, { text: "os", start: 2.74, end: 2.96 }, { text: "dias.", start: 2.96, end: 3.24 }] },
+      { words: [{ text: "É", start: 0.2, end: 0.42 }, { text: "manter", start: 0.42, end: 0.74 }, { text: "a", start: 0.74, end: 1.06 }, { text: "operação", start: 1.06, end: 1.68 }, { text: "atualizada", start: 1.68, end: 2.46, hl: true }] },
+      { words: [{ text: "todos", start: 2.46, end: 2.74 }, { text: "os", start: 2.74, end: 2.96 }, { text: "dias.", start: 2.96, end: 3.24 }] },
     ],
   },
   {
@@ -189,10 +184,9 @@ export const SCENES: SceneDef[] = [
     trimEnd: 4.72,
     silence: { head: 0.48, tail: 0.03 },
     chunks: [
-      { words: [{ text: "Fale", start: 0.2, end: 0.6 }, { text: "com", start: 0.6, end: 0.7 }, { text: "a", start: 0.7, end: 0.78 }, { text: "Pro Advanced", start: 0.78, end: 1.02, hl: true }] },
-      { words: [{ text: "e", start: 1.02, end: 1.5 }, { text: "saiba", start: 1.5, end: 2.08 }, { text: "como", start: 2.08, end: 2.36 }, { text: "está", start: 2.36, end: 2.66 }] },
-      { words: [{ text: "a", start: 2.66, end: 2.88 }, { text: "segurança", start: 2.88, end: 3.2, hl: true }, { text: "da", start: 3.2, end: 3.42 }, { text: "sua", start: 3.42, end: 3.54 }] },
-      { words: [{ text: "rede.", start: 3.54, end: 3.78 }] },
+      { words: [{ text: "Fale", start: 0.2, end: 0.6 }, { text: "com", start: 0.6, end: 0.7 }, { text: "a", start: 0.7, end: 0.78 }, { text: "Pro Advanced", start: 0.78, end: 1.02, hl: true }, { text: "e", start: 1.02, end: 1.5 }] },
+      { words: [{ text: "saiba", start: 1.5, end: 2.08 }, { text: "como", start: 2.08, end: 2.36 }, { text: "está", start: 2.36, end: 2.66 }] },
+      { words: [{ text: "a", start: 2.66, end: 2.88 }, { text: "segurança", start: 2.88, end: 3.2, hl: true }, { text: "da", start: 3.2, end: 3.42 }, { text: "sua", start: 3.42, end: 3.54 }, { text: "rede.", start: 3.54, end: 3.78 }] },
     ],
   },
 ];

@@ -24,7 +24,12 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   const colors = brand.colors;
   const fontFamily = captions.fontFamily ?? brand.fontFamily;
   const t = frame / fps;
-  const LEAD = captions.reveal === "reveal" ? 0.05 : 0.16;
+  /**
+   * No modo `reveal` o trecho troca exatamente quando a primeira palavra dele
+   * começa. Qualquer antecipação abre um buraco: o trecho novo entra em cena
+   * mas ainda não tem palavra nenhuma para mostrar, e a tela fica vazia.
+   */
+  const LEAD = captions.reveal === "reveal" ? 0 : 0.16;
 
   const index = chunks.findIndex(
     (c, i) =>
@@ -34,7 +39,13 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   if (index === -1) return null;
 
   const chunk = chunks[index];
-  const startsAt = chunk.words[0].start - LEAD;
+  /**
+   * O corte já aparou o silêncio da cabeça, então a primeira palavra da cena
+   * cai um pouco antes do primeiro quadro. Sem travar em zero, a entrada do
+   * primeiro trecho de cada cena já chegaria pronta e ele apareceria de
+   * estalo, no meio do corte.
+   */
+  const startsAt = Math.max(0, chunk.words[0].start - LEAD);
   const appear = spring({
     frame: frame - Math.round(startsAt * fps),
     fps,
@@ -51,10 +62,18 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   const next = chunks[index + 1];
   const lastWord = chunk.words[chunk.words.length - 1];
   const endsAt = next ? next.words[0].start - LEAD : lastWord.end + 0.35;
-  const exit = captions.exitFrames ?? 0;
+
+  /**
+   * A saída só cabe no silêncio entre um trecho e o seguinte. Quando eles vêm
+   * colados — que é o caso na maior parte da fala —, animar a saída apagaria a
+   * última palavra enquanto ela ainda está sendo dita. Aí o trecho simplesmente
+   * dá lugar ao próximo, e é a entrada dele que carrega o movimento.
+   */
+  const slack = Math.max(0, endsAt - lastWord.end);
+  const exitSeconds = Math.min((captions.exitFrames ?? 0) / fps, slack);
   const leaving =
-    exit > 0
-      ? interpolate(t, [endsAt - exit / fps, endsAt], [0, 1], {
+    exitSeconds > 0
+      ? interpolate(t, [endsAt - exitSeconds, endsAt], [0, 1], {
           extrapolateLeft: "clamp",
           extrapolateRight: "clamp",
         })
