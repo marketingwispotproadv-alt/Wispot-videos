@@ -271,7 +271,7 @@ alternando o sentido a cada take.
 
 | | `FICHAS` | `LEGENDA_GRANDE` |
 | --- | --- | --- |
-| Legenda | embaixo, 66 px, peso 800 | no topo, 102 px, peso 700, caixa baixa |
+| Legenda | embaixo, 66 px, peso 800, Montserrat | no topo, 102 px, peso 700, Poppins |
 | Palavra ativa | pílula na cor da marca | nada: tudo branco |
 | Palavras por dizer | aparecem escurecidas | não aparecem; entram ao serem ditas |
 | Emendas | borrão de 6 quadros | corte seco |
@@ -328,6 +328,31 @@ Ele é desenhado **por cima** da peça, não como emenda da `TransitionSeries`.
 A diferença é audível: emenda sobrepõe as duas cenas e, com elas, as duas
 falas. Assim o corte continua seco no vídeo e no áudio, e o clarão é só uma
 camada branca em volta do quadro do corte.
+
+### A fonte da legenda é Poppins, e foi identificada medindo
+
+A referência não usa Montserrat. Dá para ver nas formas — bojo circular e 'a'
+de um andar com a haste reta — e para confirmar com número: a razão entre
+**altura de x e ascendente** na legenda da referência é **0,735**; em Poppins é
+0,745 e em Montserrat, 0,698. Poppins erra por 0,01, Montserrat por 0,04.
+
+Isso contraria o manual da ProAdvanced, que pede Montserrat. A troca foi
+pedida e vale só para a legenda; etiqueta, ficha de apoio, pílula de chamada e
+cartão final seguem em Montserrat. Para voltar atrás, é apagar uma linha
+(`captions.fontFamily`) em `src/template/style.ts`.
+
+A caixa **não** segue a referência: lá a legenda é toda minúscula, aqui a
+grafia do roteiro é respeitada — nome próprio e início de frase em maiúscula.
+
+### O trecho entra e sai
+
+Cada trecho de legenda tem entrada e saída próprias: entra subindo com mola em
+7 quadros e sai nos 6 quadros antes de o próximo entrar, desaparecendo enquanto
+sobe e encolhe 4%. Antes ele sumia no talho, trocado de um quadro para o outro.
+
+O último trecho de cada cena não tem próximo para se apoiar, então usa a última
+palavra como referência. Se o corte chegar antes, ele corta a saída, e isso não
+faz mal nenhum.
 
 ### Clarão em quatro cortes, não em quinze
 

@@ -19,8 +19,10 @@ import type { CaptionChunk } from "../types";
 export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const { colors, fontFamily } = useBrand();
+  const brand = useBrand();
   const { captions } = useStyle();
+  const colors = brand.colors;
+  const fontFamily = captions.fontFamily ?? brand.fontFamily;
   const t = frame / fps;
   const LEAD = captions.reveal === "reveal" ? 0.05 : 0.16;
 
@@ -32,12 +34,32 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
   if (index === -1) return null;
 
   const chunk = chunks[index];
+  const startsAt = chunk.words[0].start - LEAD;
   const appear = spring({
-    frame: frame - Math.round((chunk.words[0].start - LEAD) * fps),
+    frame: frame - Math.round(startsAt * fps),
     fps,
     config: { damping: 200, mass: 0.45 },
-    durationInFrames: 8,
+    durationInFrames: captions.enterFrames ?? 8,
   });
+
+  /**
+   * O trecho também sai de cena, e não some no talho: some subindo nos últimos
+   * quadros antes do próximo entrar. O último trecho da cena não tem próximo,
+   * então usa a última palavra como referência — se o corte chegar primeiro,
+   * ele corta a saída, e isso não faz mal.
+   */
+  const next = chunks[index + 1];
+  const lastWord = chunk.words[chunk.words.length - 1];
+  const endsAt = next ? next.words[0].start - LEAD : lastWord.end + 0.35;
+  const exit = captions.exitFrames ?? 0;
+  const leaving =
+    exit > 0
+      ? interpolate(t, [endsAt - exit / fps, endsAt], [0, 1], {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp",
+        })
+      : 0;
+  const alive = appear * (1 - leaving);
 
   const anchor =
     captions.anchor === "top"
@@ -56,11 +78,16 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
         justifyContent: "center",
         alignItems: "center",
         gap: `0px ${Math.round(captions.fontSize * 0.22)}px`,
-        opacity: captions.reveal === "reveal" ? 1 : appear,
-        transform:
-          captions.reveal === "reveal"
-            ? undefined
-            : `translateY(${interpolate(appear, [0, 1], [22, 0])}px)`,
+        opacity: captions.reveal === "reveal" ? 1 - leaving : alive,
+        transform: [
+          `translateY(${
+            (captions.reveal === "reveal"
+              ? 0
+              : interpolate(appear, [0, 1], [22, 0])) -
+            leaving * 24
+          }px)`,
+          `scale(${1 - leaving * 0.04})`,
+        ].join(" "),
       }}
     >
       {chunk.words.map((w, i) => {

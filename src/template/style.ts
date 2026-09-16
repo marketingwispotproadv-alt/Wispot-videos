@@ -42,9 +42,17 @@ export const LEGENDA_GRANDE: Style = {
     fontSize: 102,
     fontWeight: 700,
     lineHeight: 0.91,
-    lowercase: true,
+    // O vídeo de referência escreve tudo em caixa baixa; aqui a grafia do
+    // roteiro é respeitada — nome próprio e início de frase em maiúscula.
+    lowercase: false,
     highlight: "none",
     reveal: "reveal",
+    // Identificada medindo a referência: a razão entre altura de x e
+    // ascendente é 0,735 lá, 0,745 em Poppins e 0,698 em Montserrat. O manual
+    // da marca pede Montserrat, que segue valendo no resto da peça.
+    fontFamily: 'Poppins, "Helvetica Neue", Helvetica, Arial, sans-serif',
+    enterFrames: 7,
+    exitFrames: 6,
   },
   transitions: "cut",
   watermark: false,

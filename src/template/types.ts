@@ -117,8 +117,16 @@ export type Style = {
     fontSize: number;
     fontWeight: number;
     lineHeight: number;
-    /** caixa baixa em tudo, como manda o estilo de legenda grande */
+    /** caixa baixa em tudo, ignorando a grafia do roteiro */
     lowercase: boolean;
+    /**
+     * Fonte só da legenda, quando ela difere da fonte da marca. Tem de estar
+     * carregada em `src/fonts.ts`.
+     */
+    fontFamily?: string;
+    /** quadros de entrada e de saída de cada trecho */
+    enterFrames?: number;
+    exitFrames?: number;
     /**
      * `pill` acende a palavra ativa numa pílula da cor da marca;
      * `none` deixa tudo branco e o ritmo fica só na entrada das palavras.
