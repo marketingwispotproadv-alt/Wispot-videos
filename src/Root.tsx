@@ -1,6 +1,7 @@
 import "./index.css";
 import { Composition } from "remotion";
 import { VIDEO } from "./brand";
+import { Capa } from "./Capa";
 import { MyGuest, totalFrames } from "./MyGuest";
 import { EndCard } from "./components/EndCard";
 
@@ -13,6 +14,16 @@ export const RemotionRoot: React.FC = () => {
         id="MyGuest"
         component={MyGuest}
         durationInFrames={totalFrames(VIDEO.fps)}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Capa do post. Render: npx remotion still Capa out/capa/capa.png */}
+      <Composition
+        id="Capa"
+        component={Capa}
+        durationInFrames={1}
         fps={VIDEO.fps}
         width={VIDEO.width}
         height={VIDEO.height}

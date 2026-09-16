@@ -7,6 +7,7 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | ID | Formato | Duração | O que é |
 | --- | --- | --- | --- |
 | `MyGuest` | 1080×1920 (9:16) | ~44,8 s | Vídeo institucional do MyGuest, com locução, trilha, legendas sincronizadas e gráficos de marca |
+| `Capa` | 1080×1920 | still | Capa do post, montada sobre um frame do próprio material |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final isolado, para reaproveitar em outras peças |
 
 ## Comandos
@@ -14,6 +15,7 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 ```bash
 npm run dev                                  # abre o Remotion Studio
 npx remotion render MyGuest out/myguest.mp4  # renderiza o vídeo
+npx remotion still Capa out/capa/capa.png    # gera a capa do post
 npm run lint                                 # eslint + tsc
 ```
 
@@ -120,6 +122,10 @@ baixos, lendo o roteiro; em 8446 (`trimStart` 1,88) havia uma respirada audível
 antes da fala. Em 8454 o corte cai **depois** de "No painel,", que é dito justamente
 durante a olhada — quem carrega esse sentido passa a ser a etiqueta "Painel de
 controle" na tela, e a cena emenda em "Você acompanha quem está na rede".
+
+A capa (`src/Capa.tsx`) puxa um frame do próprio clipe por `trimBefore`, em vez
+de guardar uma imagem à parte. O texto fica no miolo vertical de propósito: no
+feed a capa é recortada em 4:5, e o que estiver muito no pé some.
 
 Para reajustar um corte, mexa em `trimStart` / `trimEnd` da cena; para mover um
 gráfico, nos tempos passados em `overlayFor` (`src/MyGuest.tsx`). Ao encurtar uma
