@@ -25,7 +25,7 @@ export const END_CARD_SECONDS = 3.6;
  * dela das duas cenas vizinhas, e todas caem em trechos mudos das pontas —
  * nenhuma fala se sobrepõe.
  */
-const TRANSITIONS = [12, 12, 12, 10, 10, 12] as const;
+const TRANSITIONS = [9, 12, 12, 10, 10, 12] as const;
 
 export const sceneFrames = (fps: number) =>
   SCENES.map((s) => Math.round((s.trimEnd - s.trimStart) * fps));
@@ -50,9 +50,9 @@ const overlayFor = (clip: string): React.ReactNode => {
     case "8446":
       return (
         <>
-          <ProductLockup outAt={4.1} />
-          <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={4.35} />
-          <VoucherCard at={4.35} />
+          <ProductLockup outAt={3.67} />
+          <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={3.92} />
+          <VoucherCard at={3.92} />
         </>
       );
     case "8450":

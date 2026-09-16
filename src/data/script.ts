@@ -22,26 +22,26 @@ export type SceneDef = {
 export const SCENES: SceneDef[] = [
   {
     clip: "8445",
-    trimStart: 1.63,
+    trimStart: 1.3,
     trimEnd: 8.9,
     chunks: [
-      { words: [{ text: "Visitantes,", start: 0.35, end: 0.95 }, { text: "clientes,", start: 0.95, end: 1.55 }] },
-      { words: [{ text: "funcionários", start: 1.69, end: 2.23 }, { text: "e", start: 2.23, end: 2.39 }, { text: "prestadores", start: 2.39, end: 2.95 }, { text: "de", start: 2.95, end: 3.13 }, { text: "serviços.", start: 3.13, end: 3.71 }] },
-      { words: [{ text: "Faz", start: 3.97, end: 4.21 }, { text: "sentido", start: 4.21, end: 4.63 }, { text: "todos", start: 4.63, end: 5.03 }, { text: "acessarem", start: 5.03, end: 5.55 }, { text: "a", start: 5.55, end: 5.73 }, { text: "sua", start: 5.73, end: 5.81 }] },
-      { words: [{ text: "rede", start: 5.81, end: 6.01 }, { text: "pelo", start: 6.01, end: 6.23 }, { text: "mesmo", start: 6.23, end: 6.47 }, { text: "caminho?", start: 6.47, end: 6.81 }] },
+      { words: [{ text: "Visitantes,", start: 0.08, end: 1.0 }, { text: "clientes,", start: 1.28, end: 1.88 }] },
+      { words: [{ text: "funcionários", start: 2.02, end: 2.56 }, { text: "e", start: 2.56, end: 2.72 }, { text: "prestadores", start: 2.72, end: 3.28 }, { text: "de", start: 3.28, end: 3.46 }, { text: "serviços.", start: 3.46, end: 4.04 }] },
+      { words: [{ text: "Faz", start: 4.3, end: 4.54 }, { text: "sentido", start: 4.54, end: 4.96 }, { text: "todos", start: 4.96, end: 5.36 }, { text: "acessarem", start: 5.36, end: 5.88 }, { text: "a", start: 5.88, end: 6.06 }, { text: "sua", start: 6.06, end: 6.14 }] },
+      { words: [{ text: "rede", start: 6.14, end: 6.34 }, { text: "pelo", start: 6.34, end: 6.56 }, { text: "mesmo", start: 6.56, end: 6.8 }, { text: "caminho?", start: 6.8, end: 7.14 }] },
     ],
   },
   {
     clip: "8446",
-    trimStart: 1.45,
+    trimStart: 1.88,
     trimEnd: 11.6,
     chunks: [
-      { words: [{ text: "O", start: 0.39, end: 0.89 }, { text: "MyGuest", start: 0.89, end: 1.39, hl: true }, { text: "é", start: 1.39, end: 1.49 }, { text: "o", start: 1.49, end: 1.55 }, { text: "portal", start: 1.55, end: 1.71 }, { text: "inteligente", start: 1.71, end: 2.23 }] },
-      { words: [{ text: "da", start: 2.23, end: 2.39 }, { text: "Wispot,", start: 2.39, end: 2.87 }, { text: "o", start: 3.23, end: 3.43 }, { text: "acesso", start: 3.43, end: 3.73 }, { text: "pode", start: 3.73, end: 4.05 }, { text: "ser", start: 4.05, end: 4.21 }, { text: "liberado", start: 4.21, end: 4.65 }] },
-      { words: [{ text: "por", start: 4.65, end: 4.85 }, { text: "voucher.", start: 4.85, end: 5.43, hl: true }] },
-      { words: [{ text: "Você", start: 5.83, end: 6.01 }, { text: "entrega", start: 6.01, end: 6.43 }, { text: "o", start: 6.43, end: 6.49 }, { text: "código", start: 6.49, end: 6.77 }, { text: "e", start: 6.77, end: 6.99 }, { text: "define", start: 6.99, end: 7.25 }, { text: "quem", start: 7.25, end: 7.49 }] },
-      { words: [{ text: "entra,", start: 7.49, end: 7.83 }, { text: "com", start: 7.93, end: 8.01 }, { text: "qual", start: 8.01, end: 8.21 }, { text: "permissão", start: 8.21, end: 8.75 }, { text: "e", start: 8.75, end: 8.91 }, { text: "por", start: 8.91, end: 9.09 }] },
-      { words: [{ text: "quanto", start: 9.09, end: 9.31 }, { text: "tempo.", start: 9.31, end: 9.75 }] },
+      { words: [{ text: "O", start: 0.3, end: 0.46 }, { text: "MyGuest", start: 0.46, end: 0.96, hl: true }, { text: "é", start: 0.96, end: 1.06 }, { text: "o", start: 1.06, end: 1.12 }, { text: "portal", start: 1.12, end: 1.28 }, { text: "inteligente", start: 1.28, end: 1.8 }] },
+      { words: [{ text: "da", start: 1.8, end: 1.96 }, { text: "Wispot,", start: 1.96, end: 2.44 }, { text: "o", start: 2.8, end: 3.0 }, { text: "acesso", start: 3.0, end: 3.3 }, { text: "pode", start: 3.3, end: 3.62 }, { text: "ser", start: 3.62, end: 3.78 }, { text: "liberado", start: 3.78, end: 4.22 }] },
+      { words: [{ text: "por", start: 4.22, end: 4.42 }, { text: "voucher.", start: 4.42, end: 5.0, hl: true }] },
+      { words: [{ text: "Você", start: 5.4, end: 5.58 }, { text: "entrega", start: 5.58, end: 6.0 }, { text: "o", start: 6.0, end: 6.06 }, { text: "código", start: 6.06, end: 6.34 }, { text: "e", start: 6.34, end: 6.56 }, { text: "define", start: 6.56, end: 6.82 }, { text: "quem", start: 6.82, end: 7.06 }] },
+      { words: [{ text: "entra,", start: 7.06, end: 7.4 }, { text: "com", start: 7.5, end: 7.58 }, { text: "qual", start: 7.58, end: 7.78 }, { text: "permissão", start: 7.78, end: 8.32 }, { text: "e", start: 8.32, end: 8.48 }, { text: "por", start: 8.48, end: 8.66 }] },
+      { words: [{ text: "quanto", start: 8.66, end: 8.88 }, { text: "tempo.", start: 8.88, end: 9.32 }] },
     ],
   },
   {

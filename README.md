@@ -68,6 +68,12 @@ palavra**. Os tempos vieram da transcrição do áudio real (faster-whisper com
 *word timestamps*), com os nomes de marca corrigidos à mão — por isso a legenda
 acompanha o que é dito, e não o roteiro escrito.
 
+Atenção a um detalhe do whisper: ele erra o alinhamento da **primeira palavra**
+de uma fala quando há silêncio antes dela, e erra para os dois lados — em 8445
+atrasou 0,6 s, em 8446 adiantou 0,3 s. Escolher `trimStart` por esses tempos
+corta no lugar errado. Confira o começo de cada corte pela envoltória de energia
+do áudio antes de confiar no timestamp.
+
 Estrutura do vídeo:
 
 | Cena | Clipe | Bloco do roteiro | Gráfico |
@@ -108,9 +114,10 @@ a tela inteira vira peça de marca e o clipe fica por baixo, desfocado, só como
 textura — é dele que vem a locução. Nelas a legenda também inverte, porque azul
 sobre azul sumiria: a palavra ativa fica em pílula branca com texto azul.
 
-Dois cortes existem por causa da apresentadora, não do texto: em 8452
-(`trimStart` 1,05) e em 8454 (`trimStart` 3,38) ela começa de olhos baixos, lendo
-o roteiro. Em 8454 o corte cai **depois** de "No painel,", que é dito justamente
+Alguns cortes existem por causa da gravação, não do texto: em 8452
+(`trimStart` 1,05) e em 8454 (`trimStart` 3,38) a apresentadora começa de olhos
+baixos, lendo o roteiro; em 8446 (`trimStart` 1,88) havia uma respirada audível
+antes da fala. Em 8454 o corte cai **depois** de "No painel,", que é dito justamente
 durante a olhada — quem carrega esse sentido passa a ser a etiqueta "Painel de
 controle" na tela, e a cena emenda em "Você acompanha quem está na rede".
 
