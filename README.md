@@ -275,7 +275,7 @@ alternando o sentido a cada take.
 | Palavra ativa | pílula na cor da marca | nada: tudo branco |
 | Palavras por dizer | aparecem escurecidas | não aparecem; entram ao serem ditas |
 | Emendas | borrão de 6 quadros | corte seco |
-| Em cena | logo, etiqueta de bloco, fichas | só a legenda |
+| Em cena | logo, etiqueta de bloco, fichas | logo e a legenda |
 | Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
 | Velocidade | 1× | 1,08× |
 | Fichas de apoio | plaquinha com ícone | só texto com um fio ao lado |
@@ -295,7 +295,9 @@ alternando o sentido a cada take.
 - seis cortes em 18,8 s, **todos secos** — a diferença entre quadros vizinhos
   dura um quadro só em todos eles, então não há emenda nenhuma;
 - nada de logo, etiqueta ou ficha: o único gráfico do vídeo é a legenda, mais
-  uma pílula de chamada no último terço, a 71% da altura;
+  uma pílula de chamada no último terço, a 71% da altura. **A nossa peça não
+  segue isso**: o manual da ProAdvanced pede presença de marca, e a assinatura
+  fica no canto superior esquerdo, acima da legenda;
 - empurrão de ~3,6% por segundo, sempre fechando, e em cinco das sete cenas ele
   simplesmente não existe.
 
@@ -340,6 +342,10 @@ Isso contraria o manual da ProAdvanced, que pede Montserrat. A troca foi
 pedida e vale só para a legenda; etiqueta, ficha de apoio, pílula de chamada e
 cartão final seguem em Montserrat. Para voltar atrás, é apagar uma linha
 (`captions.fontFamily`) em `src/template/style.ts`.
+
+A assinatura da marca, essa, voltou: `watermark: true`. Copiar a referência ao
+pé da letra a tirava de cena, mas presença de marca é decisão da marca, não do
+estilo.
 
 A caixa **não** segue a referência: lá a legenda é toda minúscula, aqui a
 grafia do roteiro é respeitada — nome próprio e início de frase em maiúscula.

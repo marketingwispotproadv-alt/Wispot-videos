@@ -55,7 +55,9 @@ export const LEGENDA_GRANDE: Style = {
     exitFrames: 6,
   },
   transitions: "cut",
-  watermark: false,
+  // A referência não tem logo em quadro nenhum, mas o manual da ProAdvanced
+  // pede presença de marca — e essa decisão é da marca, não do estilo.
+  watermark: true,
   overlayStyle: "quiet",
   // Na referência a fala atravessa os cortes sem pausa; sobra o suficiente
   // para a palavra não entrar decepada, e nada além disso.
