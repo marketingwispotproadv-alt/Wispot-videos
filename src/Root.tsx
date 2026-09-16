@@ -4,6 +4,7 @@ import { VIDEO } from "./brand";
 import { MyGuest, totalFrames } from "./MyGuest";
 import { EndCard } from "./components/EndCard";
 import { proadvancedFirewall } from "./pieces/proadvancedFirewall";
+import { proadvancedFirewallRef } from "./pieces/proadvancedFirewallRef";
 import { BrandProvider } from "./template/BrandContext";
 import { EndCard as PieceEndCard } from "./template/components/EndCard";
 import { Piece } from "./template/Piece";
@@ -42,6 +43,21 @@ export const RemotionRoot: React.FC = () => {
         durationInFrames={pieceFrames(
           proadvancedFirewall.scenes,
           proadvancedFirewall.endCard.seconds,
+          VIDEO.fps,
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Mesmo corte, no estilo do vídeo de referência em `public/ref`. */}
+      <Composition
+        id={proadvancedFirewallRef.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedFirewallRef }}
+        durationInFrames={pieceFrames(
+          proadvancedFirewallRef.scenes,
+          proadvancedFirewallRef.endCard.seconds,
           VIDEO.fps,
         )}
         fps={VIDEO.fps}

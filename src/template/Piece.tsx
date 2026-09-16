@@ -5,6 +5,9 @@ import { fade } from "@remotion/transitions/fade";
 import { blurWhip } from "../transitions/blurWhip";
 import "../fonts";
 import { BrandProvider } from "./BrandContext";
+import { StyleProvider } from "./StyleContext";
+import { resolveStyle } from "./style";
+import { CtaPill } from "./components/CtaPill";
 import { EndCard } from "./components/EndCard";
 import { MusicBed } from "./components/MusicBed";
 import { RuleList } from "./components/RuleList";
@@ -31,11 +34,19 @@ import type { PieceConfig } from "./types";
  * TransitionSeries identifica os filhos comparando `child.type`, e qualquer
  * wrapper no meio faz o render falhar.
  */
-const transitionAfter = (frames: number, last: boolean): React.ReactNode => {
-  if (frames === 0) return null;
+const transitionAfter = (
+  frames: number,
+  last: boolean,
+  kind: "blur" | "cut",
+): React.ReactNode => {
+  // Corte seco em tudo, menos a entrada do cartão final: sem ele a peça
+  // termina num salto para uma imagem que não tem nada a ver com o resto.
+  if (frames === 0 || (kind === "cut" && !last)) return null;
   const timing = linearTiming({ durationInFrames: frames });
   if (last) {
-    return <TransitionSeries.Transition presentation={fade()} timing={timing} />;
+    return (
+      <TransitionSeries.Transition presentation={fade()} timing={timing} />
+    );
   }
   return (
     <TransitionSeries.Transition
@@ -48,6 +59,7 @@ const transitionAfter = (frames: number, last: boolean): React.ReactNode => {
 export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const { fps } = useVideoConfig();
   const { scenes, overlays = {}, endCard, music } = config;
+  const style = resolveStyle(config.style);
 
   const durations = sceneFrames(scenes, fps);
   const transitions = transitionsFor(scenes, fps);
@@ -56,52 +68,61 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
 
   return (
     <BrandProvider brand={config.brand}>
-      <AbsoluteFill style={{ backgroundColor: "#000" }}>
-        <TransitionSeries>
-          {scenes.map((scene, i) => {
-            const overlay = overlays[scene.clip];
-            return (
-              <React.Fragment key={scene.clip}>
-                <TransitionSeries.Sequence
-                  durationInFrames={durations[i]}
-                  name={`Cena ${i + 1} · ${scene.clip}`}
-                >
-                  <Scene
-                    scene={scene}
-                    clipsDir={config.clipsDir}
+      <StyleProvider style={style}>
+        <AbsoluteFill style={{ backgroundColor: "#000" }}>
+          <TransitionSeries>
+            {scenes.map((scene, i) => {
+              const overlay = overlays[scene.clip];
+              return (
+                <React.Fragment key={scene.clip}>
+                  <TransitionSeries.Sequence
                     durationInFrames={durations[i]}
-                    push={i % 2 === 0 ? 1 : -1}
+                    name={`Cena ${i + 1} · ${scene.clip}`}
                   >
-                    {overlay?.label ? (
-                      <SectionLabel>{overlay.label}</SectionLabel>
-                    ) : null}
-                    {overlay?.items ? <RuleList items={overlay.items} /> : null}
-                  </Scene>
-                </TransitionSeries.Sequence>
-                {transitionAfter(
-                  transitions[i],
-                  i === scenes.length - 1,
-                )}
-              </React.Fragment>
-            );
-          })}
-          <TransitionSeries.Sequence
-            durationInFrames={endCardFrames}
-            name="Cartão final"
-          >
-            <EndCard config={endCard} />
-          </TransitionSeries.Sequence>
-        </TransitionSeries>
+                    <Scene
+                      scene={scene}
+                      clipsDir={config.clipsDir}
+                      durationInFrames={durations[i]}
+                      push={style.pushAlternates && i % 2 === 1 ? -1 : 1}
+                    >
+                      {overlay?.label ? (
+                        <SectionLabel>{overlay.label}</SectionLabel>
+                      ) : null}
+                      {overlay?.items ? (
+                        <RuleList items={overlay.items} />
+                      ) : null}
+                    </Scene>
+                  </TransitionSeries.Sequence>
+                  {transitionAfter(
+                    transitions[i],
+                    i === scenes.length - 1,
+                    style.transitions,
+                  )}
+                </React.Fragment>
+              );
+            })}
+            <TransitionSeries.Sequence
+              durationInFrames={endCardFrames}
+              name="Cartão final"
+            >
+              <EndCard config={endCard} />
+            </TransitionSeries.Sequence>
+          </TransitionSeries>
 
-        {music ? (
-          <MusicBed
-            config={music}
-            totalFrames={total}
-            endCardFrom={endCardStart(scenes, endCard.seconds, fps)}
-            fps={fps}
-          />
-        ) : null}
-      </AbsoluteFill>
+          {style.cta ? (
+            <CtaPill text={style.cta.text} at={style.cta.at} />
+          ) : null}
+
+          {music ? (
+            <MusicBed
+              config={music}
+              totalFrames={total}
+              endCardFrom={endCardStart(scenes, endCard.seconds, fps)}
+              fps={fps}
+            />
+          ) : null}
+        </AbsoluteFill>
+      </StyleProvider>
     </BrandProvider>
   );
 };

@@ -10,6 +10,7 @@ ProAdvanced.
 | `MyGuest` | 1080×1920 (9:16) | ~44,8 s | Vídeo institucional do MyGuest (Wispot), com locução, trilha, legendas sincronizadas e gráficos de marca |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final do MyGuest, isolado |
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
+| `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
@@ -227,6 +228,46 @@ da peça.
 O contrapeso ao enquadramento repetido é o empurrão de escala em
 `template/components/Scene.tsx`: cada cena entra 4,5% ampliada e vai fechando,
 alternando o sentido a cada take.
+
+## Dois estilos
+
+`src/template/style.ts` guarda os dois, e uma peça escolhe com `style:`.
+
+| | `FICHAS` | `LEGENDA_GRANDE` |
+| --- | --- | --- |
+| Legenda | embaixo, 66 px, peso 800 | no topo, 102 px, peso 700, caixa baixa |
+| Palavra ativa | pílula na cor da marca | nada: tudo branco |
+| Palavras por dizer | aparecem escurecidas | não aparecem; entram ao serem ditas |
+| Emendas | borrão de 6 quadros | corte seco |
+| Em cena | logo, etiqueta de bloco, fichas | só a legenda |
+| Empurrão | 4,5%, alternando o sentido | 12%, sempre fechando |
+
+`LEGENDA_GRANDE` saiu de medir o vídeo de referência que a Wispot mandou, em
+720×1280:
+
+- legenda a 184 px do topo (14,4% da altura), centrada, duas linhas no máximo;
+- altura de x de 36 px e ascendente de 49 px — em Montserrat isso dá ~68 px de
+  corpo, que no nosso quadro de 1920 são 102 px;
+- entrelinha de 62 px, ou 0,91 do corpo: mais apertada que o corpo;
+- seis cortes em 18,8 s, **todos secos** — a diferença entre quadros vizinhos
+  dura um quadro só em todos eles, então não há emenda nenhuma;
+- nada de logo, etiqueta ou ficha: o único gráfico do vídeo é a legenda, mais
+  uma pílula de chamada no último terço, a 71% da altura;
+- empurrão de ~3,6% por segundo, sempre fechando, e em duas das sete cenas ele
+  simplesmente não existe.
+
+O arquivo de referência não fica no repositório — é conteúdo de terceiro, e o
+que importava dele são estes números. Ele está no histórico do git, no commit
+em que foi subido.
+
+### O que não dá para copiar com a nossa grade
+
+A referência foi gravada numa sala de madeira e luz amarela; a nossa, numa de
+vidro e luz fria. Medindo a média dos canais, lá R−B é **+24** e aqui era
+**−9**. O tempero quente de `components/Warmth.tsx` mais um ganho de saturação
+levam a nossa para **+10**, com a saturação de 21 para 25 contra 35 da
+referência. Fecha pouco mais da metade da distância; o resto é o lugar, não a
+grade, e forçar mais deixa a pele alaranjada.
 
 ## Fichas que atravessam o corte
 

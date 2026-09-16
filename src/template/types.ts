@@ -93,6 +93,51 @@ export type MusicConfig = {
   over?: number;
 };
 
+/**
+ * Os poucos parâmetros em que dois estilos de peça divergem. O padrão reproduz
+ * o corte original da ProAdvanced; medidas diferentes montam o estilo de
+ * legenda grande no topo, sem cromo nenhum em volta.
+ */
+export type Style = {
+  captions: {
+    /** de onde a legenda é ancorada */
+    anchor: "top" | "bottom";
+    /** distância da borda ancorada, em px de um quadro de 1920 */
+    offset: number;
+    fontSize: number;
+    fontWeight: number;
+    lineHeight: number;
+    /** caixa baixa em tudo, como manda o estilo de legenda grande */
+    lowercase: boolean;
+    /**
+     * `pill` acende a palavra ativa numa pílula da cor da marca;
+     * `none` deixa tudo branco e o ritmo fica só na entrada das palavras.
+     */
+    highlight: "pill" | "none";
+    /**
+     * `preview` mostra o trecho inteiro e escurece o que ainda não foi dito;
+     * `reveal` faz cada palavra aparecer na hora em que é falada.
+     */
+    reveal: "preview" | "reveal";
+  };
+  /** `blur` emenda com o borrão; `cut` corta seco em tudo */
+  transitions: "blur" | "cut";
+  /** assinatura da marca no canto */
+  watermark: boolean;
+  /** quanto a cena fecha ao longo do take (0.045 = 4,5%) */
+  push: number;
+  /**
+   * Alternar o sentido do empurrão a cada take evita que dois planos seguidos
+   * andem para o mesmo lado. O estilo de legenda grande não alterna: lá a
+   * câmera só fecha, nunca abre.
+   */
+  pushAlternates: boolean;
+  /** tempero quente por cima da imagem, de 0 a 1 */
+  warmth?: number;
+  /** pílula de chamada, como a dos anúncios; entra no segundo indicado */
+  cta?: { text: string; at: number };
+};
+
 export type PieceConfig = {
   /** id da composição no Remotion Studio */
   id: string;
@@ -104,4 +149,6 @@ export type PieceConfig = {
   overlays?: Record<string, Overlay>;
   endCard: EndCardConfig;
   music?: MusicConfig;
+  /** sem isto, vale o padrão de `src/template/style.ts` */
+  style?: Partial<Style>;
 };
