@@ -56,3 +56,27 @@ export const proadvancedFirewallRef: PieceConfig = {
     cta: { text: "Fale com a gente", at: 52.5 },
   },
 };
+
+/**
+ * A mesma peça, sem legenda e sem ficha, para tirar quadro de capa:
+ *
+ *     npx remotion still ProAdvancedFirewallCapa out/capa.png --frame=883
+ *
+ * No vídeo não existe quadro limpo — nos vãos entre um trecho e outro, a
+ * legenda que sai e a que entra se cruzam em transparência.
+ */
+export const proadvancedFirewallCapa: PieceConfig = {
+  ...proadvancedFirewallRef,
+  id: "ProAdvancedFirewallCapa",
+  overlays: {},
+  style: {
+    ...proadvancedFirewallRef.style,
+    captions: {
+      ...(proadvancedFirewallRef.style?.captions ?? LEGENDA_GRANDE.captions),
+      hidden: true,
+    },
+    flash: undefined,
+    progressBar: false,
+    cta: undefined,
+  },
+};

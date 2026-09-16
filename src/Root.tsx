@@ -4,7 +4,10 @@ import { VIDEO } from "./brand";
 import { MyGuest, totalFrames } from "./MyGuest";
 import { EndCard } from "./components/EndCard";
 import { proadvancedFirewall } from "./pieces/proadvancedFirewall";
-import { proadvancedFirewallRef } from "./pieces/proadvancedFirewallRef";
+import {
+  proadvancedFirewallCapa,
+  proadvancedFirewallRef,
+} from "./pieces/proadvancedFirewallRef";
 import { BrandProvider } from "./template/BrandContext";
 import { EndCard as PieceEndCard } from "./template/components/EndCard";
 import { Piece } from "./template/Piece";
@@ -62,6 +65,22 @@ export const RemotionRoot: React.FC = () => {
           proadvancedFirewallRef.endCard.seconds,
           VIDEO.fps,
           resolveStyle(proadvancedFirewallRef.style),
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Sem legenda nem ficha, só para tirar quadro de capa. */}
+      <Composition
+        id={proadvancedFirewallCapa.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedFirewallCapa }}
+        durationInFrames={pieceFrames(
+          proadvancedFirewallCapa.scenes,
+          proadvancedFirewallCapa.endCard.seconds,
+          VIDEO.fps,
+          resolveStyle(proadvancedFirewallCapa.style),
         )}
         fps={VIDEO.fps}
         width={VIDEO.width}

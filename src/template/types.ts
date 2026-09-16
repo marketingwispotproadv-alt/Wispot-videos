@@ -128,6 +128,12 @@ export type Style = {
     enterFrames?: number;
     exitFrames?: number;
     /**
+     * Esconde a legenda. Serve para tirar capa: no vídeo não existe quadro sem
+     * legenda nenhuma — nos vãos entre um trecho e outro, o que sai e o que
+     * entra se cruzam em transparência.
+     */
+    hidden?: boolean;
+    /**
      * `pill` acende a palavra ativa numa pílula da cor da marca;
      * `none` deixa tudo branco e o ritmo fica só na entrada das palavras.
      */

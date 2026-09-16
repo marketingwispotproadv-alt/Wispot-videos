@@ -31,6 +31,8 @@ export const Captions: React.FC<{ chunks: CaptionChunk[] }> = ({ chunks }) => {
    */
   const LEAD = captions.reveal === "reveal" ? 0 : 0.16;
 
+  if (captions.hidden) return null;
+
   const index = chunks.findIndex(
     (c, i) =>
       t >= c.words[0].start - LEAD &&
