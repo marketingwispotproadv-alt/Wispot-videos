@@ -10,26 +10,34 @@ aquela trilha foi licenciada para o MyGuest e não cobre vídeo de outra marca.
 | `trilha.mp3` | *Funky Corporate Explainer*, de Alex Morgan, esticada para caber na peça |
 | `whoosh.wav` | efeito de corte, sintetizado em `tools/make_whoosh.py` |
 
-### Como a trilha foi esticada
+### Como a trilha foi ajustada
 
-O original tem 38,52 s e a peça 56,75 s. Repetir a faixa e cortar no talho
-deixa a emenda à mostra, então o corte foi feito na grade musical:
+O original tem 38,52 s e a peça 52,93 s. Repetir e cortar no talho deixa a
+emenda à mostra, então `tools/fit_music.py` corta na grade musical:
 
-- batida medida por autocorrelação do envelope de ataque: 0,5413 s, ou
-  **110,8 BPM**; compasso de 2,1654 s;
-- a peça fica **introdução → miolo → miolo repetido por 9 compassos → cauda**,
-  com cruzamento de meia batida em cada emenda;
-- o miolo vai de 8,952 s a 30,605 s, que são dez compassos exatos.
+```bash
+python3 tools/fit_music.py original.mp3 public/proadv/audio/trilha.mp3 52.93
+```
+
+- batida medida por autocorrelação do envelope de ataque: **110,4 BPM**,
+  compasso de 2,1746 s;
+- monta **introdução → miolo → miolo repetido por 7 compassos → cauda**, com
+  cruzamento de meia batida em cada emenda;
+- normaliza a −20 dBFS de RMS.
 
 Guardar a cauda original importa: é ela que resolve a faixa embaixo do cartão
-final, em vez de o vídeo terminar com a música cortada no meio.
+final, em vez de o vídeo terminar com a música cortada no meio de uma frase.
 
-Normalizada a −20 dBFS de RMS. O volume na peça é montado por
-`template/components/MusicBed.tsx`: baixo sob a locução, subindo no cartão
-final.
+**Atenção**: o número no fim do comando é a duração do vídeo **final**. Mexer
+em `speed` muda essa duração e a trilha precisa ser remontada — do contrário a
+cauda fica de fora. Foi o que aconteceu ao acelerar a peça em 8%: a trilha
+estava montada para 56,75 s e passou a ser cortada 4 s antes do fim.
 
-**Conferido**: nenhuma queda de nível nas duas emendas. Se a emenda soar, é
-questão de ouvido e não de medida — vale escutar antes de publicar.
+O volume na peça é montado por `template/components/MusicBed.tsx`: baixo sob a
+locução, subindo no cartão final.
+
+**Conferido**: nenhuma queda de nível nas emendas. Se elas soarem, é questão de
+ouvido e não de medida — vale escutar antes de publicar.
 
 ## Onde baixar
 
