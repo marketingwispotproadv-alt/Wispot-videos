@@ -64,11 +64,60 @@ export const tighten = (scene: SceneDef, style: Style): SceneDef => {
   };
 };
 
-export const tightenAll = (scenes: SceneDef[], style: Style) =>
-  scenes.map((s) => tighten(s, style));
+/**
+ * Acelera a cena.
+ *
+ * `trimStart` e `trimEnd` são posições no arquivo de origem e não mudam — quem
+ * muda é quanto tempo elas ocupam na linha do tempo. Tudo que é medido a
+ * partir do início da cena (legenda e silêncio) encolhe na mesma proporção.
+ */
+const speedUp = (scene: SceneDef, speed: number): SceneDef => {
+  if (speed === 1) return scene;
+  const scale = (v: number) => Math.round((v / speed) * 1000) / 1000;
+  const silence = silenceOf(scene);
+  return {
+    ...scene,
+    silence: { head: scale(silence.head), tail: scale(silence.tail) },
+    chunks: scene.chunks.map((chunk) => ({
+      words: chunk.words.map((w) => ({
+        ...w,
+        start: scale(w.start),
+        end: scale(w.end),
+      })),
+    })),
+  };
+};
 
-export const sceneFrames = (scenes: SceneDef[], fps: number) =>
-  scenes.map((s) => Math.round((s.trimEnd - s.trimStart) * fps));
+/** Quanto foi cortado da cabeça da cena ao aparar o silêncio. */
+export const headCut = (scene: SceneDef, style: Style) =>
+  Math.max(0, silenceOf(scene).head - style.lead.head);
+
+/**
+ * Leva os tempos dos gráficos para a mesma linha do tempo da cena já aparada e
+ * acelerada. Sem isto uma ficha marcada na palavra que a nomeia entra atrasada
+ * do tanto que o silêncio foi cortado.
+ */
+export const adjustOverlay = <T extends { at?: number }>(
+  items: T[],
+  scene: SceneDef,
+  style: Style,
+): T[] => {
+  const cut = headCut(scene, style);
+  return items.map((item) =>
+    item.at === undefined
+      ? item
+      : {
+          ...item,
+          at: Math.round(((item.at - cut) / style.speed) * 100) / 100,
+        },
+  );
+};
+
+export const tightenAll = (scenes: SceneDef[], style: Style) =>
+  scenes.map((s) => speedUp(tighten(s, style), style.speed));
+
+export const sceneFrames = (scenes: SceneDef[], fps: number, speed = 1) =>
+  scenes.map((s) => Math.round(((s.trimEnd - s.trimStart) / speed) * fps));
 
 /**
  * A emenda depois de cada cena, medida do próprio material.
@@ -108,7 +157,7 @@ export const totalFrames = (
 ) => {
   const tight = tightenAll(scenes, style);
   return (
-    sceneFrames(tight, fps).reduce((a, b) => a + b, 0) +
+    sceneFrames(tight, fps, style.speed).reduce((a, b) => a + b, 0) +
     Math.round(endCardSeconds * fps) -
     transitionsFor(tight, fps, style).reduce((a, b) => a + b, 0)
   );

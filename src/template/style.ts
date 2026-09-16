@@ -14,8 +14,10 @@ export const FICHAS: Style = {
   },
   transitions: "blur",
   watermark: true,
+  overlayStyle: "chips",
   // 0,22 s é o que o borrão de 6 quadros precisa para cair no mudo.
   lead: { head: 0.22, tail: 0.3 },
+  speed: 1,
   push: 0.045,
   pushAlternates: true,
 };
@@ -46,11 +48,15 @@ export const LEGENDA_GRANDE: Style = {
   },
   transitions: "cut",
   watermark: false,
+  overlayStyle: "quiet",
   // Na referência a fala atravessa os cortes sem pausa; sobra o suficiente
   // para a palavra não entrar decepada, e nada além disso.
   lead: { head: 0.08, tail: 0.12 },
   // ~35% entre o quadro cheio e o recorte, medido corte a corte na referência.
   punch: 1.35,
+  // 8% é o que dá para tirar sem a fala soar apressada; acima de ~12% a
+  // correção de tom começa a deixar a voz com textura de plástico.
+  speed: 1.08,
   // Com o salto de enquadramento carregando o corte, o empurrão dentro da cena
   // fica só para o quadro não congelar. Na referência ele é de ~3,6% por
   // segundo, mas lá cinco das sete cenas não têm empurrão nenhum.

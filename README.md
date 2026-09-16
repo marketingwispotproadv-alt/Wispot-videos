@@ -277,6 +277,8 @@ alternando o sentido a cada take.
 | Emendas | borrão de 6 quadros | corte seco |
 | Em cena | logo, etiqueta de bloco, fichas | só a legenda |
 | Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
+| Velocidade | 1× | 1,08× |
+| Fichas de apoio | plaquinha com ícone | só texto com um fio ao lado |
 | Clarão no corte | — | em 4 dos 15 cortes, 0,55 de opacidade |
 | Efeito no corte | — | *swish* sintetizado, nos mesmos 4 cortes |
 | Fio de progresso | — | sim |
@@ -342,6 +344,35 @@ configuração da peça, marca só onde o argumento vira:
 
 Nos outros onze cortes fica só o salto de enquadramento. O efeito sonoro
 acompanha os mesmos quatro: *swish* sem clarão é som sem imagem.
+
+### Acelerar sem deixar a voz fina
+
+`speed: 1.08` corre a imagem e a fala 8% mais rápido. `trimStart` e `trimEnd`
+são posições no arquivo de origem e não mudam; quem encolhe é o tempo que a
+cena ocupa na linha do tempo, e junto com ele a legenda, o silêncio medido e
+os tempos dos gráficos.
+
+**A armadilha**: quem vem do ffmpeg corrige o tom na mão, porque lá acelerar
+sobe a voz. No Remotion, `playbackRate` **já preserva o tom no render** — pôr
+`toneFrequency={1 / speed}` por cima derruba a voz. Medido na fundamental do
+apresentador: 129 Hz viravam 119 Hz, um semitom e meio abaixo. Sem a
+"correção", ficam 126,5 Hz, que é o mesmo dentro do erro da medida.
+
+Acima de ~12% a fala começa a soar apressada e a correção de tom deixa textura
+de plástico. 8% passa despercebido e tira quatro segundos da peça.
+
+### Um gráfico, e só um
+
+A peça de legenda grande tem **um** elemento de apoio no vídeo inteiro, no
+único lugar em que ele explica em vez de enfeitar: o bloco em que o roteiro
+enumera o que envelhece — porta aberta, acesso antigo, configuração
+desatualizada. A lista se acumula enquanto ele fala, e o item que acabou de
+entrar fica cheio enquanto os anteriores recuam para 38%. É o recuo que conta
+a história: a lista cresce junto com o problema.
+
+`QuietList` é de propósito o oposto da `RuleList` do outro estilo — sem
+plaquinha, sem ícone, sem sombra, no mesmo idioma tipográfico da legenda. Num
+corte que não tem cromo nenhum, ficha de plástico azul denunciaria o template.
 
 ### O efeito de corte é sintetizado aqui
 

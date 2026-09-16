@@ -13,10 +13,12 @@ import { CutSfx } from "./components/CutSfx";
 import { EndCard } from "./components/EndCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { MusicBed } from "./components/MusicBed";
+import { QuietList } from "./components/QuietList";
 import { RuleList } from "./components/RuleList";
 import { Scene } from "./components/Scene";
 import { SectionLabel } from "./components/SectionLabel";
 import {
+  adjustOverlay,
   endCardStart,
   sceneFrames,
   tightenAll,
@@ -64,11 +66,12 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const { fps } = useVideoConfig();
   const { overlays = {}, endCard, music, flashBefore } = config;
   const style = resolveStyle(config.style);
+  const OverlayList = style.overlayStyle === "quiet" ? QuietList : RuleList;
 
   // O silêncio que passa do que o estilo pede sai aqui, uma vez, e tudo
   // adiante — duração, emendas, legenda — trabalha sobre a cena já apertada.
   const scenes = tightenAll(config.scenes, style);
-  const durations = sceneFrames(scenes, fps);
+  const durations = sceneFrames(scenes, fps, style.speed);
   const transitions = transitionsFor(scenes, fps, style);
   const endCardFrames = Math.round(endCard.seconds * fps);
   const total = totalFrames(config.scenes, endCard.seconds, fps, style);
@@ -113,7 +116,13 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
                         <SectionLabel>{overlay.label}</SectionLabel>
                       ) : null}
                       {overlay?.items ? (
-                        <RuleList items={overlay.items} />
+                        <OverlayList
+                          items={adjustOverlay(
+                            overlay.items,
+                            config.scenes[i],
+                            style,
+                          )}
+                        />
                       ) : null}
                     </Scene>
                   </TransitionSeries.Sequence>

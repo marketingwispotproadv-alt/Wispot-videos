@@ -60,6 +60,11 @@ export const Scene: React.FC<{
         src={staticFile(`${clipsDir}/${scene.clip}.mp4`)}
         trimBefore={Math.round(scene.trimStart * fps)}
         trimAfter={Math.round(scene.trimEnd * fps)}
+        // `playbackRate` já preserva o tom no render do Remotion. Corrigir
+        // com `toneFrequency={1 / speed}` por cima — que é o reflexo de quem
+        // vem do ffmpeg — derruba a voz 1,3 semitom. Medido: a fundamental
+        // caía de 129 Hz para 119 Hz.
+        playbackRate={style.speed}
         style={{
           width: "100%",
           height: "100%",

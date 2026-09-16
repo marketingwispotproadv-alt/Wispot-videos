@@ -135,6 +135,11 @@ export type Style = {
   /** assinatura da marca no canto */
   watermark: boolean;
   /**
+   * Como as fichas de apoio aparecem. `chips` é a plaquinha com ícone; `quiet`
+   * é só texto com um fio ao lado, para o estilo que não tem cromo nenhum.
+   */
+  overlayStyle: "chips" | "quiet";
+  /**
    * Silêncio que fica em cada ponta da cena, em segundos. O que passar disso é
    * aparado, e a legenda anda junto. Nunca acrescenta silêncio que não exista.
    */
@@ -146,6 +151,13 @@ export type Style = {
    * transição nenhuma.
    */
   punch?: number;
+  /**
+   * Velocidade da imagem e da fala. 1,08 = 8% mais rápido.
+   *
+   * O tom é corrigido junto (`toneFrequency`), senão a voz sobe com a
+   * velocidade e o apresentador fica com cara de desenho animado.
+   */
+  speed: number;
   /** quanto a cena fecha ao longo do take (0.045 = 4,5%) */
   push: number;
   /**
