@@ -60,6 +60,10 @@ export const LEGENDA_GRANDE: Style = {
   // Curto e a meio caminho do branco. Clarão cheio em dezesseis cortes cansa,
   // e o corte já tem o salto de enquadramento para marcá-lo.
   flash: { intensity: 0.55, rise: 2, fall: 4 },
+  // Sintetizado em `tools/make_whoosh.py`, sem licença de ninguém no meio.
+  // Baixo de propósito: são quinze cortes, e efeito alto em todos cansa mais
+  // rápido do que o clarão.
+  flashSfx: { src: "proadv/audio/whoosh.wav", volume: 0.26 },
   progressBar: true,
 };
 

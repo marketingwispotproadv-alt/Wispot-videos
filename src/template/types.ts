@@ -164,6 +164,13 @@ export type Style = {
    * É escolha de montagem.
    */
   flash?: { intensity: number; rise: number; fall: number; color?: string };
+  /** efeito curto em cada corte, alinhado pelo pico com o clarão */
+  flashSfx?: {
+    src: string;
+    volume?: number;
+    peakAt?: number;
+    length?: number;
+  };
   /** fio de progresso no topo */
   progressBar?: boolean;
   /** pílula de chamada, como a dos anúncios; entra no segundo indicado */

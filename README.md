@@ -278,6 +278,7 @@ alternando o sentido a cada take.
 | Em cena | logo, etiqueta de bloco, fichas | só a legenda |
 | Empurrão | 4,5%, alternando o sentido | 5%, sempre fechando |
 | Clarão no corte | — | 0,55 de opacidade, sobe em 2 e cai em 4 quadros |
+| Efeito no corte | — | *swish* sintetizado, a 0,26 de volume |
 | Fio de progresso | — | sim |
 | Salto de quadro no corte | — | alterna entre cheio e 1,35× |
 | Silêncio mantido nas pontas | 0,22 s / 0,30 s | 0,08 s / 0,12 s |
@@ -325,6 +326,22 @@ Ele é desenhado **por cima** da peça, não como emenda da `TransitionSeries`.
 A diferença é audível: emenda sobrepõe as duas cenas e, com elas, as duas
 falas. Assim o corte continua seco no vídeo e no áudio, e o clarão é só uma
 camada branca em volta do quadro do corte.
+
+### O efeito de corte é sintetizado aqui
+
+`tools/make_whoosh.py` gera `public/proadv/audio/whoosh.wav`: ruído passado por
+um filtro de estado variável cuja frequência sobe de 260 Hz a 5,2 kHz, com
+ataque rápido, cauda de 75 ms e um toque de grave em 92 Hz para não ficar fino
+no alto-falante do celular. Rodar o script de novo devolve o mesmo arquivo byte
+a byte.
+
+Efeito de transição é a parte mais fácil de resolver sem depender de licença de
+banco de som — um *swish* é só ruído filtrado. Trilha é outra história, e essa
+precisa vir de fora.
+
+O pico do arquivo cai a 0,12 s do início, e `CutSfx` entra com o som adiantado
+desse tanto para o pico bater no quadro do corte: efeito de transição que
+começa **no** corte chega tarde ao ouvido.
 
 ### O que não dá para copiar com a nossa grade
 

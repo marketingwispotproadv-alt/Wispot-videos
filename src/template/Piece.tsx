@@ -9,6 +9,7 @@ import { StyleProvider } from "./StyleContext";
 import { resolveStyle } from "./style";
 import { CtaPill } from "./components/CtaPill";
 import { CutFlash } from "./components/CutFlash";
+import { CutSfx } from "./components/CutSfx";
 import { EndCard } from "./components/EndCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { MusicBed } from "./components/MusicBed";
@@ -127,6 +128,10 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
 
           {style.flash ? (
             <CutFlash cuts={cuts.slice(1)} config={style.flash} />
+          ) : null}
+
+          {style.flashSfx ? (
+            <CutSfx cuts={cuts.slice(1)} config={style.flashSfx} />
           ) : null}
 
           {style.progressBar ? <ProgressBar totalFrames={total} /> : null}
