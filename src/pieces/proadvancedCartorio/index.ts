@@ -86,14 +86,23 @@ export const proadvancedCartorio: PieceConfig = {
   },
   // A trilha é a mesma faixa licenciada para a ProAdvanced, remontada para a
   // duração desta peça — a do vídeo do firewall foi cortada para 52,93 s e
-  // aqui a peça tem 70,30 s. Ver `public/cartorio/audio/README.md`.
-  music: { src: "cartorio/audio/trilha.mp3" },
+  // aqui a peça tem 68,27 s. Ver `public/cartorio/audio/README.md`.
+  //
+  // Mais baixa que o padrão do template (0,22 e 0,62), por pedido: −4,6 dB sob
+  // a locução e −1,9 dB no cartão final. O cartão baixa menos de propósito,
+  // porque ali não há fala e é a trilha que resolve o fim da peça.
+  music: { src: "cartorio/audio/trilha.mp3", under: 0.13, over: 0.5 },
   style: {
     ...LEGENDA_GRANDE,
+    // Mais apertado que o padrão do estilo (0,08 / 0,12), por pedido de ritmo.
+    // Abaixo disto a consoante de ataque começa a entrar decepada: o corte
+    // cairia em cima do "p" de "políticas" e do "b" de "backup", que são
+    // justamente os que precisam do silêncio de antes para soarem.
+    lead: { head: 0.03, tail: 0.05 },
     // O roteiro não tem o "Fale com a Pro Advanced" gravado, então quem faz a
-    // chamada é a pílula. Ela entra junto com a pergunta do fecho, em 58,83 s,
-    // e fica até o cartão final, em 66,30 s.
-    cta: { text: "Fale com a Pro Advanced", at: 59 },
+    // chamada é a pílula. Ela entra junto com a pergunta do fecho, em 57,07 s,
+    // e fica até o cartão final, em 64,27 s.
+    cta: { text: "Fale com a Pro Advanced", at: 57.2 },
   },
 };
 

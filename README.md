@@ -12,7 +12,7 @@ ProAdvanced.
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
 | `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
-| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~70,3 s | Segurança da informação em cartórios (ProAdvanced): 21 takes, legenda grande no topo, corte seco |
+| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~68,3 s | Segurança da informação em cartórios (ProAdvanced): 21 takes, legenda grande no topo, corte seco |
 | `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
