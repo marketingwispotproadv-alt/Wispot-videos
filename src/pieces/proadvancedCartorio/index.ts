@@ -100,7 +100,7 @@ export const proadvancedCartorio: PieceConfig = {
 /**
  * A mesma peça, sem legenda e sem ficha, para tirar quadro de capa:
  *
- *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=1100
+ *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=1500
  *
  * No vídeo não existe quadro limpo — nos vãos entre um trecho e outro, a
  * legenda que sai e a que entra se cruzam em transparência.
