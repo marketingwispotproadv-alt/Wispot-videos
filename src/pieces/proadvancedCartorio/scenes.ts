@@ -191,12 +191,12 @@ export const SCENES: SceneDef[] = [
     // Na Pro Advanced, ajudamos cartórios com soluções de cibersegurança,
     clip: "17-proadvanced",
     trimStart: 0.0,
-    trimEnd: 6.38,
-    silence: { head: 0.68, tail: 0.02 },
+    trimEnd: 5.95,
+    silence: { head: 0.68, tail: 0.24 },
     chunks: [
       { words: [{ text: "Na", start: 0.0, end: 0.78 }, { text: "Pro Advanced,", start: 0.78, end: 1.6 }, { text: "ajudamos", start: 1.6, end: 2.54 }] },
       { words: [{ text: "cartórios", start: 2.54, end: 3.24 }, { text: "com", start: 3.24, end: 3.58 }, { text: "soluções", start: 3.58, end: 4.62 }] },
-      { words: [{ text: "de", start: 4.62, end: 4.72 }, { text: "cibersegurança,", start: 4.72, end: 6.36 }] },
+      { words: [{ text: "de", start: 4.62, end: 4.72 }, { text: "cibersegurança,", start: 4.72, end: 5.69 }] },
     ],
   },
   {
@@ -240,6 +240,16 @@ export const SCENES: SceneDef[] = [
     chunks: [
       { words: [{ text: "e", start: 0.2, end: 0.36 }, { text: "continuar", start: 0.36, end: 0.96 }, { text: "operando", start: 0.96, end: 1.62 }, { text: "diante", start: 1.62, end: 2.24 }] },
       { words: [{ text: "de", start: 2.24, end: 2.4 }, { text: "um", start: 2.4, end: 2.44 }, { text: "incidente?", start: 2.44, end: 3.1 }] },
+    ],
+  },
+  {
+    // Fale conosco!
+    clip: "22-fale-conosco",
+    trimStart: 0.82,
+    trimEnd: 2.13,
+    silence: { head: 0.2, tail: 0.28 },
+    chunks: [
+      { words: [{ text: "Fale", start: 0.0, end: 0.34 }, { text: "conosco!", start: 0.34, end: 1.01 }] },
     ],
   },
 ];

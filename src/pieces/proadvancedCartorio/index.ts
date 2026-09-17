@@ -53,12 +53,16 @@ const OVERLAYS: Record<string, Overlay> = {
  * seco. O material é o que está em `public/cartorio/clips` — veja o README de
  * lá para o mapa take por take e para o que foi descartado de cada um.
  *
- * **A abertura do roteiro não foi gravada.** Não existe áudio para "Quando o
- * sistema de um cartório para..." nem para o "Fale com a Pro Advanced" falado.
- * Por decisão de quem pediu o corte, a peça começa no "Todos os dias..." e o
- * fecho fica na pílula de chamada e no cartão final. Se a locução da abertura
- * aparecer, ela entra como duas cenas novas no topo do `scenes.ts` e nada mais
- * aqui precisa mudar.
+ * **A abertura do roteiro ainda não foi gravada por inteiro.** Existe áudio
+ * para "Quando o sistema de um cartório para," — está convertido em
+ * `public/cartorio/clips/00-quando.mp4`, e o nome começa em `00` para entrar na
+ * frente quando for a hora. Falta a segunda metade da frase ("não é só a
+ * tecnologia que fica indisponível") e o "Param escrituras, certidões...".
+ * Oração subordinada sozinha não emenda no "Todos os dias...", então o clipe
+ * fica fora do corte até o resto chegar; aí ele entra como cenas novas no topo
+ * do `scenes.ts` e nada mais aqui precisa mudar.
+ *
+ * O fecho falado, esse já existe: "Fale conosco!", na cena 22.
  */
 export const proadvancedCartorio: PieceConfig = {
   id: "ProAdvancedCartorio",
@@ -86,7 +90,7 @@ export const proadvancedCartorio: PieceConfig = {
   },
   // A trilha é a mesma faixa licenciada para a ProAdvanced, remontada para a
   // duração desta peça — a do vídeo do firewall foi cortada para 52,93 s e
-  // aqui a peça tem 68,27 s. Ver `public/cartorio/audio/README.md`.
+  // aqui a peça tem 68,53 s. Ver `public/cartorio/audio/README.md`.
   //
   // Mais baixa que o padrão do template (0,22 e 0,62), por pedido: −4,6 dB sob
   // a locução e −1,9 dB no cartão final. O cartão baixa menos de propósito,
@@ -99,10 +103,13 @@ export const proadvancedCartorio: PieceConfig = {
     // cairia em cima do "p" de "políticas" e do "b" de "backup", que são
     // justamente os que precisam do silêncio de antes para soarem.
     lead: { head: 0.03, tail: 0.05 },
-    // O roteiro não tem o "Fale com a Pro Advanced" gravado, então quem faz a
-    // chamada é a pílula. Ela entra junto com a pergunta do fecho, em 57,07 s,
-    // e fica até o cartão final, em 64,27 s.
-    cta: { text: "Fale com a Pro Advanced", at: 57.2 },
+    // A pílula entra junto com a pergunta do fecho, em 56,50 s, e fica até o
+    // cartão final, em 64,53 s. Ela nasceu para suprir o "Fale com a Pro
+    // Advanced" que não tinha sido gravado; agora que o "Fale conosco!" existe
+    // em áudio, ela passou a anunciá-lo — a pergunta do fecho já aparece com a
+    // chamada na tela, e a voz a confirma no fim. Se soar repetido com o
+    // cartão final, é só tirar esta linha.
+    cta: { text: "Fale com a Pro Advanced", at: 56.6 },
   },
 };
 

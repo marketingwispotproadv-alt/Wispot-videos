@@ -1,7 +1,8 @@
 # Clipes — ProAdvanced, vídeo de cartórios
 
-21 takes, um pedaço de frase por take, já convertidos para 1080×1920 a 24 fps
-com áudio a −16 LUFS. O nome traz a ordem do roteiro na frente, porque é por
+23 clipes, um pedaço de frase por take, já convertidos para 1080×1920 a 24 fps
+com áudio a −16 LUFS. Vinte e dois entram no corte; o `00-quando` fica de
+reserva, esperando o resto da abertura (veja o fim deste arquivo). O nome traz a ordem do roteiro na frente, porque é por
 ele que `tools/build_scenes.py` ordena as cenas.
 
 ## Como o material chegou
@@ -48,22 +49,36 @@ original.
 | 19 | `19-preparado` | "Seu cartório está preparado para proteger os dados?" | — |
 | 20 | `20-novas-exigencias` | "Atender as novas exigências" | — |
 | 21 | `21-incidente` | "e continuar operando diante de um incidente?" | **1ª tentativa inteira**, em que ele erra e pede de novo ("…incidente, argh, de novo"), 0,68–3,86 s |
+| 22 | `22-fale-conosco` | "Fale conosco!" | — |
+| — | `00-quando` | "Quando o sistema de um cartório para," | **fora do corte**, à espera do resto da abertura |
 
-Os cinco descartes acima entram em `build_scenes.py` como `--regiao`. Sem isso
+Há ainda um sexto descarte, que não é de ponta e por isso não vira `--regiao`:
+em `17-proadvanced`, depois de "cibersegurança" e de **0,47 s de silêncio**, o
+João diz **"Não foi."** — comentário sobre a tomada, não roteiro. O `trimEnd`
+fecha em 5,95 s para deixá-lo de fora. Esse foi o único caso em que o som
+depois da última palavra era outra fala, e não o decaimento da própria palavra;
+o que os separa é o vão de silêncio entre uma coisa e outra.
+
+Os cinco descartes de ponta entram em `build_scenes.py` como `--regiao`. Sem isso
 a ferramenta ancora o corte na primeira palavra que casa com o roteiro, e em
 `08-exigencias` a primeira palavra que casa está no tropeço, não na tomada boa.
 
-## O que o roteiro pede e não foi gravado
+## O que o roteiro pede e ainda não foi gravado
 
-Não existe áudio para:
+O fecho falado chegou: `22-fale-conosco` diz "Fale conosco!", e é ele que fecha
+a peça antes do cartão final.
 
-- **a abertura inteira** — "Quando o sistema de um cartório para, não é só a
-  tecnologia que fica indisponível. Param escrituras, certidões, registros e o
-  atendimento ao público.";
-- **"Fale com a Pro Advanced."**, o fecho falado.
+Da abertura chegou só a primeira metade, em `00-quando`:
 
-Por decisão de quem pediu o corte, a peça começa direto no "Todos os dias…" e o
-fecho fica no cartão final. O roteiro como foi escrito está guardado em
+> "Quando o sistema de um cartório para,"
+
+Falta **"não é só a tecnologia que fica indisponível"** e a frase inteira
+**"Param escrituras, certidões, registros e o atendimento ao público."**
+
+Oração subordinada sozinha não emenda no "Todos os dias…" — sairia quebrado e
+leria como erro de montagem. Por isso o `00-quando` está convertido e guardado,
+mas fora do `scenes.ts`. Quando o resto chegar, ele entra como as primeiras
+cenas e nada mais na configuração precisa mudar. O roteiro como foi escrito está guardado em
 `src/pieces/proadvancedCartorio/roteiro-original.txt`; o `roteiro.txt` ao lado
 é o que a peça fala de verdade, e é ele que alimenta a transcrição.
 

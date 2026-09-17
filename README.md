@@ -12,7 +12,7 @@ ProAdvanced.
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
 | `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
-| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~68,3 s | Segurança da informação em cartórios (ProAdvanced): 21 takes, legenda grande no topo, corte seco |
+| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~68,5 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
 | `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
@@ -178,6 +178,17 @@ termina antes. Foi o que aconteceu em `05-impacto`. A ferramenta avisa —
 "descartei 'x', mas o nível está só −2 dB abaixo do pico" —, e esse aviso é para
 ler, não para passar batido.
 
+**A folga que sobra depois da última palavra pode não ser folga.** Estender o
+`trimEnd` até o último instante de fala é o conserto certo quando o som de lá é
+o decaimento da própria palavra — que é o caso em quase todas as cenas. Mas em
+`17-proadvanced` havia **0,47 s de silêncio de verdade** entre "cibersegurança"
+e o som seguinte, e o som seguinte era o João dizendo **"Não foi."**. Estender
+o corte o trouxe para dentro da peça, e ele ficou no vídeo entregue.
+
+O teste que separa os dois casos é a pausa: decaimento de palavra é contínuo
+com ela; comentário fora do roteiro vem depois de um vão. Antes de estender um
+`trimEnd`, procure o vão — e, se houver, transcreva o que vem depois dele.
+
 **Quando o clipe acaba junto com a fala, não há cauda para pegar.** Em
 `05-impacto` e `17-proadvanced` a câmera foi parada em cima da última palavra, e
 o `trimEnd` corrigido passava do fim do arquivo. Aí o jeito é travar na duração
@@ -205,6 +216,19 @@ dá a conclusão errada de que o material é horizontal. Todos em H.264 Baseline
 com áudio a ~60 kb/s, sem metadado de câmera — assinatura de arquivo que passou
 por aplicativo de mensagem. Detalhes e o mapa take por take em
 `public/cartorio/clips/README.md`.
+
+### O salto de enquadramento estava declarado e sem efeito
+
+`style.punch` existia em `LEGENDA_GRANDE` desde o corte do firewall, mas o
+`Piece.tsx` nunca passava `baseScale` para a `Scene` — o `punch` ficava lido e
+ignorado, e as cenas todas saíam no mesmo enquadramento. É ele que faz o corte
+seco ler como movimento de câmera em vez de falha de continuidade, então a
+peça inteira dependia só do clarão para marcar os cortes.
+
+Consertado: as cenas de índice ímpar entram com o recorte de `punch`, as pares
+em quadro cheio. Isso muda o visual de **todas** as peças no estilo de legenda
+grande, o vídeo do firewall incluído. O estilo de fichas não tem `punch`, então
+o `ProAdvancedFirewall` e o `MyGuest` seguem iguais.
 
 ## Fazer uma peça nova
 

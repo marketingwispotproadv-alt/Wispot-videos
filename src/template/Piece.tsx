@@ -111,6 +111,13 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
                       clipsDir={config.clipsDir}
                       durationInFrames={durations[i]}
                       push={style.pushAlternates && i % 2 === 1 ? -1 : 1}
+                      // O salto de enquadramento do estilo: as cenas alternam
+                      // entre o quadro cheio e um recorte `punch` vezes mais
+                      // fechado. Sem passar isto, `style.punch` ficava
+                      // declarado e sem efeito — e é ele que faz o corte seco
+                      // ler como movimento de câmera em vez de falha de
+                      // continuidade.
+                      baseScale={style.punch && i % 2 === 1 ? style.punch : 1}
                     >
                       {overlay?.label ? (
                         <SectionLabel>{overlay.label}</SectionLabel>
