@@ -12,6 +12,8 @@ ProAdvanced.
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
 | `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
+| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~70,3 s | Segurança da informação em cartórios (ProAdvanced): 21 takes, legenda grande no topo, corte seco |
+| `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
 A peça da ProAdvanced é montada com o template de `src/template/`; as duas
@@ -22,7 +24,8 @@ compartilham `components/Scrim`, `transitions/blurWhip` e a fonte.
 ```bash
 npm run dev                                          # abre o Remotion Studio
 npx remotion render MyGuest out/myguest.mp4          # renderiza o vídeo da Wispot
-npx remotion render ProAdvancedFirewall out/proadvanced.mp4  # renderiza o da ProAdvanced
+npx remotion render ProAdvancedFirewall out/proadvanced.mp4  # renderiza o do firewall
+npx remotion render ProAdvancedCartorio out/cartorio.mp4     # renderiza o de cartórios
 npm run lint                                         # eslint + tsc
 ```
 
@@ -148,6 +151,60 @@ src/brands/            tokens por marca
 src/pieces/            uma pasta por peça
 tools/                 conversão dos clipes e montagem do scenes.ts
 ```
+
+## A peça de cartórios
+
+`src/pieces/proadvancedCartorio/`. Vale ler por causa de três coisas que este
+corte ensinou.
+
+**A transcrição comprime a última palavra, e o `trimEnd` da ferramenta sai em
+cima da fala.** O `build_scenes.py` marca `trimEnd` como o fim da última palavra
+mais 0,30 s. Em seis dos 21 takes o modelo encurtou essa palavra e o corte comeu
+fala: em `17-proadvanced` faltavam 0,58 s do fim de "cibersegurança", e em
+`07-provimentos` o número "243" é dito de 6,90 a 7,95 s enquanto o modelo o deu
+como encerrado em 6,97 — o corte caía 1,68 s antes do fim.
+
+O que denuncia é o `silence.tail` valendo `0.00`: se não há folga na cauda, o
+corte está em cima de som. Confira **toda** cena com cauda zerada comparando
+`trimEnd` com o último instante de fala sustentada do envelope de energia, e não
+com o tempo que a transcrição devolveu. O mesmo vale para a cabeça: em
+`18-infraestrutura` a palavra "backup" começa em 0,65 s e o corte estava em
+1,26.
+
+**Palavra que a transcrição erra é palavra que a ferramenta joga fora.** Ela
+ancora o corte na primeira e na última palavra que casam com o roteiro; quando o
+modelo ouve "laptendimento" no lugar de "atendimento", nada casa e a cena
+termina antes. Foi o que aconteceu em `05-impacto`. A ferramenta avisa —
+"descartei 'x', mas o nível está só −2 dB abaixo do pico" —, e esse aviso é para
+ler, não para passar batido.
+
+**Quando o clipe acaba junto com a fala, não há cauda para pegar.** Em
+`05-impacto` e `17-proadvanced` a câmera foi parada em cima da última palavra, e
+o `trimEnd` corrigido passava do fim do arquivo. Aí o jeito é travar na duração
+do arquivo e aceitar a cauda curta — 0,02 s em `17-proadvanced`. Com corte seco
+isso passa; com borrão não passaria, porque a emenda não teria onde morder.
+
+### O que o roteiro pedia e não foi gravado
+
+A abertura inteira e o "Fale com a Pro Advanced" falado não existem em áudio. A
+peça começa no "Todos os dias..." e a chamada fica na pílula e no cartão final.
+O roteiro como foi escrito está em `roteiro-original.txt`, ao lado do
+`roteiro.txt` que é o que a peça fala — e é o segundo que alimenta a
+transcrição, porque o vocabulário de ancoragem tem de ser o do áudio.
+
+Onde a locução se afasta do texto escrito, a legenda segue o áudio. O que o
+roteiro tinha de mais preciso e a voz deixou de fora — o ano dos provimentos, a
+sigla do CNJ, o "protegidos e testados" — entra pela camada gráfica, que é onde
+o dado exato cabe sem depender de regravação.
+
+### O material chegou por mensageiro
+
+Os 21 takes vieram **1024×576 armazenado com `rotation -90`** nos metadados, ou
+seja 576×1024 na tela. Ler a dimensão armazenada sem olhar a matriz de rotação
+dá a conclusão errada de que o material é horizontal. Todos em H.264 Baseline
+com áudio a ~60 kb/s, sem metadado de câmera — assinatura de arquivo que passou
+por aplicativo de mensagem. Detalhes e o mapa take por take em
+`public/cartorio/clips/README.md`.
 
 ## Fazer uma peça nova
 

@@ -3,6 +3,10 @@ import { Composition } from "remotion";
 import { VIDEO } from "./brand";
 import { MyGuest, totalFrames } from "./MyGuest";
 import { EndCard } from "./components/EndCard";
+import {
+  proadvancedCartorio,
+  proadvancedCartorioCapa,
+} from "./pieces/proadvancedCartorio";
 import { proadvancedFirewall } from "./pieces/proadvancedFirewall";
 import {
   proadvancedFirewallCapa,
@@ -81,6 +85,40 @@ export const RemotionRoot: React.FC = () => {
           proadvancedFirewallCapa.endCard.seconds,
           VIDEO.fps,
           resolveStyle(proadvancedFirewallCapa.style),
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Segurança da informação em cartórios (ProAdvanced), no mesmo estilo
+          de legenda grande e corte seco.
+          Render: npx remotion render ProAdvancedCartorio out/cartorio.mp4 */}
+      <Composition
+        id={proadvancedCartorio.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedCartorio }}
+        durationInFrames={pieceFrames(
+          proadvancedCartorio.scenes,
+          proadvancedCartorio.endCard.seconds,
+          VIDEO.fps,
+          resolveStyle(proadvancedCartorio.style),
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Sem legenda nem ficha, só para tirar quadro de capa. */}
+      <Composition
+        id={proadvancedCartorioCapa.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedCartorioCapa }}
+        durationInFrames={pieceFrames(
+          proadvancedCartorioCapa.scenes,
+          proadvancedCartorioCapa.endCard.seconds,
+          VIDEO.fps,
+          resolveStyle(proadvancedCartorioCapa.style),
         )}
         fps={VIDEO.fps}
         width={VIDEO.width}
