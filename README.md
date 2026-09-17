@@ -12,7 +12,7 @@ ProAdvanced.
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
 | `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
-| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~68,5 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
+| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~66,2 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
 | `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
@@ -229,6 +229,27 @@ Consertado: as cenas de índice ímpar entram com o recorte de `punch`, as pares
 em quadro cheio. Isso muda o visual de **todas** as peças no estilo de legenda
 grande, o vídeo do firewall incluído. O estilo de fichas não tem `punch`, então
 o `ProAdvancedFirewall` e o `MyGuest` seguem iguais.
+
+### As bolinhas, e por que a legenda sai quando elas entram
+
+O bloco em que o roteiro enumera as exigências ganhou um terceiro estilo de
+ficha, `bubbles` (`src/template/components/BubbleList.tsx`): cada item entra por
+baixo da borda e sobe até o lugar, empurrando para cima os que já estão em
+cena. A lista é ancorada pelo pé, então crescer para cima sai do próprio layout
+— não há posição calculada à mão.
+
+Junto veio `hideCaptions` no `Overlay`, que tira a legenda daquela cena. Não é
+enfeite: a bolinha diz exatamente o que a voz está dizendo, e legenda e ficha
+com o mesmo conteúdo na mesma tela fazem quem assiste não ler nenhuma das duas.
+
+A bolinha é de uma linha só. A maior da peça, "Backups protegidos e testados",
+ocupa 804 dos 928 px entre as margens com corpo 48 — daí o teto do corpo.
+
+Efeito colateral a conhecer: a primeira bolinha entra 1,6 s depois do começo da
+cena `10-politicas`, porque é quando ele diz "políticas". Nesse 1,6 s a tela
+fica sem texto nenhum, enquanto ele diz o "Na prática, isso envolve". Funciona
+como respiro antes da lista começar a subir, mas é uma escolha — querendo a
+legenda ali, é só tirar o `hideCaptions` dessa cena.
 
 ## Fazer uma peça nova
 

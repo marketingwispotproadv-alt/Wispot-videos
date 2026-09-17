@@ -12,6 +12,7 @@ import { CutFlash } from "./components/CutFlash";
 import { CutSfx } from "./components/CutSfx";
 import { EndCard } from "./components/EndCard";
 import { ProgressBar } from "./components/ProgressBar";
+import { BubbleList } from "./components/BubbleList";
 import { MusicBed } from "./components/MusicBed";
 import { QuietList } from "./components/QuietList";
 import { RuleList } from "./components/RuleList";
@@ -66,7 +67,12 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
   const { fps } = useVideoConfig();
   const { overlays = {}, endCard, music, flashBefore } = config;
   const style = resolveStyle(config.style);
-  const OverlayList = style.overlayStyle === "quiet" ? QuietList : RuleList;
+  const OverlayList =
+    style.overlayStyle === "bubbles"
+      ? BubbleList
+      : style.overlayStyle === "quiet"
+        ? QuietList
+        : RuleList;
 
   // O silêncio que passa do que o estilo pede sai aqui, uma vez, e tudo
   // adiante — duração, emendas, legenda — trabalha sobre a cena já apertada.
@@ -118,6 +124,7 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
                       // ler como movimento de câmera em vez de falha de
                       // continuidade.
                       baseScale={style.punch && i % 2 === 1 ? style.punch : 1}
+                      hideCaptions={overlay?.hideCaptions}
                     >
                       {overlay?.label ? (
                         <SectionLabel>{overlay.label}</SectionLabel>

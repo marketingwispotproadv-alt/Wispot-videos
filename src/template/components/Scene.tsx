@@ -33,6 +33,8 @@ export const Scene: React.FC<{
   push?: 1 | -1;
   /** recorte fixo da cena, que alterna de take para take no salto de quadro */
   baseScale?: number;
+  /** cena em que as fichas já dizem o texto e a legenda sairia sobrando */
+  hideCaptions?: boolean;
   children?: React.ReactNode;
 }> = ({
   scene,
@@ -40,6 +42,7 @@ export const Scene: React.FC<{
   durationInFrames,
   push = 1,
   baseScale = 1,
+  hideCaptions = false,
   children,
 }) => {
   const { fps } = useVideoConfig();
@@ -81,7 +84,7 @@ export const Scene: React.FC<{
       <Scrim />
       {style.watermark ? <Watermark /> : null}
       {children}
-      <Captions chunks={scene.chunks} />
+      {hideCaptions ? null : <Captions chunks={scene.chunks} />}
     </AbsoluteFill>
   );
 };

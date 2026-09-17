@@ -22,13 +22,19 @@ import { SCENES } from "./scenes";
  * Ficha sem `at` já está em cena desde o primeiro quadro: é a que veio do take
  * anterior. Assim a lista atravessa o corte sem reanimar, e os três takes do
  * bloco passam a ler como um só.
+ *
+ * Nas três cenas da lista a legenda sai (`hideCaptions`): a bolinha diz a mesma
+ * coisa que a voz está dizendo, e dois textos com o mesmo conteúdo na mesma
+ * tela fazem quem assiste não ler nenhum dos dois.
  */
 const OVERLAYS: Record<string, Overlay> = {
   "07-provimentos": { label: "Provimentos 213/2026 e 243/2026 — CNJ" },
   "10-politicas": {
+    hideCaptions: true,
     items: [{ text: "Políticas de segurança", at: 2.34 }],
   },
   "11-controle-acesso": {
+    hideCaptions: true,
     items: [
       { text: "Políticas de segurança" },
       { text: "Controle de acesso", at: 0.76 },
@@ -36,6 +42,7 @@ const OVERLAYS: Record<string, Overlay> = {
     ],
   },
   "12-negocio-backup": {
+    hideCaptions: true,
     items: [
       { text: "Políticas de segurança" },
       { text: "Controle de acesso" },
@@ -90,7 +97,7 @@ export const proadvancedCartorio: PieceConfig = {
   },
   // A trilha é a mesma faixa licenciada para a ProAdvanced, remontada para a
   // duração desta peça — a do vídeo do firewall foi cortada para 52,93 s e
-  // aqui a peça tem 68,53 s. Ver `public/cartorio/audio/README.md`.
+  // aqui a peça tem 66,17 s. Ver `public/cartorio/audio/README.md`.
   //
   // Mais baixa que o padrão do template (0,22 e 0,62), por pedido: −4,6 dB sob
   // a locução e −1,9 dB no cartão final. O cartão baixa menos de propósito,
@@ -103,13 +110,20 @@ export const proadvancedCartorio: PieceConfig = {
     // cairia em cima do "p" de "políticas" e do "b" de "backup", que são
     // justamente os que precisam do silêncio de antes para soarem.
     lead: { head: 0.03, tail: 0.05 },
-    // A pílula entra junto com a pergunta do fecho, em 56,50 s, e fica até o
-    // cartão final, em 64,53 s. Ela nasceu para suprir o "Fale com a Pro
+    // As fichas do bloco da conformidade sobem pela borda de baixo, uma por
+    // exigência, e empurram para cima as que já estão em cena. É o único bloco
+    // da peça com fichas, então o estilo pode ser desta peça inteira.
+    overlayStyle: "bubbles",
+    // 12% é o teto que o estilo documenta: acima disso a correção de tom começa
+    // a deixar a voz com textura de plástico. Estava em 8%.
+    speed: 1.12,
+    // A pílula entra junto com a pergunta do fecho, em 54,43 s, e fica até o
+    // cartão final, em 62,17 s. Ela nasceu para suprir o "Fale com a Pro
     // Advanced" que não tinha sido gravado; agora que o "Fale conosco!" existe
     // em áudio, ela passou a anunciá-lo — a pergunta do fecho já aparece com a
     // chamada na tela, e a voz a confirma no fim. Se soar repetido com o
     // cartão final, é só tirar esta linha.
-    cta: { text: "Fale com a Pro Advanced", at: 56.6 },
+    cta: { text: "Fale com a Pro Advanced", at: 54.5 },
   },
 };
 

@@ -85,6 +85,14 @@ export type Overlay = {
   /** etiqueta do bloco do roteiro, abaixo da assinatura */
   label?: string;
   items?: RuleItem[];
+  /**
+   * Tira a legenda desta cena.
+   *
+   * Serve para o bloco em que as fichas já dizem o que a voz está dizendo:
+   * legenda e ficha com o mesmo texto competem pela mesma leitura, e quem lê
+   * acaba não lendo nenhuma das duas.
+   */
+  hideCaptions?: boolean;
 };
 
 export type EndCardConfig = {
@@ -150,9 +158,11 @@ export type Style = {
   watermark: boolean;
   /**
    * Como as fichas de apoio aparecem. `chips` é a plaquinha com ícone; `quiet`
-   * é só texto com um fio ao lado, para o estilo que não tem cromo nenhum.
+   * é só texto com um fio ao lado, para o estilo que não tem cromo nenhum;
+   * `bubbles` são bolinhas que sobem pela borda de baixo e empurram para cima
+   * as que já estão em cena.
    */
-  overlayStyle: "chips" | "quiet";
+  overlayStyle: "chips" | "quiet" | "bubbles";
   /**
    * Silêncio que fica em cada ponta da cena, em segundos. O que passar disso é
    * aparado, e a legenda anda junto. Nunca acrescenta silêncio que não exista.
