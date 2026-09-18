@@ -60,6 +60,12 @@ tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,scale=1080:1920:flags=lanczos,
   -af "loudnorm=I=-16:TP=-1.5:LRA=11" -c:a aac -b:a 192k public/clips/saida.mp4
 ```
 
+`public/clips/portal.mp4` é a gravação do portal MyGuest rodando (white label da
+C&A), recortada só na tela do aparelho (`crop=770:1668:154:126`) — a moldura é
+desenhada no projeto, para bater com o celular da cena do white label. O trecho
+usado começa depois dos 7,8 s: até ali o navegador mostra a barra de endereço em
+vermelho, que passa impressão de conexão insegura e expõe a URL de teste.
+
 Os arquivos prontos ficam em `public/clips/` (`8445`, `8446`, `8450`, `8452`,
 `8454`, `8455` — a numeração é a original da câmera e segue a ordem do roteiro).
 
@@ -81,7 +87,7 @@ Estrutura do vídeo:
 | Cena | Clipe | Bloco do roteiro | Gráfico |
 | --- | --- | --- | --- |
 | 1 | 8445 | Abertura — o gancho | — |
-| 2 | 8446 | Acesso por voucher | Tela cheia de marca: lockup do MyGuest e card de voucher |
+| 2 | 8446 | Acesso por voucher | Tela cheia de marca: lockup do MyGuest e a tela real do portal |
 | 3 | 8450 | Autenticação personalizada | Tela cheia de marca: portal em white label |
 | 4 | 8452 | "E o controle é completo" | — |
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |

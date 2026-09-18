@@ -11,11 +11,11 @@ import { ComplianceBadges } from "./components/ComplianceBadges";
 import { EndCard } from "./components/EndCard";
 import { Headline } from "./components/Headline";
 import { MusicBed } from "./components/MusicBed";
+import { PortalVoucher } from "./components/PortalVoucher";
 import { ProductLockup } from "./components/ProductLockup";
 import { Scene } from "./components/Scene";
 import type { SceneVariant } from "./components/Scene";
 import { SectionLabel } from "./components/SectionLabel";
-import { VoucherCard } from "./components/VoucherCard";
 import { WhiteLabelPhone } from "./components/WhiteLabelPhone";
 
 export const END_CARD_SECONDS = 3.6;
@@ -52,7 +52,7 @@ const overlayFor = (clip: string): React.ReactNode => {
         <>
           <ProductLockup outAt={3.67} />
           <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={3.92} />
-          <VoucherCard at={3.92} />
+          <PortalVoucher at={3.92} portalFrom={8.05} />
         </>
       );
     case "8450":
