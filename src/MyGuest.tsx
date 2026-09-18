@@ -11,6 +11,7 @@ import { ComplianceBadges } from "./components/ComplianceBadges";
 import { EndCard } from "./components/EndCard";
 import { Headline } from "./components/Headline";
 import { MusicBed } from "./components/MusicBed";
+import { LoginPhone } from "./components/LoginPhone";
 import { PortalPhone } from "./components/PortalPhone";
 import { ProductLockup } from "./components/ProductLockup";
 import { Scene } from "./components/Scene";
@@ -52,10 +53,13 @@ const overlayFor = (clip: string): React.ReactNode => {
         <>
           <ProductLockup outAt={3.67} />
           <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={3.92} />
-          {/* voucher preenchido e confirmado, depois o cadastro */}
+          {/* voucher preenchido e confirmado, depois o cadastro.
+              8,05 s a 13,0 s é a única janela da gravação sem a marca do
+              cliente e sem a barra vermelha do navegador; `rate` estica esses
+              5 s para os 5,8 s da cena. */}
           <PortalPhone
             at={3.92}
-            clips={[{ from: 8.05, seconds: 5.8 }]}
+            clips={[{ from: 8.05, seconds: 5.8, rate: 0.85 }]}
             width={764}
             top={432}
             height={930}
@@ -66,18 +70,8 @@ const overlayFor = (clip: string): React.ReactNode => {
       return (
         <>
           <Headline eyebrow="AUTENTICAÇÃO" title="Com a sua marca" at={0.3} />
-          {/* a tela de entrada da C&A, e depois a tela já conectada — que é
-              onde a locução chega em "ao se conectar" */}
-          <PortalPhone
-            at={0.85}
-            clips={[
-              { from: 0.05, seconds: 5.6, rate: 0.37 },
-              { from: 13.4, seconds: 3.5 },
-            ]}
-            width={470}
-            top={424}
-          />
-          <WhiteLabelStamp at={8.75} top={1336} />
+          <LoginPhone at={0.85} swapAt={8.75} />
+          <WhiteLabelStamp at={8.9} top={1344} />
         </>
       );
     case "8454":

@@ -60,25 +60,23 @@ tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,scale=1080:1920:flags=lanczos,
   -af "loudnorm=I=-16:TP=-1.5:LRA=11" -c:a aac -b:a 192k public/clips/saida.mp4
 ```
 
-`public/clips/portal.mp4` é a gravação do portal MyGuest rodando (white label da
-C&A), recortada só na tela do aparelho (`crop=770:1668:154:126`) — a moldura vem
-de `src/components/PortalPhone.tsx`, que serve as duas cenas que usam o portal.
+`public/clips/portal.mp4` é a gravação do portal MyGuest rodando, recortada só
+na tela do aparelho (`crop=770:1668:154:126`) — a moldura vem de
+`src/components/PortalPhone.tsx`.
 
-Trechos aproveitados da gravação:
+**Só a janela de 8,05 s a 13,0 s dessa gravação pode ir ao ar.** O portal foi
+gravado em white label de um cliente, e a arte dele aparece de 0 a 2,2 s e de
+13,25 s ao fim — marca de terceiro não entra em peça da Wispot. Entre 4,9 s e
+7,8 s o navegador ainda mostra a barra de endereço em vermelho, que passa
+impressão de conexão insegura e expõe a URL de teste. Sobra a faixa do meio, com
+o voucher confirmado e o cadastro; `rate: 0.85` estica esses 5 s para os 5,8 s
+da cena.
 
-| Trecho | O que tem | Onde entra |
-| --- | --- | --- |
-| 0 – 2,2 s | tela de entrada da C&A | cena 3, "a autenticação sai personalizada" |
-| 8,05 – 13,9 s | voucher confirmado e cadastro | cena 2, "por voucher" |
-| 13,4 – 16,9 s | tela já conectada da C&A | cena 3, "ao se conectar" |
-
-Entre 4,9 s e 7,8 s o navegador mostra a barra de endereço em vermelho, que passa
-impressão de conexão insegura e expõe a URL de teste — por isso o trecho do
-voucher só começa aos 8,05 s.
-
-As telas do portal são praticamente paradas, então `rate` abaixo de 1 estica um
-trecho curto sem que se note: é o que faz a tela de entrada da C&A cobrir 5,6 s
-de cena a partir de 2,1 s de gravação.
+Por isso a tela de login da cena 3 é mock (`src/components/LoginPhone.tsx`), e
+não gravação: ela reproduz o layout real — as mesmas opções de login e o mesmo
+rodapé — com a área de marca livre, que é justamente o que se troca quando a
+locução chega em "white label". Ao regravar o portal com uma marca própria da
+Wispot, dá para substituir esse mock pela gravação.
 
 Os arquivos prontos ficam em `public/clips/` (`8445`, `8446`, `8450`, `8452`,
 `8454`, `8455` — a numeração é a original da câmera e segue a ordem do roteiro).
@@ -102,7 +100,7 @@ Estrutura do vídeo:
 | --- | --- | --- | --- |
 | 1 | 8445 | Abertura — o gancho | — |
 | 2 | 8446 | Acesso por voucher | Tela cheia de marca: lockup do MyGuest e a tela real do portal |
-| 3 | 8450 | Autenticação personalizada | Tela cheia de marca: a tela real da C&A no portal |
+| 3 | 8450 | Autenticação personalizada | Tela cheia de marca: mock da tela de login |
 | 4 | 8452 | "E o controle é completo" | — |
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |
 
