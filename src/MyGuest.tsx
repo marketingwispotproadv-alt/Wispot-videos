@@ -11,12 +11,12 @@ import { ComplianceBadges } from "./components/ComplianceBadges";
 import { EndCard } from "./components/EndCard";
 import { Headline } from "./components/Headline";
 import { MusicBed } from "./components/MusicBed";
-import { PortalVoucher } from "./components/PortalVoucher";
+import { PortalPhone } from "./components/PortalPhone";
 import { ProductLockup } from "./components/ProductLockup";
 import { Scene } from "./components/Scene";
 import type { SceneVariant } from "./components/Scene";
 import { SectionLabel } from "./components/SectionLabel";
-import { WhiteLabelPhone } from "./components/WhiteLabelPhone";
+import { WhiteLabelStamp } from "./components/WhiteLabelStamp";
 
 export const END_CARD_SECONDS = 3.6;
 
@@ -52,14 +52,32 @@ const overlayFor = (clip: string): React.ReactNode => {
         <>
           <ProductLockup outAt={3.67} />
           <Headline eyebrow="MYGUEST" title="Acesso por voucher" at={3.92} />
-          <PortalVoucher at={3.92} portalFrom={8.05} />
+          {/* voucher preenchido e confirmado, depois o cadastro */}
+          <PortalPhone
+            at={3.92}
+            clips={[{ from: 8.05, seconds: 5.8 }]}
+            width={764}
+            top={432}
+            height={930}
+          />
         </>
       );
     case "8450":
       return (
         <>
           <Headline eyebrow="AUTENTICAÇÃO" title="Com a sua marca" at={0.3} />
-          <WhiteLabelPhone at={0.9} swapAt={8.75} />
+          {/* a tela de entrada da C&A, e depois a tela já conectada — que é
+              onde a locução chega em "ao se conectar" */}
+          <PortalPhone
+            at={0.85}
+            clips={[
+              { from: 0.05, seconds: 5.6, rate: 0.37 },
+              { from: 13.4, seconds: 3.5 },
+            ]}
+            width={470}
+            top={424}
+          />
+          <WhiteLabelStamp at={8.75} top={1336} />
         </>
       );
     case "8454":

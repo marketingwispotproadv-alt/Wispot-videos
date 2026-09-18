@@ -61,10 +61,24 @@ tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,scale=1080:1920:flags=lanczos,
 ```
 
 `public/clips/portal.mp4` é a gravação do portal MyGuest rodando (white label da
-C&A), recortada só na tela do aparelho (`crop=770:1668:154:126`) — a moldura é
-desenhada no projeto, para bater com o celular da cena do white label. O trecho
-usado começa depois dos 7,8 s: até ali o navegador mostra a barra de endereço em
-vermelho, que passa impressão de conexão insegura e expõe a URL de teste.
+C&A), recortada só na tela do aparelho (`crop=770:1668:154:126`) — a moldura vem
+de `src/components/PortalPhone.tsx`, que serve as duas cenas que usam o portal.
+
+Trechos aproveitados da gravação:
+
+| Trecho | O que tem | Onde entra |
+| --- | --- | --- |
+| 0 – 2,2 s | tela de entrada da C&A | cena 3, "a autenticação sai personalizada" |
+| 8,05 – 13,9 s | voucher confirmado e cadastro | cena 2, "por voucher" |
+| 13,4 – 16,9 s | tela já conectada da C&A | cena 3, "ao se conectar" |
+
+Entre 4,9 s e 7,8 s o navegador mostra a barra de endereço em vermelho, que passa
+impressão de conexão insegura e expõe a URL de teste — por isso o trecho do
+voucher só começa aos 8,05 s.
+
+As telas do portal são praticamente paradas, então `rate` abaixo de 1 estica um
+trecho curto sem que se note: é o que faz a tela de entrada da C&A cobrir 5,6 s
+de cena a partir de 2,1 s de gravação.
 
 Os arquivos prontos ficam em `public/clips/` (`8445`, `8446`, `8450`, `8452`,
 `8454`, `8455` — a numeração é a original da câmera e segue a ordem do roteiro).
@@ -88,7 +102,7 @@ Estrutura do vídeo:
 | --- | --- | --- | --- |
 | 1 | 8445 | Abertura — o gancho | — |
 | 2 | 8446 | Acesso por voucher | Tela cheia de marca: lockup do MyGuest e a tela real do portal |
-| 3 | 8450 | Autenticação personalizada | Tela cheia de marca: portal em white label |
+| 3 | 8450 | Autenticação personalizada | Tela cheia de marca: a tela real da C&A no portal |
 | 4 | 8452 | "E o controle é completo" | — |
 | 5 | 8454 | Painel e conformidade | Selos LGPD e Marco Civil |
 
