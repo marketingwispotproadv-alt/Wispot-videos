@@ -14,6 +14,8 @@ ProAdvanced.
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
 | `ProAdvancedCartorio` | 1080×1920 (9:16) | ~66,2 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
 | `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
+| `ProAdvancedTerceiros` | 1080×1920 (9:16) | ~57,5 s | Ataque que chega pela empresa de fora (ProAdvanced): 18 takes, legenda grande no topo, corte seco |
+| `ProAdvancedTerceirosCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
 A peça da ProAdvanced é montada com o template de `src/template/`; as duas
@@ -26,6 +28,7 @@ npm run dev                                          # abre o Remotion Studio
 npx remotion render MyGuest out/myguest.mp4          # renderiza o vídeo da Wispot
 npx remotion render ProAdvancedFirewall out/proadvanced.mp4  # renderiza o do firewall
 npx remotion render ProAdvancedCartorio out/cartorio.mp4     # renderiza o de cartórios
+npx remotion render ProAdvancedTerceiros out/terceiros.mp4   # renderiza o de acesso de terceiros
 npm run lint                                         # eslint + tsc
 ```
 
@@ -250,6 +253,53 @@ cena `10-politicas`, porque é quando ele diz "políticas". Nesse 1,6 s a tela
 fica sem texto nenhum, enquanto ele diz o "Na prática, isso envolve". Funciona
 como respiro antes da lista começar a subir, mas é uma escolha — querendo a
 legenda ali, é só tirar o `hideCaptions` dessa cena.
+
+## A peça de acesso de terceiros
+
+`src/pieces/proadvancedTerceiros/`. Dezoito takes de 25 que chegaram, 57,5 s.
+Três coisas que este corte ensinou, e que o de cartórios não tinha mostrado.
+
+**O modelo entra em laço, e o laço escapa do `drop_loop`.** Em três takes a
+transcrição devolveu a frase duas vezes, com a segunda cópia inteira empilhada
+num instante só no fim do clipe — todas as palavras com `start` igual ao `end`.
+O `drop_loop` compara a cauda com o que veio antes dela e não pegou nenhum dos
+três, porque a repetição vem com grafia trocada: "una" por "uma" em
+`05-acontece`, "Si una" por "Se uma" em `09-invadida`, "no basta" por "não
+basta" em `13-proteger`. São erros de um caractere, o suficiente para o
+`normalise` não casar.
+
+O que denuncia é o tempo: **palavra com duração zero não existe em fala**. Vale
+varrer o `scenes.ts` procurando `start` igual a `end` antes de renderizar — em
+`05-acontece` o laço ainda esticava o corte por 0,9 s de silêncio, além da
+legenda fantasma no fim das três cenas.
+
+**Cauda zerada de novo, e em quatro cenas.** `07-contabilidade`, `12-normal`,
+`17-ate-onde` e `16-sabe` (0,02 s). A causa é a mesma do corte de cartórios — a
+ferramenta marca a cauda pelo fim da última palavra da transcrição, e o modelo
+comprime essa palavra —, mas aqui três das quatro são cenas cortadas por
+`--regiao`, em que a região foi escolhida pela envoltória e termina exatamente
+onde a fala termina. Ao passar `--regiao`, conte que o `trimEnd` vai cair em
+cima do fim da região, e confira. Em `07-contabilidade` o corte comia 0,13 s do
+"software".
+
+**A abertura gravada não era a do roteiro.** O roteiro escrito abre com "Sua
+empresa pode estar protegida. Mas basta uma empresa com acesso aos seus
+sistemas ser invadida para o risco chegar até você", e nada disso existe em
+áudio: o que ele gravou foi a pergunta "A sua empresa utiliza sistemas de
+terceiros?", em quatro tomadas. A palavra "terceiros" não aparece no roteiro
+escrito, o que serve de aviso — quando a transcrição traz palavra que o
+`initial_prompt` não tinha, é fala de verdade, não contaminação do contexto.
+
+Sem a frase do risco, o "Foi o que um caso recente no Brasil mostrou" da cena 2
+fica sem antecedente. Quem a carrega é a etiqueta da abertura, com as palavras
+do próprio roteiro: **"Basta uma delas ser invadida"**. Regravando a abertura,
+ela entra como cena nova no topo do `scenes.ts` e a etiqueta sai.
+
+**O caso não é nomeado, de propósito.** A locução diz "uma empresa de
+tecnologia teve os seus dados expostos, e mais de 150 órgãos públicos
+utilizavam o sistema dela". Nomear a empresa invadida põe marca de terceiro em
+peça da ProAdvanced e transforma o exemplo em acusação; o número, que é o que
+dá tamanho ao risco, fica.
 
 ## Fazer uma peça nova
 
