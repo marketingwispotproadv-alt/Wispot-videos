@@ -1,22 +1,22 @@
-Sua empresa pode estar protegida. Mas basta uma empresa com acesso aos seus
-sistemas ser invadida para o risco chegar até você.
+A sua empresa utiliza sistemas de terceiros?
 
-Foi o que um caso recente no Brasil mostrou: uma empresa de tecnologia teve
-dados expostos, e mais de 150 órgãos públicos utilizavam os sistemas dela.
+Foi o que um caso recente no Brasil mostrou: uma empresa de tecnologia teve os
+seus dados expostos, e mais de 150 órgãos públicos utilizavam o sistema dela.
 
-Isso acontece quando um ataque chega por uma empresa que já tem acesso à sua
-operação.
+Isso acontece quando um ataque chega através de uma empresa que já tem acesso à
+sua operação.
 
-Agora pensa: quantas empresas de fora acessam seus sistemas hoje? Contabilidade,
-suporte do software, fornecedor de TI, quem administra o servidor ou a nuvem.
+Agora pensa, quantas empresas de fora têm acesso aos seus sistemas hoje?
+Contabilidade, suporte de software, fornecedor de TI, quem administra os seus
+servidores.
 
-Se uma dessas empresas for invadida, esse acesso pode acabar sendo usado para
-chegar até os seus dados. E o mais perigoso é que, muitas vezes, ele parece um
+Se uma dessas empresas for invadida, esses acessos podem ser usados para chegar
+até os seus dados. E o mais perigoso é que, muitas vezes, ele pode parecer um
 acesso normal.
 
 Por isso, não basta só proteger a sua empresa. Também é importante controlar o
-que cada empresa externa pode acessar, separar os ambientes e acompanhar esses
-acessos de perto.
+que cada empresa externa pode acessar, separar os ambientes e acompanhar o
+acesso de perto.
 
-Você sabe exatamente quais empresas acessam os seus sistemas e até onde cada uma
-consegue chegar? Fale conosco e agende um diagnóstico gratuito.
+Você sabe exatamente quais empresas externas acessam o seu sistema e até onde
+cada uma pode chegar? Fale conosco e agende um diagnóstico gratuito.
