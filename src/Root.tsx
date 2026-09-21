@@ -9,6 +9,10 @@ import {
 } from "./pieces/proadvancedCartorio";
 import { proadvancedFirewall } from "./pieces/proadvancedFirewall";
 import {
+  proadvancedTerceiros,
+  proadvancedTerceirosCapa,
+} from "./pieces/proadvancedTerceiros";
+import {
   proadvancedFirewallCapa,
   proadvancedFirewallRef,
 } from "./pieces/proadvancedFirewallRef";
@@ -119,6 +123,40 @@ export const RemotionRoot: React.FC = () => {
           proadvancedCartorioCapa.endCard.seconds,
           VIDEO.fps,
           resolveStyle(proadvancedCartorioCapa.style),
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Vídeo da ProAdvanced sobre ataque que chega pela empresa de fora,
+          no mesmo estilo de legenda grande e corte seco.
+          Render: npx remotion render ProAdvancedTerceiros out/terceiros.mp4 */}
+      <Composition
+        id={proadvancedTerceiros.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedTerceiros }}
+        durationInFrames={pieceFrames(
+          proadvancedTerceiros.scenes,
+          proadvancedTerceiros.endCard.seconds,
+          VIDEO.fps,
+          resolveStyle(proadvancedTerceiros.style),
+        )}
+        fps={VIDEO.fps}
+        width={VIDEO.width}
+        height={VIDEO.height}
+      />
+
+      {/* Sem legenda nem ficha, só para tirar quadro de capa. */}
+      <Composition
+        id={proadvancedTerceirosCapa.id}
+        component={Piece}
+        defaultProps={{ config: proadvancedTerceirosCapa }}
+        durationInFrames={pieceFrames(
+          proadvancedTerceirosCapa.scenes,
+          proadvancedTerceirosCapa.endCard.seconds,
+          VIDEO.fps,
+          resolveStyle(proadvancedTerceirosCapa.style),
         )}
         fps={VIDEO.fps}
         width={VIDEO.width}
