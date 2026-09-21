@@ -226,26 +226,47 @@ def tidy(words, names: list[str], roteiro: str):
     return respell(joined, roteiro)
 
 
-MAX_WORDS, MAX_SPAN, GAP = 4, 2.2, 0.34
-LONG_WORD, MIN_TAIL = 0.45, 2
+MAX_WORDS, MAX_CHARS, MAX_SPAN, GAP = 5, 38, 2.6, 0.34
+LONG_WORD = 0.45
+# Juntando duas linhas dá para passar dos limites de cima. Quem manda aqui é a
+# contagem de caracteres, não a de palavras: acima de 40 caracteres a legenda
+# de 102 px vira três linhas, e é isso que não pode.
+MERGE_WORDS, MERGE_CHARS, MERGE_SPAN, MERGE_GAP = 8, 40, 3.4, 0.7
+# Tempo mínimo que uma linha fica na tela, em segundos de cena. A entrada leva
+# 7 quadros e a leitura precisa do resto; abaixo disto a linha pisca.
+MIN_DWELL = 1.15
 
 
-def chunk(words):
+def line_text(line) -> str:
+    return " ".join(w["t"] for w in line)
+
+
+def chunk(words, scene_end: float | None = None, min_dwell: float = MIN_DWELL):
     """
     Quebra a fala em linhas de legenda.
 
-    Duas regras existem por causa de como a linha se comporta na tela, e não
-    por causa da gramática:
+    As regras existem por causa de como a linha se comporta na tela, e não por
+    causa da gramática:
 
     - **palavra longa não abre linha**. Na revelação palavra a palavra ela
       ficaria sozinha em cena pelo tempo todo que durar — no firewall, um "é"
       de 0,76 s ficou 0,7 s sozinho, e parece legenda travada;
-    - **linha final de uma palavra só não existe**. Ela some antes de ser
-      lida; junta-se à anterior.
+    - **linha nenhuma fica menos que `min_dwell` na tela**. A linha troca
+      quando a primeira palavra da seguinte começa, então o que conta não é o
+      quanto ela dura de fala e sim o quanto fica até a próxima entrar. Linha
+      que fica 0,5 s não chega a ser lida — no corte de acesso de terceiros,
+      dezessete das quarenta e quatro linhas ficavam menos de 1 s, e a legenda
+      lia como pisca-pisca;
+    - **linha de uma palavra só não existe**, pelo mesmo motivo.
+
+    `scene_end` é o fim da cena cortada, em segundos contados do início dela.
+    Sem ele a última linha é medida pela própria fala, que é um substituto
+    ruim: ela fica na tela até a cena acabar.
     """
     out, cur = [], []
     for w in words:
         if cur and (len(cur) >= MAX_WORDS
+                    or len(line_text(cur + [w])) > MAX_CHARS
                     or w["e"] - cur[0]["s"] > MAX_SPAN
                     or w["s"] - cur[-1]["e"] > GAP):
             out.append(cur)
@@ -256,16 +277,42 @@ def chunk(words):
 
     pulled = []
     for line in out:
-        if (pulled and line and len(pulled[-1]) <= MAX_WORDS
+        if (pulled and line and len(pulled[-1]) < MAX_WORDS
                 and line[0]["e"] - line[0]["s"] > LONG_WORD):
             pulled[-1] = pulled[-1] + [line[0]]
             line = line[1:]
         if line:
             pulled.append(line)
 
-    if (len(pulled) > 1 and len(pulled[-1]) < MIN_TAIL
-            and len(pulled[-2]) <= MAX_WORDS + 1):
-        pulled = pulled[:-2] + [pulled[-2] + pulled[-1]]
+    end = scene_end if scene_end is not None else pulled[-1][-1]["e"] + 0.35
+
+    def dwell(i, lines):
+        return (lines[i + 1][0]["s"] if i + 1 < len(lines) else end) - lines[i][0]["s"]
+
+    def cabe(a, b) -> bool:
+        junta = a + b
+        return (len(junta) <= MERGE_WORDS
+                and len(line_text(junta)) <= MERGE_CHARS
+                and junta[-1]["e"] - junta[0]["s"] <= MERGE_SPAN
+                and b[0]["s"] - a[-1]["e"] <= MERGE_GAP)
+
+    mudou = True
+    while mudou and len(pulled) > 1:
+        mudou = False
+        for i in range(len(pulled)):
+            if dwell(i, pulled) >= min_dwell and len(pulled[i]) > 1:
+                continue
+            if i > 0 and cabe(pulled[i - 1], pulled[i]):
+                pulled[i - 1] = pulled[i - 1] + pulled[i]
+                del pulled[i]
+            elif i + 1 < len(pulled) and cabe(pulled[i], pulled[i + 1]):
+                pulled[i] = pulled[i] + pulled[i + 1]
+                del pulled[i + 1]
+            else:
+                continue
+            mudou = True
+            break
+
     return pulled
 
 
@@ -325,7 +372,7 @@ def render_ts(scenes, highlights: set[str]) -> str:
             "    silence: {{ head: {}, tail: {} }},".format(*sc["silence"]),
             "    chunks: [",
         ]
-        for group in chunk(sc["words"]):
+        for group in chunk(sc["words"], sc["trimEnd"] - sc["trimStart"]):
             body = ", ".join(
                 "{{ text: {}, start: {}, end: {}{} }}".format(
                     json.dumps(w["t"], ensure_ascii=False), w["s"], w["e"],

@@ -91,7 +91,11 @@ export const proadvancedTerceiros: PieceConfig = {
     ...LEGENDA_GRANDE,
     lead: { head: 0.03, tail: 0.05 },
     overlayStyle: "bubbles",
-    speed: 1.12,
+    // 1,08 em vez dos 1,12 do corte de cartórios. A fala aqui já é mais
+    // corrida que a de lá, e a legenda com ela: em 12% a linha trocava antes
+    // de ser lida. 8% é o que o estilo documenta como o que dá para tirar sem
+    // a fala soar apressada.
+    speed: 1.08,
   },
 };
 
