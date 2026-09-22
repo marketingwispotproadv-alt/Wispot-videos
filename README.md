@@ -12,7 +12,7 @@ ProAdvanced.
 | `ProAdvancedFirewall` | 1080×1920 (9:16) | ~60,5 s | Firewall gerenciado (ProAdvanced): 16 takes emendados, legendas palavra a palavra e fichas de apoio |
 | `ProAdvancedFirewallRef` | 1080×1920 (9:16) | ~60,5 s | Mesmo corte, no estilo medido do vídeo de referência: legenda grande no topo, corte seco, sem cromo |
 | `ProAdvancedFirewallCartaoFinal` | 1080×1920 | 4 s | Cartão final da ProAdvanced, isolado |
-| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~66,2 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
+| `ProAdvancedCartorio` | 1080×1920 (9:16) | ~64,0 s | Segurança da informação em cartórios (ProAdvanced): 22 takes, legenda grande no topo, corte seco |
 | `ProAdvancedCartorioCapa` | 1080×1920 | still | Mesmo corte sem legenda nem ficha, para tirar quadro de capa |
 
 O MyGuest é de antes do template e tem componentes próprios em `src/components/`.
@@ -250,6 +250,25 @@ cena `10-politicas`, porque é quando ele diz "políticas". Nesse 1,6 s a tela
 fica sem texto nenhum, enquanto ele diz o "Na prática, isso envolve". Funciona
 como respiro antes da lista começar a subir, mas é uma escolha — querendo a
 legenda ali, é só tirar o `hideCaptions` dessa cena.
+
+### Até onde a voz aguenta ser acelerada
+
+O estilo documenta 12% como teto, e esta peça está em 16% por pedido de
+duração. Quatro pontos acima, a voz ainda absorve.
+
+O alvo pedido era fechar em 60 s, e não dá só com velocidade — medido cena a
+cena: 16% dá 64,0 s, 20% dá 62,1 s e **só 24% chega a 60,2 s**, o dobro do
+teto. Para 60 s sem torturar a voz seria preciso mexer no conteúdo: 16% mais a
+saída da cena `18-infraestrutura` dá 60,9 s, e a frase ainda fecha certa em
+"ajudamos cartórios com soluções de cibersegurança". Isso é decisão de
+conteúdo, não de montagem.
+
+Para comparar de ouvido, renderize só o áudio em cada velocidade:
+
+```bash
+# o codec mp3 não aceita o --crf que o remotion.config.ts fixa: comente a linha
+npx remotion render ProAdvancedCartorio out/voz.mp3 --codec=mp3
+```
 
 ## Fazer uma peça nova
 

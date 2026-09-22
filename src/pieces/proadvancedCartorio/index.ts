@@ -97,7 +97,7 @@ export const proadvancedCartorio: PieceConfig = {
   },
   // A trilha é a mesma faixa licenciada para a ProAdvanced, remontada para a
   // duração desta peça — a do vídeo do firewall foi cortada para 52,93 s e
-  // aqui a peça tem 66,17 s. Ver `public/cartorio/audio/README.md`.
+  // aqui a peça tem 64,00 s. Ver `public/cartorio/audio/README.md`.
   //
   // Mais baixa que o padrão do template (0,22 e 0,62), por pedido: −4,6 dB sob
   // a locução e −1,9 dB no cartão final. O cartão baixa menos de propósito,
@@ -114,16 +114,22 @@ export const proadvancedCartorio: PieceConfig = {
     // exigência, e empurram para cima as que já estão em cena. É o único bloco
     // da peça com fichas, então o estilo pode ser desta peça inteira.
     overlayStyle: "bubbles",
-    // 12% é o teto que o estilo documenta: acima disso a correção de tom começa
-    // a deixar a voz com textura de plástico. Estava em 8%.
-    speed: 1.12,
-    // A pílula entra junto com a pergunta do fecho, em 54,43 s, e fica até o
-    // cartão final, em 62,17 s. Ela nasceu para suprir o "Fale com a Pro
+    // 16%. O estilo documenta 12% como teto, e isto passa quatro pontos dele
+    // por pedido de duração — a voz ainda absorve.
+    //
+    // O alvo era fechar em 60 s, e não dá só com velocidade: seria preciso 24%,
+    // o dobro do teto, e aí a fala entrega que foi acelerada. As amostras de
+    // áudio em 16, 20 e 24% estão em `out/voz-*.mp3` — renderize de novo com
+    // `--codec=mp3` (comentando o `setCrf` do `remotion.config.ts`, que o mp3
+    // não aceita) se precisar comparar outra vez.
+    speed: 1.16,
+    // A pílula entra junto com a pergunta do fecho, em 52,50 s, e fica até o
+    // cartão final, em 60,00 s. Ela nasceu para suprir o "Fale com a Pro
     // Advanced" que não tinha sido gravado; agora que o "Fale conosco!" existe
     // em áudio, ela passou a anunciá-lo — a pergunta do fecho já aparece com a
     // chamada na tela, e a voz a confirma no fim. Se soar repetido com o
     // cartão final, é só tirar esta linha.
-    cta: { text: "Fale com a Pro Advanced", at: 54.5 },
+    cta: { text: "Fale com a Pro Advanced", at: 52.6 },
   },
 };
 
