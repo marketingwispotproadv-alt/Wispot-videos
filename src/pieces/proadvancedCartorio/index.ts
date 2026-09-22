@@ -130,10 +130,14 @@ export const proadvancedCartorio: PieceConfig = {
 /**
  * A mesma peça, sem legenda e sem ficha, para tirar quadro de capa:
  *
- *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=1560
+ *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=465
  *
  * No vídeo não existe quadro limpo — nos vãos entre um trecho e outro, a
  * legenda que sai e a que entra se cruzam em transparência.
+ *
+ * O 465 é o de expressão séria, no bloco em que ele fala do risco. O 1560, no
+ * fecho, é o mesmo plano com ele sorrindo — troque o número se a peça for
+ * sair num contexto que peça o tom mais leve.
  */
 export const proadvancedCartorioCapa: PieceConfig = {
   ...proadvancedCartorio,
