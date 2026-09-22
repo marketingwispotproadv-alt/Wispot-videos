@@ -18,6 +18,10 @@ import type { NewsImage } from "../types";
  * Por isso também a linha de fonte embaixo. Ela não é enfeite: é o crédito, e
  * é o que separa citar de se apropriar.
  *
+ * A subida acontece uma vez só. A cena que traz `at` é a que anima; as
+ * seguintes declaram a placa sem `at` e ela aparece já no lugar, atravessando
+ * o corte sem se mexer.
+ *
  * Nas cenas em que a placa está em cena a legenda sai (`hideCaptions` no
  * overlay). A manchete já é texto, e texto contra texto na mesma tela faz quem
  * assiste não ler nenhum dos dois — a mesma regra das bolinhas.
@@ -30,13 +34,19 @@ export const NewsCard: React.FC<{ image: NewsImage; top?: number }> = ({
   const { fps } = useVideoConfig();
   const { colors, fontFamily } = useBrand();
 
-  const at = image.at ?? 0;
-  const enter = spring({
-    frame: frame - Math.round(at * fps),
-    fps,
-    config: { damping: 200, mass: 0.7 },
-    durationInFrames: 14,
-  });
+  // Sem `at` a placa veio do take anterior: entra já assentada e não reanima
+  // no corte. Com `at` em toda cena do bloco, ela subia de novo a cada emenda
+  // — três vezes seguidas, o que lê como defeito e não como entrada. É a mesma
+  // regra da `BubbleList`, e vale pelo mesmo motivo.
+  const enter =
+    image.at === undefined
+      ? 1
+      : spring({
+          frame: frame - Math.round(image.at * fps),
+          fps,
+          config: { damping: 200, mass: 0.7 },
+          durationInFrames: 14,
+        });
   if (enter <= 0) return null;
 
   return (
