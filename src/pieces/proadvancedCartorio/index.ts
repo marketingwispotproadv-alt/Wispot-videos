@@ -136,14 +136,19 @@ export const proadvancedCartorio: PieceConfig = {
 /**
  * A mesma peça, sem legenda e sem ficha, para tirar quadro de capa:
  *
- *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=465
+ *     npx remotion still ProAdvancedCartorioCapa out/capa.png --frame=450
  *
  * No vídeo não existe quadro limpo — nos vãos entre um trecho e outro, a
  * legenda que sai e a que entra se cruzam em transparência.
  *
- * O 465 é o de expressão séria, no bloco em que ele fala do risco. O 1560, no
- * fecho, é o mesmo plano com ele sorrindo — troque o número se a peça for
- * sair num contexto que peça o tom mais leve.
+ * O 450 é o de expressão séria, no bloco em que ele fala do risco — é onde o
+ * rosto fecha sozinho, porque é o que o texto pede ali.
+ *
+ * **O número vale para a velocidade atual e só para ela.** Mexer em `speed`
+ * reposiciona tudo, e o quadro que era o bom passa a cair no meio de uma
+ * palavra. Depois de mudar a velocidade, procure de novo: renderize alguns
+ * quadros espaçados e escolha um de boca fechada, que é o que a peça quase não
+ * tem — ele fala o tempo todo.
  */
 export const proadvancedCartorioCapa: PieceConfig = {
   ...proadvancedCartorio,
