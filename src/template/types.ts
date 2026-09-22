@@ -81,10 +81,27 @@ export type RuleItem = {
   at?: number;
 };
 
+/**
+ * Recorte de notícia mostrado em cena.
+ *
+ * `src` é o caminho em `public/`. `source` é o crédito — veículo e data —, e
+ * vale a pena escrever: é o que separa citar de se apropriar. `at` é o segundo
+ * em que a placa entra, contado do início da cena; sem ele a placa já está em
+ * cena desde o primeiro quadro, que é como ela atravessa o corte de um take
+ * para o seguinte sem reanimar.
+ */
+export type NewsImage = {
+  src: string;
+  source?: string;
+  at?: number;
+};
+
 export type Overlay = {
   /** etiqueta do bloco do roteiro, abaixo da assinatura */
   label?: string;
   items?: RuleItem[];
+  /** recorte de notícia, na placa branca de `components/NewsCard` */
+  image?: NewsImage;
   /**
    * Tira a legenda desta cena.
    *

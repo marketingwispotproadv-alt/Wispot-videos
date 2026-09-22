@@ -14,6 +14,7 @@ import { EndCard } from "./components/EndCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { BubbleList } from "./components/BubbleList";
 import { MusicBed } from "./components/MusicBed";
+import { NewsCard } from "./components/NewsCard";
 import { QuietList } from "./components/QuietList";
 import { RuleList } from "./components/RuleList";
 import { Scene } from "./components/Scene";
@@ -136,6 +137,17 @@ export const Piece: React.FC<{ config: PieceConfig }> = ({ config }) => {
                             config.scenes[i],
                             style,
                           )}
+                        />
+                      ) : null}
+                      {overlay?.image ? (
+                        <NewsCard
+                          image={
+                            adjustOverlay(
+                              [overlay.image],
+                              config.scenes[i],
+                              style,
+                            )[0]
+                          }
                         />
                       ) : null}
                     </Scene>

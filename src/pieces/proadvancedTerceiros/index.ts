@@ -4,8 +4,21 @@ import type { Overlay, PieceConfig } from "../../template/types";
 import { SCENES } from "./scenes";
 
 /**
- * Dois gráficos na peça inteira, e os dois estão onde **completam** o que a
+ * Três gráficos na peça inteira, e os três estão onde **completam** o que a
  * locução deixou pela metade — não onde enfeitam.
+ *
+ * O recorte da notícia: a voz diz "um caso recente no Brasil" e não diz qual.
+ * A placa entra em "caso", na cena 2, e fica pelas cenas 3 e 4, que são as que
+ * falam do vazamento — atravessa os dois cortes sem reanimar, porque só a
+ * primeira traz `at`. Nas cenas 3 e 4 a legenda sai: a manchete já é texto, e
+ * texto contra texto na mesma tela faz quem assiste não ler nenhum dos dois.
+ * Na cena 2 ela fica, porque é ali que a placa está subindo e ainda há o que
+ * ler em cima.
+ *
+ * O recorte foi cortado logo abaixo da linha fina: o que entra é manchete e
+ * olho, sem a assinatura dos repórteres. Nome de pessoa não entra em peça
+ * publicitária sem que ela saiba. O crédito do veículo fica, escrito por nós
+ * na linha de baixo da placa — é o que separa citar de se apropriar.
  *
  * A etiqueta da abertura: o roteiro escrito abre com "Sua empresa pode estar
  * protegida. Mas basta uma empresa com acesso aos seus sistemas ser invadida
@@ -34,8 +47,17 @@ import { SCENES } from "./scenes";
  * mesma coisa que a voz está dizendo, e dois textos com o mesmo conteúdo na
  * mesma tela fazem quem assiste não ler nenhum dos dois.
  */
+const NOTICIA = {
+  src: "terceiros/news/g1-sp.png",
+  source: "g1 · 07/05/2026",
+};
+
 const OVERLAYS: Record<string, Overlay> = {
   "01-terceiros": { label: "Basta uma delas ser invadida" },
+  // Sobe em "caso", que é a palavra que a placa ilustra.
+  "02-caso": { image: { ...NOTICIA, at: 0.8 } },
+  "03-expostos": { hideCaptions: true, image: NOTICIA },
+  "04-orgaos": { hideCaptions: true, image: NOTICIA },
   "07-contabilidade": {
     hideCaptions: true,
     items: [
@@ -89,6 +111,14 @@ export const proadvancedTerceiros: PieceConfig = {
   music: { src: "terceiros/audio/trilha.mp3", under: 0.13, over: 0.5 },
   style: {
     ...LEGENDA_GRANDE,
+    captions: {
+      ...LEGENDA_GRANDE.captions,
+      // 88 px no lugar dos 102 do estilo. Os 102 saíram da medição do vídeo
+      // de referência, que tinha frase curta; aqui as linhas são mais longas
+      // e quebravam em duas quase sempre, o que empurra a legenda para cima
+      // do rosto. Em 88 a maior parte cabe numa linha só.
+      fontSize: 88,
+    },
     lead: { head: 0.03, tail: 0.05 },
     overlayStyle: "bubbles",
     // 1,08 em vez dos 1,12 do corte de cartórios. A fala aqui já é mais
