@@ -12,7 +12,23 @@ import { COLORS, FONT_FAMILY, GRADIENT } from "../brand";
 import { MyGuestLogo } from "./MyGuestLogo";
 import { Ripples } from "./Ripples";
 
-export const EndCard: React.FC = () => {
+/**
+ * Cartão final. Sem props é o do vídeo do MyGuest; as demos de cada produto
+ * passam a própria marca e a frase de fechamento.
+ */
+export const EndCard: React.FC<{
+  product?: React.ReactNode;
+  line?: React.ReactNode;
+}> = ({
+  product = <MyGuestLogo width={560} />,
+  line = (
+    <>
+      Controle de acesso que
+      <br />
+      vira dado estratégico.
+    </>
+  ),
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -65,7 +81,7 @@ export const EndCard: React.FC = () => {
             transform: `translateY(${interpolate(name, [0, 1], [26, 0])}px)`,
           }}
         >
-          <MyGuestLogo width={560} />
+          {product}
         </div>
 
         <div
@@ -92,9 +108,7 @@ export const EndCard: React.FC = () => {
             transform: `translateY(${interpolate(cta, [0, 1], [22, 0])}px)`,
           }}
         >
-          Controle de acesso que
-          <br />
-          vira dado estratégico.
+          {line}
         </div>
 
         <div

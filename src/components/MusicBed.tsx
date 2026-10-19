@@ -11,7 +11,9 @@ export const MusicBed: React.FC<{
   /** frame em que o cartão final começa */
   endCardFrom: number;
   fps: number;
-}> = ({ totalFrames, endCardFrom, fps }) => {
+  /** volume durante o vídeo; sem locução por cima dá para subir */
+  level?: number;
+}> = ({ totalFrames, endCardFrom, fps, level = 0.22 }) => {
   const frame = useCurrentFrame();
 
   const fadeIn = Math.round(fps * 1.2);
@@ -28,7 +30,7 @@ export const MusicBed: React.FC<{
       totalFrames - fadeOut,
       totalFrames,
     ],
-    [0, 0.22, 0.22, 0.62, 0.62, 0],
+    [0, level, level, 0.62, 0.62, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
 

@@ -9,6 +9,11 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | `MyGuest` | 1080×1920 (9:16) | ~44,8 s | Vídeo institucional do MyGuest, com locução, trilha, legendas sincronizadas e gráficos de marca |
 | `Capa` | 1080×1920 | still | Capa do post, montada sobre um frame do próprio material |
 | `CartaoFinal` | 1080×1920 | 3,6 s | Cartão final isolado, para reaproveitar em outras peças |
+| `DemoHoraPremiada` | 1080×1920 | ~33 s | Demo animada do Hora Premiada |
+| `DemoMyGuest` | 1080×1920 | ~33 s | Demo animada do MyGuest |
+| `DemoSending` | 1080×1920 | ~32 s | Demo animada do Sending |
+| `DemoWimap` | 1080×1920 | ~32 s | Demo animada do Wimap |
+| `DemoWiquest` | 1080×1920 | ~32 s | Demo animada do Wiquest |
 
 ## Comandos
 
@@ -17,7 +22,41 @@ npm run dev                                  # abre o Remotion Studio
 npx remotion render MyGuest out/myguest.mp4  # renderiza o vídeo
 npx remotion still Capa out/capa/capa.png    # gera a capa do post
 npm run lint                                 # eslint + tsc
+npx remotion render DemoWimap out/demos/wimap.mp4  # renderiza uma demo
 ```
+
+Os MP4 já renderizados das demos ficam em `renders/demos/`.
+
+## Demos animadas das ferramentas
+
+Uma animação por ferramenta (Hora Premiada, MyGuest, Sending, Wimap e
+Wiquest), sem locução, só com a trilha. Todas seguem o mesmo esqueleto
+(`src/demos/DemoVideo.tsx`):
+
+1. abertura com a marca do produto e a frase de posicionamento;
+2. quatro passos, cada um com a plataforma em uso — painel numa janela de
+   navegador ou o celular do cliente, com ponteiro, toques, digitação,
+   números subindo e gráficos se desenhando;
+3. os quatro benefícios, tirados das páginas de cada produto em wispot.com.br;
+4. o cartão final (`EndCard`, agora com a marca e a frase por props).
+
+O roteiro de cada demo está no arquivo do produto em `src/demos/` (o
+`...Config` no fim de cada um): título e subtítulo de cada passo, duração e a
+cena. As peças de interface reutilizáveis — celular, janela, ponteiro, toque,
+campos, botões, gráficos, notificações — ficam em `src/demos/kit.tsx`, e os
+tempos dentro de cada cena são em segundos.
+
+As telas são **recriadas**, não gravadas: seguem o layout das gravações e das
+artes da pasta do Drive (painel do Hora Premiada, portal do MyGuest, painel do
+Sending, telas de celular por produto), mas com "SUA MARCA" e dados fictícios
+no lugar dos clientes que aparecem nas gravações.
+
+Cada produto tem uma cor de destaque (`PRODUCTS`, em
+`src/demos/ProductMark.tsx`), a mesma das artes de celular do Drive — exceto
+o Sending, que usa o amarelo do próprio painel, porque o azul da arte se
+confunde com o azul da Wispot. Só o MyGuest tem arquivo de logo no projeto;
+os outros aparecem com ícone + nome em Montserrat. Quando chegarem os logos
+em vetor, é só trocar em `ProductMark`.
 
 ## Identidade visual
 
