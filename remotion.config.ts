@@ -13,3 +13,5 @@ Config.setVideoImageFormat("jpeg");
 Config.setCrf(23);
 Config.setOverwriteOutput(true);
 Config.overrideBundlerConfig(enableTailwind);
+// cenas 3D (three.js) renderizam por software: o container não tem GPU
+Config.setChromiumOpenGlRenderer("swangle");

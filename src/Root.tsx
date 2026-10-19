@@ -16,6 +16,24 @@ import { myGuestExplainer } from "./explainers/ExMyGuest";
 import { sendingExplainer } from "./explainers/ExSending";
 import { wimapExplainer } from "./explainers/ExWimap";
 import { wiquestExplainer } from "./explainers/ExWiquest";
+import { StoryConfig, StoryVideo, storyFrames } from "./stories/story-kit";
+import { horaPremiadaStory } from "./stories/StoryHoraPremiada";
+import { myGuestStory } from "./stories/StoryMyGuest";
+import { sendingStory } from "./stories/StorySending";
+import { wimapStory } from "./stories/StoryWimap";
+import { wiquestStory } from "./stories/StoryWiquest";
+
+/** Histórias 16:9: uma narrativa por ferramenta, mais rápidas, com 3D. */
+const STORIES = [
+  { id: "HistoriaHoraPremiada", config: horaPremiadaStory },
+  { id: "HistoriaMyGuest", config: myGuestStory },
+  { id: "HistoriaSending", config: sendingStory },
+  { id: "HistoriaWimap", config: wimapStory },
+  { id: "HistoriaWiquest", config: wiquestStory },
+].map((d: { id: string; config: StoryConfig }) => ({
+  ...d,
+  component: () => <StoryVideo config={d.config} />,
+}));
 
 /** Explainers 16:9 no estilo do institucional antigo da Wispot. */
 const EXPLAINERS = [
@@ -94,6 +112,18 @@ export const RemotionRoot: React.FC = () => {
           id={d.id}
           component={d.component}
           durationInFrames={explainerFrames(VIDEO.fps)}
+          fps={VIDEO.fps}
+          width={1920}
+          height={1080}
+        />
+      ))}
+      {/* Histórias. Render: npx remotion render HistoriaWimap out/historias/wimap.mp4 */}
+      {STORIES.map((d) => (
+        <Composition
+          key={d.id}
+          id={d.id}
+          component={d.component}
+          durationInFrames={storyFrames(d.config, VIDEO.fps)}
           fps={VIDEO.fps}
           width={1920}
           height={1080}

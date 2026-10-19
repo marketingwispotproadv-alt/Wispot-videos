@@ -12,6 +12,7 @@ import { FONT_FAMILY } from "../brand";
 
 export type Hair = "short" | "long" | "bun" | "curly" | "none";
 export type Pose = "stand" | "phone" | "sit" | "walk" | "wave";
+export type Mood = "neutral" | "happy" | "sad" | "surprised" | "angry";
 
 export type PersonProps = {
   x: number;
@@ -33,6 +34,8 @@ export type PersonProps = {
   /** instante em que aparece o balão de Wi-Fi sobre a cabeça */
   wifiAt?: number;
   wifiColor?: string;
+  /** expressão do rosto (sobrancelhas e boca) */
+  mood?: Mood;
 };
 
 const SHOE = "#2B2F36";
@@ -55,6 +58,7 @@ export const Person: React.FC<PersonProps> = ({
   dress,
   wifiAt,
   wifiColor = "#25A8E0",
+  mood = "neutral",
 }) => {
   const bob = pose === "walk" ? Math.abs(Math.sin(t * 6 + phase)) * -4 : Math.sin(t * 1.6 + phase) * 1.6;
   const swing = pose === "walk" ? Math.sin(t * 6 + phase) * 20 : 0;
@@ -161,7 +165,7 @@ export const Person: React.FC<PersonProps> = ({
         [-22, -11, 0, 11, 22].map((dx) => <circle key={dx} cx={dx} cy={headY - 20 + Math.abs(dx) * 0.4} r={11} fill={hairColor} />)}
       <circle cx={-9} cy={headY + 1} r={2.8} fill="#22252B" />
       <circle cx={9} cy={headY + 1} r={2.8} fill="#22252B" />
-      <path d={`M-7 ${headY + 11} Q0 ${headY + 16} 7 ${headY + 11}`} fill="none" stroke="#22252B" strokeWidth={2.2} strokeLinecap="round" />
+      <Face headY={headY} mood={mood} />
       {glasses && (
         <g fill="none" stroke="#22252B" strokeWidth={2.4}>
           <circle cx={-10} cy={headY + 1} r={8} />
@@ -171,6 +175,35 @@ export const Person: React.FC<PersonProps> = ({
       )}
       {wifiAt !== undefined && t > wifiAt && (
         <WifiBubble x={flip ? -10 : 10} y={headY - 74} p={Math.min(1, (t - wifiAt) / 0.3)} t={t} color={wifiColor} flip={flip} />
+      )}
+    </g>
+  );
+};
+
+/** boca e sobrancelhas de cada expressão */
+const Face: React.FC<{ headY: number; mood: Mood }> = ({ headY: h, mood }) => {
+  const ink = { fill: "none", stroke: "#22252B", strokeWidth: 2.4, strokeLinecap: "round" } as const;
+  return (
+    <g>
+      {mood === "happy" && <path d={`M-9 ${h + 9} Q0 ${h + 21} 9 ${h + 9} Z`} fill="#22252B" />}
+      {mood === "neutral" && <path d={`M-7 ${h + 11} Q0 ${h + 16} 7 ${h + 11}`} {...ink} />}
+      {mood === "sad" && (
+        <>
+          <path d={`M-7 ${h + 15} Q0 ${h + 9} 7 ${h + 15}`} {...ink} />
+          <path d={`M-14 ${h - 6} L-5 ${h - 10} M14 ${h - 6} L5 ${h - 10}`} {...ink} />
+        </>
+      )}
+      {mood === "surprised" && (
+        <>
+          <ellipse cx={0} cy={h + 13} rx={4.5} ry={6} fill="#22252B" />
+          <path d={`M-14 ${h - 11} Q-9 ${h - 15} -4 ${h - 11} M4 ${h - 11} Q9 ${h - 15} 14 ${h - 11}`} {...ink} />
+        </>
+      )}
+      {mood === "angry" && (
+        <>
+          <path d={`M-6 ${h + 13} L6 ${h + 13}`} {...ink} />
+          <path d={`M-14 ${h - 10} L-4 ${h - 5} M14 ${h - 10} L4 ${h - 5}`} {...ink} strokeWidth={3} />
+        </>
       )}
     </g>
   );
@@ -203,7 +236,7 @@ const WifiBubble: React.FC<{ x: number; y: number; p: number; t: number; color: 
 /* Mobiliário                                                           */
 /* ------------------------------------------------------------------ */
 
-const Txt: React.FC<{ x: number; y: number; size: number; color: string; children: React.ReactNode; weight?: number; anchor?: "start" | "middle" | "end"; ls?: number }> = ({
+export const Txt: React.FC<{ x: number; y: number; size: number; color: string; children: React.ReactNode; weight?: number; anchor?: "start" | "middle" | "end"; ls?: number }> = ({
   x,
   y,
   size,
@@ -250,7 +283,7 @@ export const WifiSign: React.FC<{ x: number; y: number; color?: string }> = ({ x
   </g>
 );
 
-const Shelf: React.FC<{ x: number; y: number; w: number; h: number; colors: string[] }> = ({ x, y, w, h, colors }) => {
+export const Shelf: React.FC<{ x: number; y: number; w: number; h: number; colors: string[] }> = ({ x, y, w, h, colors }) => {
   const rows = 4;
   const rh = h / rows;
   return (
@@ -280,7 +313,7 @@ const Shelf: React.FC<{ x: number; y: number; w: number; h: number; colors: stri
   );
 };
 
-const Counter: React.FC<{ x: number; y: number; w: number; h: number; color: string; topColor: string }> = ({ x, y, w, h, color, topColor }) => (
+export const Counter: React.FC<{ x: number; y: number; w: number; h: number; color: string; topColor: string }> = ({ x, y, w, h, color, topColor }) => (
   <g>
     <rect x={x} y={y} width={w} height={h} fill={color} />
     {Array.from({ length: Math.floor(w / 60) }, (_, i) => (
@@ -290,7 +323,7 @@ const Counter: React.FC<{ x: number; y: number; w: number; h: number; color: str
   </g>
 );
 
-const Table: React.FC<{ x: number; y: number; w?: number; top?: string }> = ({ x, y, w = 170, top = "#FFFFFF" }) => (
+export const Table: React.FC<{ x: number; y: number; w?: number; top?: string }> = ({ x, y, w = 170, top = "#FFFFFF" }) => (
   <g>
     <rect x={x - 6} y={y} width={12} height={110} fill="#5B4A3A" />
     <rect x={x - 40} y={y + 104} width={80} height={10} rx={5} fill="#5B4A3A" />
@@ -299,7 +332,7 @@ const Table: React.FC<{ x: number; y: number; w?: number; top?: string }> = ({ x
   </g>
 );
 
-const Chair: React.FC<{ x: number; y: number; color: string; flip?: boolean }> = ({ x, y, color, flip }) => (
+export const Chair: React.FC<{ x: number; y: number; color: string; flip?: boolean }> = ({ x, y, color, flip }) => (
   <g transform={`translate(${x} ${y}) scale(${flip ? -1 : 1} 1)`}>
     <rect x={-34} y={-150} width={14} height={110} rx={6} fill={color} />
     <rect x={-34} y={-58} width={80} height={16} rx={6} fill={color} />
@@ -308,7 +341,7 @@ const Chair: React.FC<{ x: number; y: number; color: string; flip?: boolean }> =
   </g>
 );
 
-const Frame: React.FC<{ x: number; y: number; w: number; h: number; c1: string; c2: string }> = ({ x, y, w, h, c1, c2 }) => (
+export const Frame: React.FC<{ x: number; y: number; w: number; h: number; c1: string; c2: string }> = ({ x, y, w, h, c1, c2 }) => (
   <g>
     <rect x={x} y={y} width={w} height={h} fill="#fff" stroke="#3B4048" strokeWidth={6} />
     <circle cx={x + w * 0.35} cy={y + h * 0.4} r={h * 0.18} fill={c1} />
@@ -316,7 +349,7 @@ const Frame: React.FC<{ x: number; y: number; w: number; h: number; c1: string; 
   </g>
 );
 
-const Luggage: React.FC<{ x: number; y: number; color: string }> = ({ x, y, color }) => (
+export const Luggage: React.FC<{ x: number; y: number; color: string }> = ({ x, y, color }) => (
   <g>
     <rect x={x - 6} y={y - 150} width={12} height={40} fill="#4A4F57" />
     <rect x={x - 34} y={y - 116} width={68} height={104} rx={12} fill={color} />
@@ -334,7 +367,7 @@ const Luggage: React.FC<{ x: number; y: number; color: string }> = ({ x, y, colo
 
 export type Place = "store" | "hotel" | "cafe" | "street" | "restaurant";
 
-const SKINS = ["#F2C7A5", "#D9A27A", "#A86E4B", "#7A4A30", "#F6D3BC"];
+export const SKINS = ["#F2C7A5", "#D9A27A", "#A86E4B", "#7A4A30", "#F6D3BC"];
 
 type Cast = Omit<PersonProps, "t"> & {
   /** fica atrás do balcão (desenhado antes da camada da frente) */
@@ -375,7 +408,7 @@ const CAST: Record<Place, Cast[]> = {
   ],
 };
 
-const Backdrop: React.FC<{ place: Place; accent: string }> = ({ place, accent }) => {
+export const Backdrop: React.FC<{ place: Place; accent: string; sign?: string }> = ({ place, accent, sign = "SUA LOJA" }) => {
   switch (place) {
     case "store":
       return (
@@ -467,7 +500,7 @@ const Backdrop: React.FC<{ place: Place; accent: string }> = ({ place, accent })
           <rect x={460} y={300} width={1000} height={580} fill="#FFFFFF" />
           <rect x={460} y={300} width={1000} height={110} fill={accent} />
           <Txt x={960} y={375} size={56} color="#fff" ls={6}>
-            SUA LOJA
+            {sign}
           </Txt>
           <rect x={500} y={450} width={540} height={400} fill="#CFE8F5" stroke="#3B4048" strokeWidth={8} />
           <rect x={1100} y={450} width={320} height={430} fill="#3B4048" />
@@ -505,7 +538,7 @@ const Backdrop: React.FC<{ place: Place; accent: string }> = ({ place, accent })
 };
 
 /** o que fica na frente de quem trabalha atrás do balcão */
-const Front: React.FC<{ place: Place }> = ({ place }) => {
+export const Front: React.FC<{ place: Place }> = ({ place }) => {
   if (place === "hotel") return <Counter x={1040} y={640} w={580} h={220} color="#3E5873" topColor="#2D4257" />;
   if (place === "cafe")
     return (

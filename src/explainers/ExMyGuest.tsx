@@ -24,7 +24,7 @@ const RED = "#C42627";
 
 /* Portal de voucher ------------------------------------------------------ */
 
-const VoucherPortal: React.FC<{
+export const VoucherPortal: React.FC<{
   theme: ThemeId;
   code: string;
   t: number;
