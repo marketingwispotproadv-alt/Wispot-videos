@@ -14,13 +14,23 @@ export const NAVY = "#0B3F8F";
 export const NAVY_DEEP = "#072A63";
 export const PILL = "#1C7FD6";
 
+/** azul institucional da Wispot: é a cor de fundo de todos os vídeos */
+export const BRAND_BLUE = "#25A8E0";
+
+/** avisa a tipografia de que está sobre o azul (destaques viram pílula branca) */
+export const OnBlue = React.createContext(false);
+
+/**
+ * Fundo azul dos vídeos, na cor institucional #25A8E0. Leva só um brilho
+ * suave no centro e um tom abaixo nas bordas, para não ficar chapado.
+ */
 export const NavyBg: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <AbsoluteFill
     style={{
-      background: `radial-gradient(ellipse at 70% 30%, #1A5FC0 0%, ${NAVY} 45%, ${NAVY_DEEP} 100%)`,
+      background: `radial-gradient(ellipse at 50% 40%, #3BB3E6 0%, ${BRAND_BLUE} 55%, #1F9DD4 100%)`,
     }}
   >
-    {children}
+    <OnBlue.Provider value>{children}</OnBlue.Provider>
   </AbsoluteFill>
 );
 
@@ -57,12 +67,22 @@ export const ProductLogo: React.FC<{
   white?: boolean;
   height: number;
   style?: React.CSSProperties;
-}> = ({ id, white, height, style }) => (
-  <Img
-    src={staticFile(`brand/products/${id}${white && HAS_WHITE.includes(id) ? "-white" : ""}.png`)}
-    style={{ height, display: "block", ...style }}
-  />
-);
+}> = ({ id, white, height, style }) => {
+  const img = (
+    <Img
+      src={staticFile(`brand/products/${id}${white && HAS_WHITE.includes(id) ? "-white" : ""}.png`)}
+      style={{ height, display: "block", ...(white && !HAS_WHITE.includes(id) ? {} : style) }}
+    />
+  );
+  // o Sending só existe colorido, e o amarelo do "ing" some no azul
+  if (white && !HAS_WHITE.includes(id))
+    return (
+      <div style={{ display: "inline-block", padding: `${height * 0.12}px ${height * 0.2}px`, borderRadius: height * 0.16, background: "#fff", ...style }}>
+        {img}
+      </div>
+    );
+  return img;
+};
 
 export const WispotLogo: React.FC<{ width: number; white?: boolean; style?: React.CSSProperties }> = ({
   width,

@@ -311,7 +311,7 @@ export const MessageFlight3D: React.FC<{ accent: string; dot: string }> = ({ acc
       <Rig pos={[Math.sin(orbit) * 11 + 1, 7.5, Math.cos(orbit) * 11]} look={[1, 0, 0]} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[1, -0.02, 0]}>
         <planeGeometry args={[40, 30]} />
-        <meshStandardMaterial color="#123E7E" roughness={0.9} />
+        <meshStandardMaterial color="#1A8FC6" roughness={0.9} />
       </mesh>
       {/* a loja, de onde saem as mensagens */}
       <group position={origin}>
@@ -337,7 +337,7 @@ export const MessageFlight3D: React.FC<{ accent: string; dot: string }> = ({ acc
           <group key={i}>
             <mesh position={[g.x, 0.12, g.z]} scale={0.16 * pulse}>
               <sphereGeometry args={[1, 16, 12]} />
-              <meshStandardMaterial color={arrived ? dot : "#8FA9CF"} emissive={arrived ? dot : "#000000"} emissiveIntensity={arrived ? 0.5 : 0} />
+              <meshStandardMaterial color={arrived ? dot : "#DDF2FB"} emissive={arrived ? dot : "#000000"} emissiveIntensity={arrived ? 0.5 : 0} />
             </mesh>
             {fly && (
               <mesh position={[x, y, z]} rotation={[-0.5, Math.atan2(g.x - origin.x, g.z - origin.z), Math.sin(e * 6) * 0.2]} scale={0.55}>

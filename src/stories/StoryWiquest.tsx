@@ -191,6 +191,9 @@ const FiveStars: React.FC = () => (
 
 export const wiquestStory: StoryConfig = {
   logo: "wiquest",
+  narration: "wiquest",
+  title: ["A estrela", "que *faltava*"],
+  sector: "Restaurantes",
   name: "Wiquest",
   accent: ORANGE,
   logoColor: LIGHT,

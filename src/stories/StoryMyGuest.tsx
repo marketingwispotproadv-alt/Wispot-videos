@@ -306,6 +306,9 @@ const Review: React.FC = () => (
 
 export const myGuestStory: StoryConfig = {
   logo: "myguest",
+  narration: "myguest",
+  title: ["A senha", "no *post-it*"],
+  sector: "Hotéis",
   name: "MyGuest",
   accent: RED,
   logoColor: "#FF5A5A",

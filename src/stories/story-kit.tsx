@@ -1,7 +1,9 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useVideoConfig } from "remotion";
+import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useVideoConfig } from "remotion";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import "../fonts";
+import TEMPOS from "./narracao-tempos.json";
+import { Ripples } from "../components/Ripples";
 import { FONT_FAMILY } from "../brand";
 import { MusicBed } from "../components/MusicBed";
 import { Phone, PhoneNotification } from "../demos/kit";
@@ -16,12 +18,20 @@ import { WaveSting3D } from "./three3d";
 
 export type Shot = { seconds: number; cut?: CutKind; node: React.ReactNode };
 
+export type NarrationKey = keyof typeof TEMPOS;
+
 export type StoryConfig = {
   logo: LogoId;
   name: string;
   accent: string;
   /** cor do logo, para a vinheta 3D */
   logoColor: string;
+  /** chave da história em narracao.json / narracao-tempos.json */
+  narration: NarrationKey;
+  /** título da capa de abertura (aceita *destaque*) */
+  title: string[];
+  /** setor em que a história se passa */
+  sector: string;
   shots: Shot[];
   slogan: string[];
   sectors: string[];
@@ -30,28 +40,160 @@ export type StoryConfig = {
 /** emendas curtas: 9 quadros (0,3 s), dentro da faixa de troca de contexto */
 const CUT_FRAMES = 9;
 export const END_SECONDS = 4.4;
+const COVER_SECONDS = 2.6;
+const SIGN_OFF_SECONDS = 4.4;
+/** a fala entra 0,2 s depois do corte e termina antes da emenda seguinte */
+const VO_LEAD = 0.2;
+const VO_TAIL = 0.45;
+
+type Beat = { key: string; seconds: number; cut?: CutKind; node: React.ReactNode };
+
+/** planos da história com capa, fechamento e assinatura, já esticados para caber a fala */
+const beats = (c: StoryConfig): Beat[] => {
+  const vo = TEMPOS[c.narration] as Record<string, number>;
+  const fit = (key: string, seconds: number) => Math.max(seconds, VO_LEAD + (vo[key] ?? 0) + VO_TAIL);
+  return [
+    { key: "capa", seconds: fit("capa", COVER_SECONDS), node: <OpeningCover c={c} /> },
+    ...c.shots.map((s, i) => ({ key: String(i), seconds: fit(String(i), s.seconds), cut: s.cut, node: s.node })),
+    { key: "fim", seconds: fit("fim", END_SECONDS), cut: "zoom" as CutKind, node: <EndShot c={c} /> },
+    { key: "assinatura", seconds: fit("assinatura", SIGN_OFF_SECONDS), cut: "whip" as CutKind, node: <ClosingCover c={c} /> },
+  ];
+};
 
 export const storyFrames = (c: StoryConfig, fps: number) =>
-  c.shots.reduce((a, s) => a + Math.round(s.seconds * fps), 0) + Math.round(END_SECONDS * fps) - c.shots.length * CUT_FRAMES;
+  beats(c).reduce((a, b) => a + Math.round(b.seconds * fps), 0) - (beats(c).length - 1) * CUT_FRAMES;
 
 export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => {
   const { fps } = useVideoConfig();
   const total = storyFrames(c, fps);
   const items: React.ReactNode[] = [];
-  const all: Shot[] = [...c.shots, { seconds: END_SECONDS, cut: "zoom", node: <EndShot c={c} /> }];
-  all.forEach((s, i) => {
-    if (i) items.push(<TransitionSeries.Transition key={`t${i}`} presentation={cut(s.cut ?? "whip")} timing={linearTiming({ durationInFrames: CUT_FRAMES })} />);
+  beats(c).forEach((b, i) => {
+    if (i) items.push(<TransitionSeries.Transition key={`t${i}`} presentation={cut(b.cut ?? "whip")} timing={linearTiming({ durationInFrames: CUT_FRAMES })} />);
     items.push(
-      <TransitionSeries.Sequence key={`s${i}`} durationInFrames={Math.round(s.seconds * fps)}>
-        {s.node}
+      <TransitionSeries.Sequence key={b.key} durationInFrames={Math.round(b.seconds * fps)}>
+        {b.node}
+        <Sequence from={Math.round(VO_LEAD * fps)} layout="none">
+          <Audio src={staticFile(`audio/narracao/${c.narration}/${b.key}.mp3`)} />
+        </Sequence>
       </TransitionSeries.Sequence>,
     );
   });
   return (
-    <AbsoluteFill style={{ background: "#072A63" }}>
+    <AbsoluteFill style={{ background: "#25A8E0" }}>
       <TransitionSeries>{items}</TransitionSeries>
-      <MusicBed totalFrames={total} endCardFrom={total - Math.round(END_SECONDS * fps)} fps={fps} level={0.55} />
+      {/* trilha baixa sob a voz; sobe no último segundo, depois da assinatura */}
+      <MusicBed totalFrames={total} endCardFrom={total - Math.round(1.9 * fps)} fps={fps} level={0.16} />
     </AbsoluteFill>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/* Capas                                                               */
+/* ------------------------------------------------------------------ */
+
+/** Capa de abertura: "uma história", o título e o produto. Serve de thumbnail. */
+export const OpeningCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
+  const t = useSeconds();
+  const logo = tween(t, 0.05, DUR.std);
+  const label = tween(t, 0.15, DUR.std);
+  const product = pop(t, 0.75);
+  const chip = tween(t, 1.0, DUR.std);
+  return (
+    <NavyBg>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
+        <Ripples size={1100} opacity={0.22} speed={0.35} />
+      </AbsoluteFill>
+      <div style={{ position: "absolute", left: 90, top: 70, opacity: logo, transform: `translateY(${(1 - logo) * -20}px)` }}>
+        <WispotLogo width={230} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 300,
+          textAlign: "center",
+          fontFamily: FONT_FAMILY,
+          fontWeight: 800,
+          fontSize: 34,
+          letterSpacing: 10,
+          color: "rgba(255,255,255,0.9)",
+          opacity: label,
+        }}
+      >
+        UMA HISTÓRIA
+      </div>
+      <Kinetic lines={c.title} at={0.25} size={140} accent={c.accent} top={c.title.length > 1 ? 370 : 430} />
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 170 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 28, transform: `scale(${Math.max(0, product)})` }}>
+          <ProductLogo id={c.logo} white height={c.logo === "sending" ? 130 : 110} />
+        </div>
+      </AbsoluteFill>
+      <div
+        style={{
+          position: "absolute",
+          right: 90,
+          top: 80,
+          padding: "12px 28px",
+          borderRadius: 999,
+          border: "3px solid rgba(255,255,255,0.85)",
+          fontFamily: FONT_FAMILY,
+          fontWeight: 800,
+          fontSize: 30,
+          color: "#fff",
+          opacity: chip,
+          transform: `translateX(${(1 - chip) * 30}px)`,
+        }}
+      >
+        {c.sector}
+      </div>
+    </NavyBg>
+  );
+};
+
+const FAMILY: LogoId[] = ["hora-premiada", "myguest", "sending", "wimap", "wiquest"];
+
+/** Capa de fechamento: assinatura da Wispot, contato e as outras ferramentas. */
+export const ClosingCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
+  const t = useSeconds();
+  const logo = pop(t, 0.1);
+  const line = tween(t, 0.5, DUR.std);
+  const contact = tween(t, 0.8, DUR.std);
+  const others = FAMILY.filter((f) => f !== c.logo);
+  return (
+    <NavyBg>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
+        <Ripples size={1000} opacity={0.2} speed={0.3} />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: 120 }}>
+        <div style={{ transform: `scale(${Math.max(0, logo)})` }}>
+          <WispotLogo width={560} />
+        </div>
+        <div style={{ marginTop: 36, fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 36, letterSpacing: 7, color: "#fff", opacity: line, transform: `translateY(${(1 - line) * 20}px)` }}>
+          INTERAÇÃO E EXPERIÊNCIA EM WI-FI
+        </div>
+        <div style={{ marginTop: 34, display: "flex", gap: 22, opacity: contact, transform: `translateY(${(1 - contact) * 20}px)` }}>
+          {["wispot.com.br", "(11) 94020-0547"].map((s) => (
+            <span key={s} style={{ padding: "14px 30px", borderRadius: 999, background: "#fff", fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 32, color: "#0B91C1" }}>
+              {s}
+            </span>
+          ))}
+        </div>
+      </AbsoluteFill>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 90, display: "flex", flexDirection: "column", alignItems: "center", gap: 22 }}>
+        <div style={{ fontFamily: FONT_FAMILY, fontWeight: 700, fontSize: 24, letterSpacing: 5, color: "rgba(255,255,255,0.85)", opacity: tween(t, 1.1, DUR.std) }}>CONHEÇA TAMBÉM</div>
+        <div style={{ display: "flex", gap: 56, alignItems: "center" }}>
+          {others.map((id, i) => {
+            const p = tween(t, 1.2 + i * 0.08, DUR.std);
+            return (
+              <div key={id} style={{ opacity: p, transform: `translateY(${(1 - p) * 24}px)` }}>
+                <ProductLogo id={id} white height={id === "sending" ? 56 : 44} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </NavyBg>
   );
 };
 
@@ -67,11 +209,9 @@ export const StingShot: React.FC<{ logo: LogoId; color: string; line: string[] }
           style={{
             marginTop: -60,
             opacity: logo,
-            filter: `blur(${(1 - logo) * 14}px)`,
             transform: `scale(${0.82 + logo * 0.18})`,
             padding: "28px 46px",
-            borderRadius: 30,
-            background: "rgba(7,42,99,0.55)",
+            filter: `blur(${(1 - logo) * 14}px) drop-shadow(0 10px 30px rgba(0,60,110,0.35))`,
           }}
         >
           <ProductLogo id={id} white height={id === "sending" ? 200 : 150} />

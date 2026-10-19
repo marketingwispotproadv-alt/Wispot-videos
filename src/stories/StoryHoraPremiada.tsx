@@ -300,6 +300,9 @@ const Result: React.FC = () => (
 
 export const horaPremiadaStory: StoryConfig = {
   logo: "hora-premiada",
+  narration: "horaPremiada",
+  title: ["*15h*, loja vazia"],
+  sector: "Varejo",
   name: "Hora Premiada",
   accent: GREEN,
   logoColor: LOGO,

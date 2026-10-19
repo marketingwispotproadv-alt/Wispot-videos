@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import type { TransitionPresentation, TransitionPresentationComponentProps } from "@remotion/transitions";
 import { FONT_FAMILY } from "../brand";
+import { OnBlue } from "../explainers/ex-kit";
 
 /**
  * Identidade de movimento das histórias, montada com a skill de motion design
@@ -68,8 +69,10 @@ export const Kinetic: React.FC<{
   plate?: string;
 }> = ({ lines, at, until = 999, size = 110, color = "#fff", accent, align = "center", left = 0, top = 380, width = 1920, weight = 900, shadow = true, plate }) => {
   const t = useSeconds();
+  const onBlue = useContext(OnBlue);
   if (t < at - 0.05 || t > until + DUR.quick + 0.05) return null;
   const words = lines.map((l) => l.split(" "));
+  const ink = readable(accent);
   const total = words.flat().length;
   // stagger dentro do orçamento de 0,5 s da skill
   const step = Math.min(0.07, 0.45 / Math.max(1, total));
@@ -121,12 +124,15 @@ export const Kinetic: React.FC<{
                   fontSize: size,
                   lineHeight: 1.05,
                   letterSpacing: -size * 0.03,
-                  color: isAccent ? accent : color,
-                  textShadow: shadow ? "0 8px 30px rgba(0,0,0,0.35)" : "none",
+                  color: isAccent ? (onBlue ? ink : accent) : color,
+                  textShadow: shadow && !(isAccent && onBlue) ? "0 8px 30px rgba(0,0,0,0.25)" : "none",
+                  ...(isAccent && onBlue
+                    ? { background: "#fff", padding: `0 ${size * 0.16}px`, borderRadius: size * 0.16, boxShadow: "0 10px 26px rgba(0,0,0,0.18)" }
+                    : {}),
                 }}
               >
                 {clean}
-                {isAccent && (
+                {isAccent && !onBlue && (
                   <span
                     style={{
                       position: "absolute",
@@ -149,6 +155,15 @@ export const Kinetic: React.FC<{
       ))}
     </div>
   );
+};
+
+/** escurece cores claras demais para serem lidas sobre branco */
+const readable = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  if (lum < 0.5) return hex;
+  const k = 0.5 / lum;
+  return `rgb(${Math.round(r * k)}, ${Math.round(g * k)}, ${Math.round(b * k)})`;
 };
 
 /** Etiqueta pequena (lugar, hora) no canto, como legenda de cena. */

@@ -103,7 +103,7 @@ export const ExplainerVideo: React.FC<{ config: ExplainerConfig }> = ({ config: 
   });
 
   return (
-    <AbsoluteFill style={{ background: "#072A63" }}>
+    <AbsoluteFill style={{ background: "#25A8E0" }}>
       <TransitionSeries>{children}</TransitionSeries>
       <MusicBed totalFrames={total} endCardFrom={total - Math.round(SECONDS.final * fps)} fps={fps} level={0.5} />
     </AbsoluteFill>
@@ -238,7 +238,7 @@ const Tiles: React.FC<{ c: ExplainerConfig }> = ({ c }) => {
           </Freeze>
         </Laptop>
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: "rgba(7,30,72,0.62)" }} />
+      <AbsoluteFill style={{ background: "rgba(31,157,212,0.72)" }} />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
         <div style={{ ...text(46, 900, "#fff", { letterSpacing: 4 }), ...rise(head, 20) }}>O QUE O {c.name.toUpperCase()} OFERECE</div>
         <div style={{ marginTop: 70, display: "flex", gap: 90 }}>
