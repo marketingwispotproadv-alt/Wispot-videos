@@ -19,11 +19,11 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | `ExplainerSending` | 1920×1080 | ~47 s | Idem, Sending |
 | `ExplainerWimap` | 1920×1080 | ~47 s | Idem, Wimap |
 | `ExplainerWiquest` | 1920×1080 | ~47 s | Idem, Wiquest |
-| `HistoriaHoraPremiada` | 1920×1080 | ~29 s | História "15h, loja vazia" (varejo) |
-| `HistoriaMyGuest` | 1920×1080 | ~28 s | História "A senha no post-it" (hotéis) |
-| `HistoriaSending` | 1920×1080 | ~27 s | História "A cliente que sumiu" (cafeterias) |
-| `HistoriaWimap` | 1920×1080 | ~28 s | História "O mistério da vitrine" (shoppings) |
-| `HistoriaWiquest` | 1920×1080 | ~27 s | História "A estrela que faltava" (restaurantes) |
+| `HistoriaHoraPremiada` | 1920×1080 | ~39 s | História "Loja vazia às 15h" (varejo) |
+| `HistoriaMyGuest` | 1920×1080 | ~34 s | História "A senha no post-it" (hotéis) |
+| `HistoriaSending` | 1920×1080 | ~35 s | História "A cliente que sumiu" (cafeterias) |
+| `HistoriaWimap` | 1920×1080 | ~35 s | História "O mistério da vitrine" (shoppings) |
+| `HistoriaWiquest` | 1920×1080 | ~35 s | História "A estrela que faltava" (restaurantes) |
 
 ## Comandos
 
@@ -36,7 +36,10 @@ npx remotion render DemoWimap out/demos/wimap.mp4  # renderiza uma demo
 ```
 
 Os MP4 já renderizados ficam em `renders/demos/` (verticais),
-`renders/explainers/` e `renders/historias/` (16:9).
+`renders/explainers/` e `renders/historias/` (16:9). As capas das histórias,
+em PNG, ficam em `renders/historias/capas/`.
+
+O fundo azul de todos os vídeos é o azul institucional `#25A8E0`.
 
 ## Demos animadas das ferramentas
 
@@ -88,7 +91,7 @@ PNGs.
 ## Explainers no estilo do institucional antigo
 
 Seguem o vídeo institucional antigo da Wispot (16:9, ~90 s, com locução):
-cena ilustrada com pessoas, logo no azul-marinho, aparelhos no estúdio cinza,
+cena ilustrada com pessoas, logo no azul (aqui, o institucional `#25A8E0`), aparelhos no estúdio cinza,
 "Painel de Controle", notebook no azul, recursos sobre o painel desfocado e
 fechamento com tópicos e o site. O esqueleto está em
 `src/explainers/ExplainerVideo.tsx` e cada produto tem o seu arquivo
@@ -243,14 +246,14 @@ aconteceu com os selos de conformidade neste corte.
 
 ## Histórias (versão rápida, com 3D)
 
-Uma narrativa por ferramenta, de ~28 s, com planos de 2,5 a 3,8 s e emendas
-de 0,3 s. Cada uma tem personagem, conflito, virada e resultado, e fecha com
+Uma narrativa por ferramenta, de ~35 s, narrada, com capa de abertura e de
+fechamento, planos de 2,5 a 4 s e emendas de 0,3 s. Cada uma tem personagem, conflito, virada e resultado, e fecha com
 os setores atendidos e os serviços da Wispot (captive portal com a marca do
 cliente, dados de acordo com a LGPD, integração com os sistemas dele):
 
 | Ferramenta | História | Setor |
 | --- | --- | --- |
-| Hora Premiada | **15h, loja vazia** — a Marina cria uma oferta só para a hora parada, dispara para quem já passou pelo Wi-Fi e a loja enche | Varejo |
+| Hora Premiada | **Loja vazia às 15h** — a Marina cria uma oferta só para a hora parada, dispara para quem já passou pelo Wi-Fi e a loja enche | Varejo |
 | MyGuest | **A senha no post-it** — a senha vazou para a rua inteira; com voucher por hóspede, quem não é hóspede fica de fora | Hotéis |
 | Sending | **A cliente que sumiu** — a Ana veio uma vez e nunca voltou; uma mensagem com o nome dela na sexta de manhã e ela volta | Cafeterias |
 | Wimap | **O mistério da vitrine** — o mapa de calor mostra que ninguém chegava ao fundo da loja; a promoção muda de lugar e a loja inteira vende | Shoppings |
@@ -282,3 +285,27 @@ acendendo (Wiquest). Diferente do R3F comum, nada usa `useFrame`: tudo é
 função do quadro atual, para o render ser determinístico. O container não tem
 GPU, então o WebGL roda por software (`Config.setChromiumOpenGlRenderer
 ("swangle")` em `remotion.config.ts`); com GPU dá para trocar por `angle`.
+
+**Capas.** Cada história abre com uma capa ("uma história", o título, o logo
+do produto e o setor) e fecha com a assinatura da Wispot (slogan, site,
+telefone e as outras quatro ferramentas). As duas ficam em
+`src/stories/story-kit.tsx` (`OpeningCover` e `ClosingCover`); o título de
+cada capa é o campo `title` da história.
+
+**Narração.** A voz é sintética, do [Kokoro](https://github.com/thewh1teagle/kokoro-onnx)
+(modelo aberto, Apache 2.0, voz `pm_alex`), e roda local. O roteiro está em
+`src/stories/narracao.json` — uma fala para a capa, uma por plano, uma para o
+fechamento do produto e uma para a assinatura. Os nomes estão escritos como se
+falam (uispót, Mai guést, Sénding, uimáp, uikuést, uai-fai), senão a voz lê em
+português ao pé da letra. Depois de mudar o roteiro:
+
+```bash
+pip install kokoro-onnx soundfile
+python3 scripts/narracao.py   # grava public/audio/narracao/ e src/stories/narracao-tempos.json
+```
+
+Cada plano dura o que estiver na história ou o tempo da fala mais uma folga, o
+que for maior, então nenhuma fala é cortada. A trilha fica baixa sob a voz.
+Para trocar por um locutor de verdade, basta gravar os MP3 com os mesmos nomes
+e atualizar as durações em `narracao-tempos.json`. Há
+também uma voz feminina, `pf_dora`, trocando o campo `voz`.
