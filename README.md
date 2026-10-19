@@ -19,6 +19,11 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | `ExplainerSending` | 1920×1080 | ~47 s | Idem, Sending |
 | `ExplainerWimap` | 1920×1080 | ~47 s | Idem, Wimap |
 | `ExplainerWiquest` | 1920×1080 | ~47 s | Idem, Wiquest |
+| `HistoriaHoraPremiada` | 1920×1080 | ~29 s | História "15h, loja vazia" (varejo) |
+| `HistoriaMyGuest` | 1920×1080 | ~28 s | História "A senha no post-it" (hotéis) |
+| `HistoriaSending` | 1920×1080 | ~27 s | História "A cliente que sumiu" (cafeterias) |
+| `HistoriaWimap` | 1920×1080 | ~28 s | História "O mistério da vitrine" (shoppings) |
+| `HistoriaWiquest` | 1920×1080 | ~27 s | História "A estrela que faltava" (restaurantes) |
 
 ## Comandos
 
@@ -30,8 +35,8 @@ npm run lint                                 # eslint + tsc
 npx remotion render DemoWimap out/demos/wimap.mp4  # renderiza uma demo
 ```
 
-Os MP4 já renderizados ficam em `renders/demos/` (verticais) e
-`renders/explainers/` (16:9).
+Os MP4 já renderizados ficam em `renders/demos/` (verticais),
+`renders/explainers/` e `renders/historias/` (16:9).
 
 ## Demos animadas das ferramentas
 
@@ -235,3 +240,45 @@ Para reajustar um corte, mexa em `trimStart` / `trimEnd` da cena; para mover um
 gráfico, nos tempos passados em `overlayFor` (`src/MyGuest.tsx`). Ao encurtar uma
 cena, confira se os gráficos do fim dela ainda têm tempo de tela — foi o que
 aconteceu com os selos de conformidade neste corte.
+
+## Histórias (versão rápida, com 3D)
+
+Uma narrativa por ferramenta, de ~28 s, com planos de 2,5 a 3,8 s e emendas
+de 0,3 s. Cada uma tem personagem, conflito, virada e resultado, e fecha com
+os setores atendidos e os serviços da Wispot (captive portal com a marca do
+cliente, dados de acordo com a LGPD, integração com os sistemas dele):
+
+| Ferramenta | História | Setor |
+| --- | --- | --- |
+| Hora Premiada | **15h, loja vazia** — a Marina cria uma oferta só para a hora parada, dispara para quem já passou pelo Wi-Fi e a loja enche | Varejo |
+| MyGuest | **A senha no post-it** — a senha vazou para a rua inteira; com voucher por hóspede, quem não é hóspede fica de fora | Hotéis |
+| Sending | **A cliente que sumiu** — a Ana veio uma vez e nunca voltou; uma mensagem com o nome dela na sexta de manhã e ela volta | Cafeterias |
+| Wimap | **O mistério da vitrine** — o mapa de calor mostra que ninguém chegava ao fundo da loja; a promoção muda de lugar e a loja inteira vende | Shoppings |
+| Wiquest | **A estrela que faltava** — a nota baixa vira alerta na hora, o problema é resolvido na mesa e a mesma cliente dá 5 estrelas | Restaurantes |
+
+Cada história fica num arquivo (`src/stories/Story*.tsx`), como uma lista de
+planos (`shots`) com duração e tipo de emenda. Os números das histórias são
+de cenário, não de clientes reais.
+
+**Movimento.** Segue a skill de motion design da LottieFiles
+(`.claude/skills/motion-design`): personalidade "Energetic" na narrativa e
+"Corporate" nas telas; entradas em expo de saída, saídas aceleradas e câmera
+em ease-in-out — nunca linear em deslocamento; durações de 0,25 / 0,4 / 0,7 s;
+stagger sempre abaixo de 0,5 s; e as três camadas (principal, secundária e
+ambiente) em todo plano. As peças estão em `src/stories/motion.tsx`:
+
+- `Kinetic` — frases que sobem palavra por palavra por trás de uma máscara,
+  com destaque na cor do produto (`*palavra*`) e tarja opcional;
+- `Camera` — câmera pose a pose sobre as ilustrações, com tranco de zoom nos
+  impactos e uma deriva mínima para o quadro nunca ficar parado;
+- `cut` — emendas de 9 quadros: chicote com borrão, mergulho de zoom e clarão.
+
+**3D.** As cenas em `src/stories/three3d.tsx` usam three.js via
+`@remotion/three`, seguindo a skill de React Three Fiber
+(`.claude/skills/threejs-*`): ondas de Wi-Fi na vinheta de cada produto,
+cupons explodindo (Hora Premiada), vouchers em leque (MyGuest), mensagens
+voando até os clientes (Sending), mapa de calor em torres (Wimap) e estrelas
+acendendo (Wiquest). Diferente do R3F comum, nada usa `useFrame`: tudo é
+função do quadro atual, para o render ser determinístico. O container não tem
+GPU, então o WebGL roda por software (`Config.setChromiumOpenGlRenderer
+("swangle")` em `remotion.config.ts`); com GPU dá para trocar por `angle`.
