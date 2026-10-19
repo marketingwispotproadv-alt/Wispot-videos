@@ -15,7 +15,7 @@ import { EndCard } from "../components/EndCard";
 import { MusicBed } from "../components/MusicBed";
 import { Ripples } from "../components/Ripples";
 import { DemoBackdrop, INK, MUTED, ramp, rise, useT, usePop } from "./kit";
-import { Product, ProductMark, ProductTile } from "./ProductMark";
+import { Product, ProductLogoImg, ProductMark } from "./ProductMark";
 
 /**
  * Esqueleto comum das demos: abertura com a marca do produto, um passo por
@@ -128,8 +128,7 @@ const TopBar: React.FC<{ product: Product }> = ({ product }) => (
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 14,
-        padding: "10px 24px 10px 10px",
+        padding: "12px 28px",
         borderRadius: 999,
         background: "#fff",
         boxShadow: "0 8px 24px rgba(16,30,54,0.10)",
@@ -139,8 +138,7 @@ const TopBar: React.FC<{ product: Product }> = ({ product }) => (
         color: INK,
       }}
     >
-      <ProductTile product={product} size={52} />
-      {product.name}
+      <ProductLogoImg product={product} height={product.id === "sending" ? 62 : 46} />
     </div>
   </div>
 );

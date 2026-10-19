@@ -14,6 +14,11 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | `DemoSending` | 1080×1920 | ~32 s | Demo animada do Sending |
 | `DemoWimap` | 1080×1920 | ~32 s | Demo animada do Wimap |
 | `DemoWiquest` | 1080×1920 | ~32 s | Demo animada do Wiquest |
+| `ExplainerHoraPremiada` | 1920×1080 | ~47 s | Explainer no estilo do institucional antigo |
+| `ExplainerMyGuest` | 1920×1080 | ~47 s | Idem, MyGuest |
+| `ExplainerSending` | 1920×1080 | ~47 s | Idem, Sending |
+| `ExplainerWimap` | 1920×1080 | ~47 s | Idem, Wimap |
+| `ExplainerWiquest` | 1920×1080 | ~47 s | Idem, Wiquest |
 
 ## Comandos
 
@@ -25,7 +30,8 @@ npm run lint                                 # eslint + tsc
 npx remotion render DemoWimap out/demos/wimap.mp4  # renderiza uma demo
 ```
 
-Os MP4 já renderizados das demos ficam em `renders/demos/`.
+Os MP4 já renderizados ficam em `renders/demos/` (verticais) e
+`renders/explainers/` (16:9).
 
 ## Demos animadas das ferramentas
 
@@ -52,11 +58,52 @@ Sending, telas de celular por produto), mas com "SUA MARCA" e dados fictícios
 no lugar dos clientes que aparecem nas gravações.
 
 Cada produto tem uma cor de destaque (`PRODUCTS`, em
-`src/demos/ProductMark.tsx`), a mesma das artes de celular do Drive — exceto
-o Sending, que usa o amarelo do próprio painel, porque o azul da arte se
-confunde com o azul da Wispot. Só o MyGuest tem arquivo de logo no projeto;
-os outros aparecem com ícone + nome em Montserrat. Quando chegarem os logos
-em vetor, é só trocar em `ProductMark`.
+`src/demos/ProductMark.tsx`), tirada do logo oficial. O verde do Hora Premiada
+desce um tom para o texto branco ler bem, e o Sending fica no amarelo do "ing".
+
+## Logos dos produtos
+
+Os originais (JPEG sobre branco) ficam em `assets-src/logos/`. O script
+`scripts/recorta-logos.py` gera os PNGs com transparência em
+`public/brand/products/`: a versão colorida de todos e uma versão branca para
+o azul (Hora Premiada, MyGuest, Wimap e Wiquest — o Sending só existe colorido
+e funciona direto sobre o azul).
+
+```bash
+pip install pillow numpy scipy
+python3 scripts/recorta-logos.py
+```
+
+O alfa sai da distância de cada pixel até o branco, então a borda fica suave e
+o branco de dentro das letras vira transparente. No MyGuest o boneco branco do
+quadrado vermelho é preservado (é um "buraco" grande; os miolos das letras são
+pequenos e ficam vazados). Quando chegarem os logos em vetor, basta trocar os
+PNGs.
+
+## Explainers no estilo do institucional antigo
+
+Seguem o vídeo institucional antigo da Wispot (16:9, ~90 s, com locução):
+cena ilustrada com pessoas, logo no azul-marinho, aparelhos no estúdio cinza,
+"Painel de Controle", notebook no azul, recursos sobre o painel desfocado e
+fechamento com tópicos e o site. O esqueleto está em
+`src/explainers/ExplainerVideo.tsx` e cada produto tem o seu arquivo
+(`src/explainers/Ex*.tsx`) com as telas, o painel, o notebook e o texto.
+
+1. **Gancho** — cenário ilustrado (`src/explainers/people.tsx`: loja, hotel,
+   café, rua e restaurante, com personagens em SVG) e a pergunta do problema;
+2. **Logo** do produto revelado no azul, com "uma solução wispot";
+3. **Celular** do cliente no estúdio, com cartões de perfil ao lado;
+4. **Painel de Controle** mudando o que aparece no celular;
+5. **Notebook** com o painel web;
+6. **Recursos** em três blocos sobre o painel desfocado;
+7. **Fechamento** com dois tópicos e WWW.WISPOT.COM.BR;
+8. **Cartão final** com o slogan "Interação e experiência em Wi-Fi".
+
+O vídeo antigo é narrado; aqui a narração vira legenda (`Caption`, em
+`src/explainers/ex-kit.tsx`), uma frase por vez. Os textos estão nos campos
+`hook` e `caption` de cada config — se for gravar locução, eles já servem de
+roteiro, e os tempos de cada cena ficam em `SECONDS`. A trilha tem 48 s, por
+isso os explainers ficam em ~47 s.
 
 ## Identidade visual
 

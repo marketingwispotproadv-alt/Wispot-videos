@@ -10,6 +10,24 @@ import { myGuestConfig } from "./demos/MyGuestDemo";
 import { sendingConfig } from "./demos/Sending";
 import { wimapConfig } from "./demos/Wimap";
 import { wiquestConfig } from "./demos/Wiquest";
+import { ExplainerConfig, ExplainerVideo, explainerFrames } from "./explainers/ExplainerVideo";
+import { horaPremiadaExplainer } from "./explainers/ExHoraPremiada";
+import { myGuestExplainer } from "./explainers/ExMyGuest";
+import { sendingExplainer } from "./explainers/ExSending";
+import { wimapExplainer } from "./explainers/ExWimap";
+import { wiquestExplainer } from "./explainers/ExWiquest";
+
+/** Explainers 16:9 no estilo do institucional antigo da Wispot. */
+const EXPLAINERS = [
+  { id: "ExplainerHoraPremiada", config: horaPremiadaExplainer },
+  { id: "ExplainerMyGuest", config: myGuestExplainer },
+  { id: "ExplainerSending", config: sendingExplainer },
+  { id: "ExplainerWimap", config: wimapExplainer },
+  { id: "ExplainerWiquest", config: wiquestExplainer },
+].map((d: { id: string; config: ExplainerConfig }) => ({
+  ...d,
+  component: () => <ExplainerVideo config={d.config} />,
+}));
 
 /** Demos animadas de cada ferramenta, na ordem do menu do site. */
 const DEMOS = [
@@ -67,6 +85,18 @@ export const RemotionRoot: React.FC = () => {
           fps={VIDEO.fps}
           width={VIDEO.width}
           height={VIDEO.height}
+        />
+      ))}
+      {/* Explainers 16:9. Render: npx remotion render ExplainerWimap out/explainers/wimap.mp4 */}
+      {EXPLAINERS.map((d) => (
+        <Composition
+          key={d.id}
+          id={d.id}
+          component={d.component}
+          durationInFrames={explainerFrames(VIDEO.fps)}
+          fps={VIDEO.fps}
+          width={1920}
+          height={1080}
         />
       ))}
     </>

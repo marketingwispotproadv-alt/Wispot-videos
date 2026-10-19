@@ -269,6 +269,8 @@ export const Phone: React.FC<{
   screen?: string;
   darkStatus?: boolean;
   style?: React.CSSProperties;
+  /** cor do corpo do aparelho */
+  frame?: string;
 }> = ({
   children,
   left,
@@ -277,6 +279,7 @@ export const Phone: React.FC<{
   screen = "#FFFFFF",
   darkStatus = true,
   style,
+  frame = "#121417",
 }) => (
   <div
     style={{
@@ -286,10 +289,10 @@ export const Phone: React.FC<{
       width: PHONE.w,
       height: PHONE.h,
       borderRadius: 86,
-      background: "#121417",
+      background: frame,
       padding: PHONE.bezel,
       boxShadow:
-        "0 50px 90px rgba(16,30,54,0.28), 0 10px 24px rgba(16,30,54,0.18), inset 0 0 0 3px #2B2F35",
+        `0 50px 90px rgba(16,30,54,0.28), 0 10px 24px rgba(16,30,54,0.18), inset 0 0 0 3px ${frame === "#121417" ? "#2B2F35" : "#D5DAE1"}`,
       transform: `scale(${scale})`,
       transformOrigin: "top left",
       ...style,
