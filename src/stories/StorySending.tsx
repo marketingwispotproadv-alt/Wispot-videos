@@ -12,13 +12,14 @@ import { CountCard, FlipCalendar, IllustratedShot, LockPhone, SoftBg, StingShot,
  * A Ana tomou um café no Café da Esquina, adorou… e nunca mais voltou. Mas
  * ela entrou no Wi-Fi, e o contato dela ficou. O Lucas separa quem não volta
  * há 30 dias, escreve uma mensagem com o nome de cada um e agenda o envio por
- * SMS e WhatsApp. Na sexta de manhã, chega no WhatsApp da Ana — e ela volta.
+ * SMS, WhatsApp e e-mail. Na sexta de manhã, chega no WhatsApp da Ana — e ela volta.
  */
 
 const ORANGE = "#F46904";
 const YELLOW = "#FCD800";
 const INKC = "#1B2430";
 const WHATSAPP = "#25D366";
+const EMAIL = "#2F6FDE";
 
 const ANA = { skin: SKINS[0], hair: "long" as const, hairColor: "#4A2F20", top: "#3F8FD0", bottom: "#2E3440", dress: true };
 const LUCAS = { skin: SKINS[2], hair: "short" as const, hairColor: "#1F1A17", top: "#FFFFFF", bottom: "#2E3440", tie: "#7A4B2A" };
@@ -79,7 +80,7 @@ const MENU = [
   { icon: "send" as const, label: "Campanhas" },
 ];
 const MSG = "Olá, {nome}! Sentimos sua falta. O próximo cappuccino é por nossa conta.";
-const CLICK = { filter: 0.5, text: 1.4, whatsapp: 4.2, send: 4.9 };
+const CLICK = { filter: 0.5, text: 1.4, whatsapp: 4.8, email: 5.35, send: 5.9 };
 
 const fmt = (n: number) => new Intl.NumberFormat("pt-BR").format(Math.round(n));
 
@@ -127,7 +128,7 @@ const SendScreen: React.FC = () => {
   const parts = msg.split("{nome}");
   const sent = t > CLICK.send + 0.15;
   return (
-    <DashboardShell logo="sending" menu={MENU} active={2} title="Nova campanha · SMS e WhatsApp">
+    <DashboardShell logo="sending" menu={MENU} active={2} title="Nova campanha · SMS, WhatsApp e e-mail">
       <div style={{ display: "flex", alignItems: "center", gap: 20, fontFamily: FONT_FAMILY }}>
         <span
           style={{
@@ -176,12 +177,13 @@ const SendScreen: React.FC = () => {
         <span style={{ fontWeight: 700, fontSize: 26, color: MUTED }}>Enviar por</span>
         <Channel label="SMS" on color={ORANGE} />
         <Channel label="WhatsApp" on={t > CLICK.whatsapp} color={WHATSAPP} icon={<Bubble size={28} color={t > CLICK.whatsapp ? "#fff" : WHATSAPP} />} />
+        <Channel label="E-mail" on={t > CLICK.email} color={EMAIL} icon={<span style={{ fontSize: 28, lineHeight: 1 }}>✉</span>} />
       </div>
       <div
         style={{
           position: "absolute",
           right: 0,
-          top: 370,
+          top: 490,
           width: 400,
           height: 92,
           borderRadius: 20,
@@ -205,9 +207,10 @@ const SendScreen: React.FC = () => {
           { t: CLICK.filter - 0.05, x: 200, y: 30 },
           { t: CLICK.text - 0.05, x: 500, y: 200 },
           { t: CLICK.whatsapp - 0.05, x: 420, y: 418 },
-          { t: CLICK.send - 0.05, x: 880, y: 416 },
+          { t: CLICK.email - 0.05, x: 640, y: 418 },
+          { t: CLICK.send - 0.05, x: 880, y: 536 },
         ]}
-        clicks={[CLICK.filter, CLICK.text, CLICK.whatsapp, CLICK.send]}
+        clicks={[CLICK.filter, CLICK.text, CLICK.whatsapp, CLICK.email, CLICK.send]}
         from={0.15}
       />
     </DashboardShell>
@@ -232,7 +235,13 @@ const CARD = { w: 430, h: 104, gap: 18, every: 0.26, bottom: 900 };
 /** uma mensagem no feed: avatar, "Olá, {nome}!", canal e os dois tiques de entregue */
 const FeedCard: React.FC<{ i: number; t: number; at: number; y: number }> = ({ i, t, at, y }) => {
   const name = NAMES[i % NAMES.length];
-  const whatsapp = i % 5 === 1 || i % 5 === 3;
+  const channel = [
+    { label: "SMS", color: ORANGE, icon: null },
+    { label: "WhatsApp", color: WHATSAPP, icon: <Bubble size={16} /> },
+    { label: "SMS", color: ORANGE, icon: null },
+    { label: "WhatsApp", color: WHATSAPP, icon: <Bubble size={16} /> },
+    { label: "E-mail", color: EMAIL, icon: <span style={{ fontSize: 16 }}>✉</span> },
+  ][i % 5];
   const p = tween(t, at, DUR.std);
   const delivered = t > at + 0.55;
   return (
@@ -271,14 +280,14 @@ const FeedCard: React.FC<{ i: number; t: number; at: number; y: number }> = ({ i
             gap: 6,
             padding: "4px 12px",
             borderRadius: 999,
-            background: whatsapp ? WHATSAPP : ORANGE,
+            background: channel.color,
             color: "#fff",
             fontWeight: 800,
             fontSize: 16,
           }}
         >
-          {whatsapp && <Bubble size={16} />}
-          {whatsapp ? "WhatsApp" : "SMS"}
+          {channel.icon}
+          {channel.label}
         </span>
         <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: -4, color: delivered ? "#1FA2E0" : "#B8C2CC" }}>✓✓</span>
       </div>
@@ -331,8 +340,9 @@ const Flight: React.FC = () => {
         <div style={{ fontWeight: 800, fontSize: 48, marginTop: 6, opacity: tween(t, 0.4, DUR.std) }}>mensagens enviadas</div>
         <div style={{ display: "flex", gap: 16, marginTop: 30 }}>
           {[
-            { label: "SMS", n: 238, color: ORANGE, at: 0.7 },
-            { label: "WhatsApp", n: 174, color: WHATSAPP, at: 0.85 },
+            { label: "SMS", n: 186, color: ORANGE, at: 0.7 },
+            { label: "WhatsApp", n: 151, color: WHATSAPP, at: 0.8 },
+            { label: "E-mail", n: 75, color: EMAIL, at: 0.9 },
           ].map((c) => {
             const p = tween(t, c.at, DUR.std);
             return (
@@ -426,7 +436,7 @@ export const sendingStory: StoryConfig = {
     { seconds: 3.2, node: <Memory /> },
     { seconds: 2.5, cut: "whip", node: <Calendar /> },
     { seconds: 2.9, cut: "zoom", node: <Owner /> },
-    { seconds: 2.5, cut: "flash", node: <StingShot logo="sending" color={ORANGE} line={["SMS e WhatsApp para quem já conhece você."]} /> },
+    { seconds: 2.5, cut: "flash", node: <StingShot logo="sending" color={ORANGE} line={["SMS, WhatsApp e e-mail para quem já conhece você."]} /> },
     { seconds: 3.8, cut: "whip", node: <Panel /> },
     { seconds: 2.8, cut: "flash", node: <Flight /> },
     { seconds: 3.0, cut: "whip", node: <Read /> },
