@@ -1,5 +1,5 @@
 {
-  "_leia": "Roteiro da narração das histórias. 'capa' abre, os itens de 'planos' seguem a ordem dos planos da história, 'fim' é o fechamento do produto e 'assinatura' é a capa final da Wispot. 'pronuncia' troca palavras pelo jeito que a voz deve falar, só na hora de gerar o áudio. Depois de mudar este arquivo, rode: python3 scripts/narracao.py",
+  "_leia": "Roteiro da narração das histórias. 'capa' abre, os itens de 'planos' seguem a ordem dos planos da história, 'fim' é o fechamento do produto e 'assinatura' é a capa final da Wispot. Uma fala pode ser uma lista de pedaços: cada pedaço é gerado à parte e os pedaços são emendados com uma pausa curta — pedaços iguais saem com o mesmo áudio em todos os vídeos, e é assim que o 'Wispot.' soa sempre igual. 'pronuncia' troca palavras pelo jeito que a voz deve falar, só na hora de gerar o áudio. Depois de mudar este arquivo, rode: python3 scripts/narracao.py",
   "motor": "edge",
   "voz": "pt-BR-FranciscaNeural",
   "velocidade": "+4%",
@@ -12,7 +12,7 @@
     "voucher": "vaucher"
   },
   "horaPremiada": {
-    "capa": "Uma história do Hora Premiada.",
+    "capa": "Conheça o Hora Premiada.",
     "planos": [
       "Terça-feira, três da tarde. A loja da Marina, vazia.",
       "Lá fora, gente passando o tempo todo.",
@@ -24,11 +24,19 @@
       "E a loja enche antes das cinco.",
       "A hora mais parada virou a mais cheia."
     ],
-    "fim": "Hora Premiada, uma solução Wispot. Transforme horas paradas em horas premiadas.",
-    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
+    "fim": [
+      "Hora Premiada.",
+      "Uma solução",
+      "Wispot.",
+      "Transforme horas paradas em horas premiadas."
+    ],
+    "assinatura": [
+      "Wispot.",
+      "Interação e experiência em Wi-Fi."
+    ]
   },
   "myguest": {
-    "capa": "Uma história do MyGuest.",
+    "capa": "Conheça o MyGuest.",
     "planos": [
       "No Hotel Central, a senha do Wi-Fi ficava num post-it.",
       "Em uma semana, a rua inteira usava a rede.",
@@ -39,11 +47,19 @@
       "Digitou o código, conectou.",
       "E o Wi-Fi virou motivo de elogio."
     ],
-    "fim": "MyGuest, uma solução Wispot. Cada hóspede, o seu acesso.",
-    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
+    "fim": [
+      "MyGuest.",
+      "Uma solução",
+      "Wispot.",
+      "Cada hóspede, o seu acesso."
+    ],
+    "assinatura": [
+      "Wispot.",
+      "Interação e experiência em Wi-Fi."
+    ]
   },
   "sending": {
-    "capa": "Uma história do Sending.",
+    "capa": "Conheça o Sending.",
     "planos": [
       "A Ana tomou um café com a gente uma vez. E amou.",
       "Mas nunca mais voltou.",
@@ -54,11 +70,19 @@
       "Sexta, oito da manhã, chegou no WhatsApp da Ana. Ela leu, e sorriu.",
       "No mesmo dia, ela voltou."
     ],
-    "fim": "Sending, uma solução Wispot. Por SMS e WhatsApp, quem já veio, volta.",
-    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
+    "fim": [
+      "Sending.",
+      "Uma solução",
+      "Wispot.",
+      "Por SMS e WhatsApp, quem já veio, volta."
+    ],
+    "assinatura": [
+      "Wispot.",
+      "Interação e experiência em Wi-Fi."
+    ]
   },
   "wimap": {
-    "capa": "Uma história do Wimap.",
+    "capa": "Conheça o Wimap.",
     "planos": [
       "A Paula caprichou na vitrine nova.",
       "Mas as vendas continuaram iguais.",
@@ -69,11 +93,19 @@
       "Então ela levou a promoção para o fundo.",
       "Uma semana depois, a loja inteira vendia."
     ],
-    "fim": "Wimap, uma solução Wispot. Pare de adivinhar. Comece a enxergar.",
-    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
+    "fim": [
+      "Wimap.",
+      "Uma solução",
+      "Wispot.",
+      "Pare de adivinhar. Comece a enxergar."
+    ],
+    "assinatura": [
+      "Wispot.",
+      "Interação e experiência em Wi-Fi."
+    ]
   },
   "wiquest": {
-    "capa": "Uma história da Wiquest.",
+    "capa": "Conheça a Wiquest.",
     "planos": [
       "Sexta, dez da noite. Uma avaliação de uma estrela.",
       "O Rafael só ficou sabendo quando já era tarde.",
@@ -84,7 +116,15 @@
       "O Rafael vai até a mesa e resolve ali mesmo.",
       "Cinco estrelas. Da mesma cliente."
     ],
-    "fim": "Wiquest, uma solução Wispot. Ouça antes que vire avaliação.",
-    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
+    "fim": [
+      "Wiquest.",
+      "Uma solução",
+      "Wispot.",
+      "Ouça antes que vire avaliação."
+    ],
+    "assinatura": [
+      "Wispot.",
+      "Interação e experiência em Wi-Fi."
+    ]
   }
 }

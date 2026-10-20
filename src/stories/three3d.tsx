@@ -187,6 +187,32 @@ const drawCard = (accent: string, face: CardFace) => (ctx: CanvasRenderingContex
   ctx.fillText(face.small, 240, h / 2 + 72);
 };
 
+/** cartão de cantos arredondados, no mesmo raio do desenho da textura */
+let cardGeometry: THREE.ShapeGeometry | null = null;
+const getCardGeometry = () => {
+  if (cardGeometry) return cardGeometry;
+  const w = 1.78;
+  const h = 1;
+  const r = (36 / 640) * w;
+  const shape = new THREE.Shape();
+  shape.moveTo(-w / 2 + r, -h / 2);
+  shape.lineTo(w / 2 - r, -h / 2);
+  shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+  shape.lineTo(w / 2, h / 2 - r);
+  shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+  shape.lineTo(-w / 2 + r, h / 2);
+  shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r);
+  shape.lineTo(-w / 2, -h / 2 + r);
+  shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+  const geo = new THREE.ShapeGeometry(shape, 12);
+  // UV de 0 a 1 no cartão inteiro, para a textura cobrir a frente
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + w / 2) / w, (pos.getY(i) + h / 2) / h);
+  cardGeometry = geo;
+  return geo;
+};
+
 const Card: React.FC<{ accent: string; face: CardFace; position: [number, number, number]; rotation: [number, number, number]; scale?: number }> = ({
   accent,
   face,
@@ -195,16 +221,16 @@ const Card: React.FC<{ accent: string; face: CardFace; position: [number, number
   scale = 1,
 }) => {
   const tex = useCardTexture(drawCard(accent, face), `${accent}-${face.big}-${face.small}`);
+  const geo = getCardGeometry();
   return (
-    <mesh position={position} rotation={rotation} scale={scale}>
-      <boxGeometry args={[1.78, 1, 0.035]} />
-      <meshStandardMaterial attach="material-0" color={accent} />
-      <meshStandardMaterial attach="material-1" color={accent} />
-      <meshStandardMaterial attach="material-2" color={accent} />
-      <meshStandardMaterial attach="material-3" color={accent} />
-      <meshStandardMaterial attach="material-4" map={tex} roughness={0.45} />
-      <meshStandardMaterial attach="material-5" color={accent} roughness={0.5} />
-    </mesh>
+    <group position={position} rotation={rotation} scale={scale}>
+      <mesh geometry={geo}>
+        <meshStandardMaterial map={tex} roughness={0.45} />
+      </mesh>
+      <mesh geometry={geo} rotation={[0, Math.PI, 0]} position={[0, 0, -0.015]}>
+        <meshStandardMaterial color={accent} roughness={0.5} />
+      </mesh>
+    </group>
   );
 };
 
@@ -279,84 +305,6 @@ export const VoucherFan3D: React.FC<{ accent: string; faces: CardFace[]; hero: C
 
 /* ------------------------------------------------------------------ */
 /* Mensagens voando até os clientes (Sending)                           */
-/* ------------------------------------------------------------------ */
-
-const drawEnvelope = (accent: string) => (ctx: CanvasRenderingContext2D, w: number, h: number) => {
-  roundRect(ctx, 0, 0, w, h, 28);
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fill();
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = 22;
-  ctx.lineJoin = "round";
-  ctx.beginPath();
-  ctx.moveTo(24, 24);
-  ctx.lineTo(w / 2, h * 0.62);
-  ctx.lineTo(w - 24, 24);
-  ctx.stroke();
-};
-
-export const MessageFlight3D: React.FC<{ accent: string; dot: string }> = ({ accent, dot }) => {
-  const t = useT();
-  const tex = useCardTexture(drawEnvelope(accent), `env-${accent}`);
-  const targets = useMemo(() => {
-    const r = rng(21);
-    const out: { x: number; z: number; at: number }[] = [];
-    for (let i = 0; i < 46; i++) out.push({ x: -1 + r() * 8, z: -4 + r() * 8, at: 0.25 + r() * 1.7 });
-    return out.sort((a, b) => a.at - b.at);
-  }, []);
-  const origin = new THREE.Vector3(-4.2, 0, 0.5);
-  const orbit = 0.5 + t * 0.12;
-  return (
-    <Stage fov={38}>
-      <Rig pos={[Math.sin(orbit) * 11 + 1, 7.5, Math.cos(orbit) * 11]} look={[1, 0, 0]} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[1, -0.02, 0]}>
-        <planeGeometry args={[40, 30]} />
-        <meshStandardMaterial color="#1A8FC6" roughness={0.9} />
-      </mesh>
-      {/* a loja, de onde saem as mensagens */}
-      <group position={origin}>
-        <mesh position={[0, 0.6, 0]}>
-          <boxGeometry args={[1.4, 1.2, 1.4]} />
-          <meshStandardMaterial color="#FFFFFF" />
-        </mesh>
-        <mesh position={[0, 1.45, 0]}>
-          <boxGeometry args={[1.6, 0.5, 1.6]} />
-          <meshStandardMaterial color={accent} />
-        </mesh>
-      </group>
-      {targets.map((g, i) => {
-        const p = clamp01((t - g.at) / 0.75);
-        const arrived = p >= 1;
-        const pulse = arrived ? 1 + Math.max(0, 1 - (t - g.at - 0.75) * 3) * 0.8 : 1;
-        const fly = p > 0 && !arrived;
-        const e = easeInOut(p);
-        const x = origin.x + (g.x - origin.x) * e;
-        const z = origin.z + (g.z - origin.z) * e;
-        const y = 1.6 + Math.sin(e * Math.PI) * 2.6 - e * 1.3;
-        return (
-          <group key={i}>
-            <mesh position={[g.x, 0.12, g.z]} scale={0.16 * pulse}>
-              <sphereGeometry args={[1, 16, 12]} />
-              <meshStandardMaterial color={arrived ? dot : "#DDF2FB"} emissive={arrived ? dot : "#000000"} emissiveIntensity={arrived ? 0.5 : 0} />
-            </mesh>
-            {fly && (
-              <mesh position={[x, y, z]} rotation={[-0.5, Math.atan2(g.x - origin.x, g.z - origin.z), Math.sin(e * 6) * 0.2]} scale={0.55}>
-                <boxGeometry args={[1, 0.6, 0.03]} />
-                <meshStandardMaterial attach="material-4" map={tex} />
-                <meshStandardMaterial attach="material-5" color="#FFFFFF" />
-                <meshStandardMaterial attach="material-0" color="#FFFFFF" />
-                <meshStandardMaterial attach="material-1" color="#FFFFFF" />
-                <meshStandardMaterial attach="material-2" color="#FFFFFF" />
-                <meshStandardMaterial attach="material-3" color="#FFFFFF" />
-              </mesh>
-            )}
-          </group>
-        );
-      })}
-    </Stage>
-  );
-};
-
 /* ------------------------------------------------------------------ */
 /* Mapa de calor em torres (Wimap)                                      */
 /* ------------------------------------------------------------------ */

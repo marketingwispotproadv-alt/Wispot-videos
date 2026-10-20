@@ -1,8 +1,8 @@
 """
 Gera a narração das histórias a partir de src/stories/narracao.json.
 
-    pip install edge-tts            # motor "edge"
-    pip install kokoro-onnx soundfile   # motor "kokoro"
+    pip install edge-tts soundfile numpy   # motor "edge"
+    pip install kokoro-onnx                # motor "kokoro", além dos de cima
     python3 scripts/narracao.py
 
 O campo "motor" do roteiro escolhe a voz:
@@ -15,7 +15,10 @@ O campo "motor" do roteiro escolhe a voz:
   robótico e pede mais grafias fonéticas (uai-fai, pôstit, tchéquin).
 
 Antes de falar, cada texto passa pelo dicionário "pronuncia" do roteiro, que
-troca os nomes das marcas pelo jeito de falar (Wispot → uispót).
+troca os nomes das marcas pelo jeito de falar (Wispot → uispót). Uma fala
+também pode ser uma lista de pedaços, gerados à parte e emendados com uma
+pausa curta; pedaços iguais reaproveitam o mesmo áudio, e é assim que o
+"Wispot." soa igual em todos os vídeos.
 
 Para cada fala ele grava public/audio/narracao/<história>/<chave>.mp3,
 normalizado a -16 LUFS, e escreve as durações em
@@ -30,8 +33,12 @@ import re
 import ssl
 import subprocess
 import tempfile
+import time
 import urllib.request
 from pathlib import Path
+
+import numpy as np
+import soundfile as sf
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "src" / "stories" / "narracao.json"
@@ -44,7 +51,6 @@ FILES = ["kokoro-v1.0.onnx", "voices-v1.0.bin"]
 
 
 def kokoro(voice: str, speed: float):
-    import soundfile as sf
     from kokoro_onnx import Kokoro
 
     CACHE.mkdir(parents=True, exist_ok=True)
@@ -75,18 +81,45 @@ def edge(voice: str, rate: str):
     return say
 
 
-def speak(say, text: str, dest: Path) -> float:
+TRIM = (
+    "silenceremove=start_periods=1:start_threshold=-50dB,"
+    "areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse"
+)
+GAP = 0.16  # pausa entre os pedaços de uma fala, em segundos
+
+
+def piece(say, text: str, cache: dict[str, np.ndarray]) -> np.ndarray:
+    """Um pedaço de fala, sem silêncio nas pontas. Texto igual devolve o mesmo áudio."""
+    if text not in cache:
+        with tempfile.NamedTemporaryFile(suffix=".audio") as raw, tempfile.NamedTemporaryFile(suffix=".wav") as wav:
+            for attempt in range(5):
+                try:
+                    say(text, raw.name)
+                    break
+                except Exception:
+                    if attempt == 4:
+                        raise
+                    time.sleep(2 ** attempt)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw.name, "-af", TRIM, "-ac", "1", "-ar", "44100", wav.name], check=True)
+            cache[text] = sf.read(wav.name, dtype="float32")[0]
+    return cache[text]
+
+
+def speak(say, pieces: list[str], dest: Path, cache: dict[str, np.ndarray]) -> float:
+    gap = np.zeros(int(44100 * GAP), dtype=np.float32)
+    parts = []
+    for i, text in enumerate(pieces):
+        if i:
+            parts.append(gap)
+        parts.append(piece(say, text, cache))
     dest.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(suffix=".audio") as tmp:
-        say(text, tmp.name)
-        # tira o silêncio das pontas e normaliza a voz para -16 LUFS
+    with tempfile.NamedTemporaryFile(suffix=".wav") as tmp:
+        sf.write(tmp.name, np.concatenate(parts), 44100)
+        # normaliza a voz para -16 LUFS
         subprocess.run(
             [
                 "ffmpeg", "-v", "error", "-y", "-i", tmp.name,
-                "-af",
-                "silenceremove=start_periods=1:start_threshold=-50dB,"
-                "areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,"
-                "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100",
+                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100",
                 "-c:a", "libmp3lame", "-b:a", "160k", str(dest),
             ],
             check=True,
@@ -109,6 +142,7 @@ def main():
     voice, speed = script["voz"], script["velocidade"]
     say = edge(voice, speed) if script.get("motor", "kokoro") == "edge" else kokoro(voice, speed)
     words = script.get("pronuncia", {})
+    cache: dict[str, np.ndarray] = {}
     times: dict[str, dict[str, float]] = {}
     for story, lines in script.items():
         if not isinstance(lines, dict) or "planos" not in lines:
@@ -117,9 +151,10 @@ def main():
         keys.update({str(i): t for i, t in enumerate(lines["planos"])})
         times[story] = {}
         for key, text in keys.items():
-            d = speak(say, pronounce(text, words), OUT / story / f"{key}.mp3")
+            pieces = text if isinstance(text, list) else [text]
+            d = speak(say, [pronounce(p, words) for p in pieces], OUT / story / f"{key}.mp3", cache)
             times[story][key] = d
-            print(f"{story:13s} {key:10s} {d:5.2f}s  {text}")
+            print(f"{story:13s} {key:10s} {d:5.2f}s  {' '.join(pieces)}")
     TIMES.write_text(json.dumps(times, indent=2, ensure_ascii=False) + "\n")
 
 

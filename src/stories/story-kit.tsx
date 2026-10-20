@@ -121,7 +121,7 @@ export const OpeningCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
           opacity: label,
         }}
       >
-        UMA HISTÓRIA
+        CONHEÇA
       </div>
       <Kinetic lines={c.title} at={0.25} size={140} accent={c.accent} top={c.title.length > 1 ? 370 : 430} />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 170 }}>

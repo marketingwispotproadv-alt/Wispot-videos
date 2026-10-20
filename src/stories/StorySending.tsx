@@ -3,9 +3,8 @@ import { FONT_FAMILY } from "../brand";
 import { Caret, Cursor, INK, MUTED } from "../demos/kit";
 import { Avatar, DashboardShell, Laptop, NavyBg } from "../explainers/ex-kit";
 import { SKINS } from "../explainers/people";
-import { DUR, Kinetic, pop, Tag, tween, useSeconds } from "./motion";
+import { DUR, EASE, Kinetic, pop, Tag, tween, useSeconds } from "./motion";
 import { CountCard, FlipCalendar, IllustratedShot, LockPhone, SoftBg, StingShot, StoryConfig } from "./story-kit";
-import { MessageFlight3D } from "./three3d";
 
 /**
  * Sending — "A cliente que sumiu".
@@ -226,12 +225,144 @@ const Panel: React.FC = () => (
 
 /* 6 · as mensagens saem ------------------------------------------------------ */
 
-const Flight: React.FC = () => (
-  <NavyBg>
-    <MessageFlight3D accent={ORANGE} dot={YELLOW} />
-    <Kinetic lines={["*412* mensagens por SMS e WhatsApp.", "Cada uma com um nome."]} at={0.4} size={66} accent={YELLOW} top={860} />
-  </NavyBg>
-);
+const NAMES = ["Ana", "Bruno", "Carla", "Diego", "Elisa", "Fábio", "Gabi", "Hugo", "Iara", "João", "Karen", "Léo", "Marina", "Nina", "Otávio", "Paula", "Rafa", "Sofia", "Tiago", "Vera", "Wagner", "Yara", "Caio", "Duda", "Enzo", "Flávia", "Gui", "Helena", "Ícaro", "Júlia"];
+const AVATARS = ["#F46904", "#3F8FD0", "#C94F7C", "#2FA37A", "#8A5A35", "#6C5CE7"];
+const CARD = { w: 430, h: 104, gap: 18, every: 0.26, bottom: 900 };
+
+/** uma mensagem no feed: avatar, "Olá, {nome}!", canal e os dois tiques de entregue */
+const FeedCard: React.FC<{ i: number; t: number; at: number; y: number }> = ({ i, t, at, y }) => {
+  const name = NAMES[i % NAMES.length];
+  const whatsapp = i % 5 === 1 || i % 5 === 3;
+  const p = tween(t, at, DUR.std);
+  const delivered = t > at + 0.55;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: 0,
+        top: y,
+        width: CARD.w,
+        height: CARD.h,
+        borderRadius: 22,
+        background: "#fff",
+        boxShadow: "0 14px 30px rgba(0,60,110,0.22)",
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+        padding: "0 20px",
+        boxSizing: "border-box",
+        fontFamily: FONT_FAMILY,
+        opacity: p,
+        transform: `translateY(${(1 - p) * 40}px) scale(${0.9 + p * 0.1})`,
+      }}
+    >
+      <div style={{ width: 56, height: 56, borderRadius: 28, background: AVATARS[i % AVATARS.length], color: "#fff", fontWeight: 900, fontSize: 26, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        {name[0]}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontWeight: 800, fontSize: 24, color: INKC }}>{name}</div>
+        <div style={{ fontWeight: 600, fontSize: 18, color: MUTED, whiteSpace: "nowrap" }}>Olá, {name}! Sentimos sua falta.</div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "4px 12px",
+            borderRadius: 999,
+            background: whatsapp ? WHATSAPP : ORANGE,
+            color: "#fff",
+            fontWeight: 800,
+            fontSize: 16,
+          }}
+        >
+          {whatsapp && <Bubble size={16} />}
+          {whatsapp ? "WhatsApp" : "SMS"}
+        </span>
+        <span style={{ fontWeight: 900, fontSize: 20, letterSpacing: -4, color: delivered ? "#1FA2E0" : "#B8C2CC" }}>✓✓</span>
+      </div>
+    </div>
+  );
+};
+
+/** duas colunas de mensagens subindo, uma nova a cada instante */
+const Feed: React.FC<{ t: number }> = ({ t }) => {
+  const speed = (CARD.h + CARD.gap) / CARD.every;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: 960,
+        top: 0,
+        width: 920,
+        height: 1080,
+        transform: "perspective(1800px) rotateY(-16deg) rotateX(4deg)",
+        WebkitMaskImage: "linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%)",
+      }}
+    >
+      {[0, 1].map((col) => (
+        <div key={col} style={{ position: "absolute", left: col * (CARD.w + 30), top: 0 }}>
+          {Array.from({ length: 24 }, (_, k) => {
+            const i = k * 2 + col;
+            // começa já com o feed cheio, as primeiras mensagens no alto
+            const at = -1.9 + k * CARD.every + col * CARD.every * 0.5;
+            const y = CARD.bottom - (t - at) * speed;
+            if (t < at - 0.05 || y < -CARD.h - 40) return null;
+            return <FeedCard key={i} i={i} t={t} at={at} y={y} />;
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Flight: React.FC = () => {
+  const t = useSeconds();
+  const n = tween(t, 0.2, 2.4, EASE.move);
+  const big = pop(t, 0.15);
+  return (
+    <NavyBg>
+      <Feed t={t} />
+      <div style={{ position: "absolute", left: 110, top: 250, fontFamily: FONT_FAMILY, color: "#fff" }}>
+        <div style={{ fontWeight: 900, fontSize: 250, lineHeight: 1, letterSpacing: -8, transform: `scale(${Math.max(0, big)})`, transformOrigin: "left center", textShadow: "0 12px 40px rgba(0,60,110,0.3)" }}>
+          {Math.round(412 * n)}
+        </div>
+        <div style={{ fontWeight: 800, fontSize: 48, marginTop: 6, opacity: tween(t, 0.4, DUR.std) }}>mensagens enviadas</div>
+        <div style={{ display: "flex", gap: 16, marginTop: 30 }}>
+          {[
+            { label: "SMS", n: 238, color: ORANGE, at: 0.7 },
+            { label: "WhatsApp", n: 174, color: WHATSAPP, at: 0.85 },
+          ].map((c) => {
+            const p = tween(t, c.at, DUR.std);
+            return (
+              <span
+                key={c.label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "12px 24px",
+                  borderRadius: 999,
+                  background: "#fff",
+                  color: INKC,
+                  fontWeight: 800,
+                  fontSize: 30,
+                  opacity: p,
+                  transform: `translateY(${(1 - p) * 20}px)`,
+                }}
+              >
+                <span style={{ width: 16, height: 16, borderRadius: 8, background: c.color }} />
+                {c.label} · {Math.round(c.n * n)}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <Kinetic lines={["Cada uma com um *nome*."]} at={1.6} size={58} accent={YELLOW} align="left" left={110} top={720} width={820} />
+    </NavyBg>
+  );
+};
 
 /* 7 · a Ana lê ------------------------------------------------------------------ */
 

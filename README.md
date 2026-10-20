@@ -279,14 +279,13 @@ ambiente) em todo plano. As peças estão em `src/stories/motion.tsx`:
 **3D.** As cenas em `src/stories/three3d.tsx` usam three.js via
 `@remotion/three`, seguindo a skill de React Three Fiber
 (`.claude/skills/threejs-*`): ondas de Wi-Fi na vinheta de cada produto,
-cupons explodindo (Hora Premiada), vouchers em leque (MyGuest), mensagens
-voando até os clientes (Sending), mapa de calor em torres (Wimap) e estrelas
-acendendo (Wiquest). Diferente do R3F comum, nada usa `useFrame`: tudo é
+cupons explodindo (Hora Premiada), vouchers em leque (MyGuest), mapa de calor
+em torres (Wimap) e estrelas acendendo (Wiquest). Diferente do R3F comum, nada usa `useFrame`: tudo é
 função do quadro atual, para o render ser determinístico. O container não tem
 GPU, então o WebGL roda por software (`Config.setChromiumOpenGlRenderer
 ("swangle")` em `remotion.config.ts`); com GPU dá para trocar por `angle`.
 
-**Capas.** Cada história abre com uma capa ("uma história", o título, o logo
+**Capas.** Cada história abre com uma capa ("conheça", o título, o logo
 do produto e o setor) e fecha com a assinatura da Wispot (slogan, site,
 telefone e as outras quatro ferramentas). As duas ficam em
 `src/stories/story-kit.tsx` (`OpeningCover` e `ClosingCover`); o título de
@@ -297,10 +296,13 @@ neurais da Microsoft. O roteiro está em `src/stories/narracao.json`, na grafia
 normal: uma fala para a capa, uma por plano, uma para o fechamento do produto
 e uma para a assinatura. O dicionário `pronuncia` do mesmo arquivo troca, só
 na hora de gerar o áudio, os nomes que a voz leria errado (Wispot → uispót,
-Wiquest → uiquést, voucher → vaucher…). Depois de mudar o roteiro:
+Wiquest → uiquést, voucher → vaucher…). Uma fala também pode ser uma lista
+de pedaços, gerados à parte e emendados com uma pausa curta: pedaços iguais
+reaproveitam o mesmo áudio, e é assim que o "Wispot." soa igual em todos os
+vídeos (no fechamento do produto e na assinatura). Depois de mudar o roteiro:
 
 ```bash
-pip install edge-tts
+pip install edge-tts soundfile numpy
 python3 scripts/narracao.py   # grava public/audio/narracao/ e src/stories/narracao-tempos.json
 ```
 

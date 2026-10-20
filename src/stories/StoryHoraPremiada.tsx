@@ -226,7 +226,7 @@ const Phones: React.FC = () => (
         body="Hora Premiada! 20% OFF até as 17h. Só hoje."
       />
     ))}
-    <Kinetic lines={["*Plim.* Na hora certa."]} at={1.3} until={3.0} size={80} accent={GREEN} color={INKC} shadow={false} plate="#FFFFFF" top={880} />
+    <Kinetic lines={["O cliente recebe uma *notificação*.", "Na hora certa."]} at={1.3} until={3.0} size={64} accent={GREEN} color={INKC} shadow={false} plate="#FFFFFF" top={850} />
   </SoftBg>
 );
 
