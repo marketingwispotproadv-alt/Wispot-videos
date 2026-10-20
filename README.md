@@ -292,20 +292,24 @@ telefone e as outras quatro ferramentas). As duas ficam em
 `src/stories/story-kit.tsx` (`OpeningCover` e `ClosingCover`); o título de
 cada capa é o campo `title` da história.
 
-**Narração.** A voz é sintética, do [Kokoro](https://github.com/thewh1teagle/kokoro-onnx)
-(modelo aberto, Apache 2.0, voz `pm_alex`), e roda local. O roteiro está em
-`src/stories/narracao.json` — uma fala para a capa, uma por plano, uma para o
-fechamento do produto e uma para a assinatura. Os nomes estão escritos como se
-falam (uispót, Mai guést, Sénding, uimáp, uikuést, uai-fai), senão a voz lê em
-português ao pé da letra. Depois de mudar o roteiro:
+**Narração.** A voz é a Francisca (`pt-BR-FranciscaNeural`), uma das vozes
+neurais da Microsoft. O roteiro está em `src/stories/narracao.json`, na grafia
+normal: uma fala para a capa, uma por plano, uma para o fechamento do produto
+e uma para a assinatura. O dicionário `pronuncia` do mesmo arquivo troca, só
+na hora de gerar o áudio, os nomes que a voz leria errado (Wispot → uispót,
+Wiquest → uiquést, voucher → vaucher…). Depois de mudar o roteiro:
 
 ```bash
-pip install kokoro-onnx soundfile
+pip install edge-tts
 python3 scripts/narracao.py   # grava public/audio/narracao/ e src/stories/narracao-tempos.json
 ```
 
 Cada plano dura o que estiver na história ou o tempo da fala mais uma folga, o
 que for maior, então nenhuma fala é cortada. A trilha fica baixa sob a voz.
-Para trocar por um locutor de verdade, basta gravar os MP3 com os mesmos nomes
-e atualizar as durações em `narracao-tempos.json`. Há
-também uma voz feminina, `pf_dora`, trocando o campo `voz`.
+
+O script usa o acesso gratuito do leitor de texto do Edge, que não é um
+serviço oficial. Para uso comercial, as mesmas vozes estão no Azure Speech
+(pago). Também há o motor `kokoro` (`"motor": "kokoro"`, voz `pm_alex` ou
+`pf_dora`), um modelo aberto que roda sem internet, mas soa mais robótico. Para
+trocar por um locutor de verdade, basta gravar os MP3 com os mesmos nomes e
+atualizar as durações em `narracao-tempos.json`.

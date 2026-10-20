@@ -1,7 +1,16 @@
 {
-  "_leia": "Roteiro da narração das histórias. 'capa' abre, os itens de 'planos' seguem a ordem dos planos da história, 'fim' é o fechamento do produto e 'assinatura' é a capa final da Wispot. O texto é o que a voz LÊ, por isso alguns nomes estão escritos como se falam (uispót, Mai guést, Sénding, uimáp, uikuést, uai-fai). Depois de mudar este arquivo, rode: python3 scripts/narracao.py",
-  "voz": "pm_alex",
-  "velocidade": 1.08,
+  "_leia": "Roteiro da narração das histórias. 'capa' abre, os itens de 'planos' seguem a ordem dos planos da história, 'fim' é o fechamento do produto e 'assinatura' é a capa final da Wispot. 'pronuncia' troca palavras pelo jeito que a voz deve falar, só na hora de gerar o áudio. Depois de mudar este arquivo, rode: python3 scripts/narracao.py",
+  "motor": "edge",
+  "voz": "pt-BR-FranciscaNeural",
+  "velocidade": "+4%",
+  "pronuncia": {
+    "Wispot": "uispót",
+    "MyGuest": "Mai guést",
+    "Sending": "Sénding",
+    "Wimap": "uimáp",
+    "Wiquest": "uiquést",
+    "voucher": "vaucher"
+  },
   "horaPremiada": {
     "capa": "Uma história do Hora Premiada.",
     "planos": [
@@ -10,72 +19,72 @@
       "E se essas pessoas soubessem de uma oferta, agora?",
       "Com o Hora Premiada, elas ficam sabendo.",
       "Em três cliques, a Marina cria uma oferta só para a hora mais parada.",
-      "E dispara para quem já passou pelo uai-fai da loja.",
+      "E dispara para quem já passou pelo Wi-Fi da loja.",
       "O cupom chega na hora certa.",
       "E a loja enche antes das cinco.",
       "A hora mais parada virou a mais cheia."
     ],
-    "fim": "Hora Premiada, uma solução uispót. Transforme horas paradas em horas premiadas.",
-    "assinatura": "A uispót. Interação e experiência em uai-fai."
+    "fim": "Hora Premiada, uma solução Wispot. Transforme horas paradas em horas premiadas.",
+    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
   },
   "myguest": {
-    "capa": "Uma história do Mai guést.",
+    "capa": "Uma história do MyGuest.",
     "planos": [
-      "No Hotel Central, a senha do uai-fai ficava num pôstit.",
+      "No Hotel Central, a senha do Wi-Fi ficava num post-it.",
       "Em uma semana, a rua inteira usava a rede.",
       "E o hóspede que pagou a diária ficou sem internet.",
-      "Foi aí que entrou o Mai guést.",
-      "Agora, cada hóspede recebe o seu vaucher no tchéquin.",
+      "Foi aí que entrou o MyGuest.",
+      "Agora, cada hóspede recebe o seu voucher no check-in.",
       "Quem não é hóspede, fica de fora.",
       "Digitou o código, conectou.",
-      "E o uai-fai virou motivo de elogio."
+      "E o Wi-Fi virou motivo de elogio."
     ],
-    "fim": "Mai guést, uma solução uispót. Cada hóspede, o seu acesso.",
-    "assinatura": "A uispót. Interação e experiência em uai-fai."
+    "fim": "MyGuest, uma solução Wispot. Cada hóspede, o seu acesso.",
+    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
   },
   "sending": {
-    "capa": "Uma história do Sénding.",
+    "capa": "Uma história do Sending.",
     "planos": [
       "A Ana tomou um café com a gente uma vez. E amou.",
       "Mas nunca mais voltou.",
-      "Só que ela deixou o contato no uai-fai do café.",
-      "Com o Sénding, o Lucas fala com ela de novo.",
+      "Só que ela deixou o contato no Wi-Fi do café.",
+      "Com o Sending, o Lucas fala com ela de novo.",
       "Ele separa quem sumiu e escreve uma mensagem com o nome de cada um.",
       "Quatrocentas e doze mensagens. Cada uma com um nome.",
       "Sexta, oito da manhã. A Ana leu, e sorriu.",
       "No mesmo dia, ela voltou."
     ],
-    "fim": "Sénding, uma solução uispót. Quem já veio, volta.",
-    "assinatura": "A uispót. Interação e experiência em uai-fai."
+    "fim": "Sending, uma solução Wispot. Quem já veio, volta.",
+    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
   },
   "wimap": {
-    "capa": "Uma história do uimáp.",
+    "capa": "Uma história do Wimap.",
     "planos": [
       "A Paula caprichou na vitrine nova.",
       "Mas as vendas continuaram iguais.",
       "Quantos olham? Quantos entram? E para onde eles vão?",
-      "O uimáp mostrou tudo.",
+      "O Wimap mostrou tudo.",
       "Muita gente passava. Poucos entravam. E quase ninguém chegava ao fundo da loja.",
       "A vitrine funcionava. O problema era lá dentro.",
       "Então ela levou a promoção para o fundo.",
       "Uma semana depois, a loja inteira vendia."
     ],
-    "fim": "uimáp, uma solução uispót. Pare de adivinhar. Comece a enxergar.",
-    "assinatura": "A uispót. Interação e experiência em uai-fai."
+    "fim": "Wimap, uma solução Wispot. Pare de adivinhar. Comece a enxergar.",
+    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
   },
   "wiquest": {
-    "capa": "Uma história da uikuést.",
+    "capa": "Uma história da Wiquest.",
     "planos": [
       "Sexta, dez da noite. Uma avaliação de uma estrela.",
       "O Rafael só ficou sabendo quando já era tarde.",
       "E se desse para saber antes da cliente ir embora?",
-      "Com a uikuést, dá para saber.",
-      "Logo depois de conectar no uai-fai, a cliente responde uma pesquisa rápida.",
+      "Com a Wiquest, dá para saber.",
+      "Logo depois de conectar no Wi-Fi, a cliente responde uma pesquisa rápida.",
       "A nota baixa vira alerta, na hora.",
       "O Rafael vai até a mesa e resolve ali mesmo.",
       "Cinco estrelas. Da mesma cliente."
     ],
-    "fim": "uikuést, uma solução uispót. Ouça antes que vire avaliação.",
-    "assinatura": "A uispót. Interação e experiência em uai-fai."
+    "fim": "Wiquest, uma solução Wispot. Ouça antes que vire avaliação.",
+    "assinatura": "A Wispot. Interação e experiência em Wi-Fi."
   }
 }
