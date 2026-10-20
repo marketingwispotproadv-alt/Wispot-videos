@@ -59,30 +59,15 @@ export const StudioBg: React.FC<{ children?: React.ReactNode }> = ({ children })
 
 export type LogoId = "hora-premiada" | "myguest" | "sending" | "wimap" | "wiquest";
 
-/** os logos que têm versão branca (o Sending só existe colorido) */
-const HAS_WHITE: LogoId[] = ["hora-premiada", "myguest", "wimap", "wiquest"];
-
+/** sobre o azul, todos os logos vão na versão branca, de uma cor só */
 export const ProductLogo: React.FC<{
   id: LogoId;
   white?: boolean;
   height: number;
   style?: React.CSSProperties;
-}> = ({ id, white, height, style }) => {
-  const img = (
-    <Img
-      src={staticFile(`brand/products/${id}${white && HAS_WHITE.includes(id) ? "-white" : ""}.png`)}
-      style={{ height, display: "block", ...(white && !HAS_WHITE.includes(id) ? {} : style) }}
-    />
-  );
-  // o Sending só existe colorido, e o amarelo do "ing" some no azul
-  if (white && !HAS_WHITE.includes(id))
-    return (
-      <div style={{ display: "inline-block", padding: `${height * 0.12}px ${height * 0.2}px`, borderRadius: height * 0.16, background: "#fff", ...style }}>
-        {img}
-      </div>
-    );
-  return img;
-};
+}> = ({ id, white, height, style }) => (
+  <Img src={staticFile(`brand/products/${id}${white ? "-white" : ""}.png`)} style={{ height, display: "block", ...style }} />
+);
 
 export const WispotLogo: React.FC<{ width: number; white?: boolean; style?: React.CSSProperties }> = ({
   width,

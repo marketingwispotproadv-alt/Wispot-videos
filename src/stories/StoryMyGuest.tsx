@@ -318,7 +318,7 @@ export const myGuestStory: StoryConfig = {
     { seconds: 3.2, node: <PostItShot /> },
     { seconds: 3.0, cut: "whip", node: <Spread /> },
     { seconds: 2.9, cut: "zoom", node: <Slow /> },
-    { seconds: 2.5, cut: "flash", node: <StingShot logo="myguest" color="#FF5A5A" line={["Wi-Fi de hóspede, sob controle."]} /> },
+    { seconds: 2.5, cut: "flash", node: <StingShot logo="myguest" color={RED} line={["Wi-Fi de hóspede, sob controle."]} /> },
     { seconds: 2.9, cut: "whip", node: <CheckIn /> },
     { seconds: 3.4, cut: "whip", node: <Network /> },
     { seconds: 2.9, cut: "zoom", node: <Connect /> },

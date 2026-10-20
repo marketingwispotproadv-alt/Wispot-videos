@@ -203,7 +203,7 @@ export const wiquestStory: StoryConfig = {
     { seconds: 3.0, node: <BadReview /> },
     { seconds: 2.6, cut: "zoom", node: <TooLate /> },
     { seconds: 2.6, cut: "whip", node: <Rewind /> },
-    { seconds: 2.5, cut: "flash", node: <StingShot logo="wiquest" color={LIGHT} line={["Ouça seus clientes em tempo real."]} /> },
+    { seconds: 2.5, cut: "flash", node: <StingShot logo="wiquest" color={ORANGE} line={["Ouça seus clientes em tempo real."]} /> },
     { seconds: 3.4, cut: "whip", node: <Survey /> },
     { seconds: 2.7, cut: "zoom", node: <Alert /> },
     { seconds: 3.4, cut: "whip", node: <Rescue /> },

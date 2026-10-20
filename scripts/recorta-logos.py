@@ -9,8 +9,9 @@ cor é "desmultiplicada" do branco — assim a borda fica suave, sem franja, e o
 branco de dentro das letras vira transparente. Nos logos de uma cor só a cor
 é trocada pela cor dominante, o que limpa o ruído de compressão do JPEG.
 
-Além da versão colorida, os logos de uma cor (e o MyGuest) ganham uma versão
-branca, para ir sobre o azul institucional.
+Além da versão colorida, todo logo ganha uma versão branca, de uma cor só,
+para ir sobre o azul institucional: o mesmo alfa com RGB branco. Os brancos de
+dentro do logo (o boneco do MyGuest, o envelope do Sending) ficam vazados.
 """
 
 from pathlib import Path
@@ -54,6 +55,8 @@ def main():
     for path in sorted(SRC.glob("*.jpg")):
         name = path.stem
         color, alpha = extract(path)
+        # o alfa antes de tapar o boneco do MyGuest, para a versão branca vazada
+        cutout = alpha.copy()
 
         if name in MONO:
             solid = alpha > 0.95
@@ -75,15 +78,7 @@ def main():
 
         crop(color, alpha).save(OUT / f"{name}.png")
 
-        if name in MONO or name == "myguest":
-            white = color.copy()
-            if name in MONO:
-                white[:] = 255
-            else:
-                # só o texto cinza vira branco; os quadrados coloridos ficam
-                sat = color.max(axis=2) - color.min(axis=2)
-                white[sat < 40] = 255
-            crop(white, alpha).save(OUT / f"{name}-white.png")
+        crop(np.full_like(color, 255), cutout).save(OUT / f"{name}-white.png")
         print("ok", name)
 
 

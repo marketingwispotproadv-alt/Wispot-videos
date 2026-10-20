@@ -12,13 +12,14 @@ import { MessageFlight3D } from "./three3d";
  *
  * A Ana tomou um café no Café da Esquina, adorou… e nunca mais voltou. Mas
  * ela entrou no Wi-Fi, e o contato dela ficou. O Lucas separa quem não volta
- * há 30 dias, escreve uma mensagem com o nome de cada um e agenda o envio.
- * Na sexta de manhã, a Ana lê, sorri — e volta.
+ * há 30 dias, escreve uma mensagem com o nome de cada um e agenda o envio por
+ * SMS e WhatsApp. Na sexta de manhã, chega no WhatsApp da Ana — e ela volta.
  */
 
 const ORANGE = "#F46904";
 const YELLOW = "#FCD800";
 const INKC = "#1B2430";
+const WHATSAPP = "#25D366";
 
 const ANA = { skin: SKINS[0], hair: "long" as const, hairColor: "#4A2F20", top: "#3F8FD0", bottom: "#2E3440", dress: true };
 const LUCAS = { skin: SKINS[2], hair: "short" as const, hairColor: "#1F1A17", top: "#FFFFFF", bottom: "#2E3440", tie: "#7A4B2A" };
@@ -79,7 +80,7 @@ const MENU = [
   { icon: "send" as const, label: "Campanhas" },
 ];
 const MSG = "Olá, {nome}! Sentimos sua falta. O próximo cappuccino é por nossa conta.";
-const CLICK = { filter: 0.5, text: 1.1, send: 3.2 };
+const CLICK = { filter: 0.5, text: 1.4, whatsapp: 4.2, send: 4.9 };
 
 const fmt = (n: number) => new Intl.NumberFormat("pt-BR").format(Math.round(n));
 
@@ -92,6 +93,34 @@ const NameToken = () => (
   <span style={{ padding: "2px 12px", borderRadius: 10, background: YELLOW, color: "#4A3A00", fontWeight: 800 }}>nome</span>
 );
 
+/** balão de conversa verde, no lugar do ícone do WhatsApp */
+const Bubble: React.FC<{ size: number; color?: string }> = ({ size, color = "#fff" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24">
+    <path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5Z" fill="none" stroke={color} strokeWidth={2.2} strokeLinejoin="round" />
+    <path d="M8.6 7.6c.3-.6 1.1-.6 1.3 0l.7 1.7c.1.3 0 .6-.2.8l-.6.6c.6 1.3 1.6 2.3 2.9 2.9l.6-.6c.2-.2.5-.3.8-.2l1.7.7c.6.2.6 1 0 1.3-1.6.9-3.4.5-5.3-1.4s-2.3-3.7-1.9-5.8Z" fill={color} />
+  </svg>
+);
+
+const Channel: React.FC<{ label: string; on: boolean; color: string; icon?: React.ReactNode }> = ({ label, on, color, icon }) => (
+  <span
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "14px 24px",
+      borderRadius: 999,
+      border: `3px solid ${on ? color : "#D3D9E0"}`,
+      background: on ? color : "#fff",
+      color: on ? "#fff" : INK,
+      fontWeight: 800,
+      fontSize: 28,
+    }}
+  >
+    {on ? "✓" : "+"} {icon}
+    {label}
+  </span>
+);
+
 const SendScreen: React.FC = () => {
   const t = useSeconds();
   const n = 12480 + (412 - 12480) * tween(t, CLICK.filter + 0.05, DUR.slow);
@@ -99,7 +128,7 @@ const SendScreen: React.FC = () => {
   const parts = msg.split("{nome}");
   const sent = t > CLICK.send + 0.15;
   return (
-    <DashboardShell logo="sending" menu={MENU} active={2} title="Nova campanha · SMS">
+    <DashboardShell logo="sending" menu={MENU} active={2} title="Nova campanha · SMS e WhatsApp">
       <div style={{ display: "flex", alignItems: "center", gap: 20, fontFamily: FONT_FAMILY }}>
         <span
           style={{
@@ -144,12 +173,17 @@ const SendScreen: React.FC = () => {
         ))}
         <Caret t={t} from={CLICK.text} to={CLICK.send - 0.2} />
       </div>
+      <div style={{ position: "absolute", left: 0, top: 384, display: "flex", alignItems: "center", gap: 16, fontFamily: FONT_FAMILY }}>
+        <span style={{ fontWeight: 700, fontSize: 26, color: MUTED }}>Enviar por</span>
+        <Channel label="SMS" on color={ORANGE} />
+        <Channel label="WhatsApp" on={t > CLICK.whatsapp} color={WHATSAPP} icon={<Bubble size={28} color={t > CLICK.whatsapp ? "#fff" : WHATSAPP} />} />
+      </div>
       <div
         style={{
           position: "absolute",
           right: 0,
           top: 370,
-          width: 460,
+          width: 400,
           height: 92,
           borderRadius: 20,
           background: sent ? "#FFF1E6" : ORANGE,
@@ -171,9 +205,10 @@ const SendScreen: React.FC = () => {
           { t: 0, x: 700, y: 600 },
           { t: CLICK.filter - 0.05, x: 200, y: 30 },
           { t: CLICK.text - 0.05, x: 500, y: 200 },
-          { t: CLICK.send - 0.05, x: 850, y: 416 },
+          { t: CLICK.whatsapp - 0.05, x: 420, y: 418 },
+          { t: CLICK.send - 0.05, x: 880, y: 416 },
         ]}
-        clicks={[CLICK.filter, CLICK.text, CLICK.send]}
+        clicks={[CLICK.filter, CLICK.text, CLICK.whatsapp, CLICK.send]}
         from={0.15}
       />
     </DashboardShell>
@@ -194,7 +229,7 @@ const Panel: React.FC = () => (
 const Flight: React.FC = () => (
   <NavyBg>
     <MessageFlight3D accent={ORANGE} dot={YELLOW} />
-    <Kinetic lines={["*412* mensagens.", "Cada uma com um nome."]} at={0.4} size={72} accent={YELLOW} top={860} />
+    <Kinetic lines={["*412* mensagens por SMS e WhatsApp.", "Cada uma com um nome."]} at={0.4} size={66} accent={YELLOW} top={860} />
   </NavyBg>
 );
 
@@ -212,16 +247,16 @@ const Read: React.FC = () => {
         wallpaper="linear-gradient(160deg, #3A2A5C, #14122A)"
         at={0.3}
         time="08:00"
-        app="Mensagens"
-        glyph={<span style={{ fontSize: 20 }}>SMS</span>}
-        color="#34C759"
+        app="WhatsApp"
+        glyph={<Bubble size={30} />}
+        color={WHATSAPP}
         title="Café da Esquina"
         body="Olá, Ana! Sentimos sua falta. O próximo cappuccino é por nossa conta."
       />
       <div style={{ position: "absolute", left: 1110, top: 170, transform: `scale(${Math.max(0, a)})` }}>
         <Avatar size={300} skin={ANA.skin} hair="long" hairColor={ANA.hairColor} top={ANA.top} bg="#FFE2C7" />
       </div>
-      <Kinetic lines={["Sexta, 8h. A Ana leu.", "E *sorriu*."]} at={1.3} size={76} accent={ORANGE} color={INKC} shadow={false} align="left" left={960} top={560} width={950} />
+      <Kinetic lines={["Sexta, 8h, no *WhatsApp*.", "A Ana leu. E sorriu."]} at={1.3} size={76} accent={ORANGE} color={INKC} shadow={false} align="left" left={960} top={560} width={950} />
     </SoftBg>
   );
 };
@@ -260,7 +295,7 @@ export const sendingStory: StoryConfig = {
     { seconds: 3.2, node: <Memory /> },
     { seconds: 2.5, cut: "whip", node: <Calendar /> },
     { seconds: 2.9, cut: "zoom", node: <Owner /> },
-    { seconds: 2.5, cut: "flash", node: <StingShot logo="sending" color={YELLOW} line={["SMS e e-mail para quem já conhece você."]} /> },
+    { seconds: 2.5, cut: "flash", node: <StingShot logo="sending" color={ORANGE} line={["SMS e WhatsApp para quem já conhece você."]} /> },
     { seconds: 3.8, cut: "whip", node: <Panel /> },
     { seconds: 2.8, cut: "flash", node: <Flight /> },
     { seconds: 3.0, cut: "whip", node: <Read /> },

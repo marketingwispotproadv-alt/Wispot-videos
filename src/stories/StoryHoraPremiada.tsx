@@ -315,7 +315,7 @@ horaPremiadaStory.shots = [
   { seconds: 3.3, node: <EmptyStore /> },
   { seconds: 3.1, cut: "whip", node: <Street /> },
   { seconds: 2.8, cut: "zoom", node: <Idea /> },
-  { seconds: 2.5, cut: "flash", node: <StingShot logo="hora-premiada" color={LOGO} line={["A sua hora mais parada pode vender."]} /> },
+  { seconds: 2.5, cut: "flash", node: <StingShot logo="hora-premiada" color={GREEN} line={["A sua hora mais parada pode vender."]} /> },
   { seconds: 3.6, cut: "whip", node: <Create /> },
   { seconds: 2.7, cut: "flash", node: <Burst /> },
   { seconds: 3.1, cut: "whip", node: <Phones /> },

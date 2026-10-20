@@ -226,7 +226,7 @@ export const wimapStory: StoryConfig = {
     { seconds: 3.0, node: <Vitrine /> },
     { seconds: 2.6, cut: "whip", node: <Flat /> },
     { seconds: 2.9, cut: "zoom", node: <Doubt /> },
-    { seconds: 2.5, cut: "flash", node: <StingShot logo="wimap" color={LIGHT} line={["Enxergue quem passa, entra e volta."]} /> },
+    { seconds: 2.5, cut: "flash", node: <StingShot logo="wimap" color={PURPLE} line={["Enxergue quem passa, entra e volta."]} /> },
     { seconds: 3.8, cut: "whip", node: <Towers /> },
     { seconds: 2.7, cut: "zoom", node: <Insight /> },
     { seconds: 3.0, cut: "whip", node: <MovePromo /> },
