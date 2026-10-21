@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, Img, interpolate, staticFile } from "remotion";
 import { FONT_FAMILY } from "../brand";
 import { INK, MUTED, ramp, text, usePop, useT } from "../demos/kit";
+import { SvgImg } from "./svg-img";
 
 /**
  * Peças do estilo "explainer" (16:9), tiradas do vídeo institucional antigo
@@ -122,6 +123,7 @@ export const Caption: React.FC<{ lines: Line[]; big?: boolean }> = ({ lines, big
 
 export type IconName =
   | "wifi"
+  | "wispot"
   | "dollar"
   | "chart"
   | "ticket"
@@ -153,6 +155,16 @@ export const Icon: React.FC<{ name: IconName; size: number; color?: string; stro
 }) => {
   const s = { fill: "none", stroke: color, strokeWidth: stroke, strokeLinecap: "round", strokeLinejoin: "round" } as const;
   const paths: Record<IconName, React.ReactNode> = {
+    // o logo da Wispot no lugar do Wi-Fi: branco sobre fundo escuro, azul nos demais
+    wispot: (
+      <SvgImg
+        href={staticFile(`brand/logo-${color.toLowerCase() === "#fff" || color.toLowerCase() === "#ffffff" ? "white" : "blue"}.png`)}
+        x={0}
+        y={12 - 12 / (2095 / 1025)}
+        width={24}
+        height={24 / (2095 / 1025)}
+      />
+    ),
     wifi: (
       <>
         <path d="M2.5 9 A14 14 0 0 1 21.5 9" {...s} />

@@ -176,7 +176,7 @@ const CheckIn: React.FC = () => (
 
 const MENU = [
   { icon: "chart" as const, label: "Dashboard" },
-  { icon: "wifi" as const, label: "Rede" },
+  { icon: "wispot" as const, label: "Rede" },
   { icon: "ticket" as const, label: "Vouchers" },
 ];
 

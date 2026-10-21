@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
+import { staticFile } from "remotion";
 import { FONT_FAMILY } from "../brand";
+import { SvgImg } from "./svg-img";
 
 /**
  * Personagens e cenários em ilustração chapada, no espírito do vídeo
@@ -9,6 +11,15 @@ import { FONT_FAMILY } from "../brand";
  * Coordenadas do personagem: origem entre os pés, para cima é negativo. Um
  * personagem em escala 1 tem ~340 de altura.
  */
+
+/**
+ * Nas histórias, o símbolo de Wi-Fi dos balões e das placas vira o logo da
+ * Wispot. Os explainers continuam com o símbolo genérico.
+ */
+export const WispotWifi = React.createContext(false);
+
+/** proporção do logo da Wispot (largura / altura) */
+const LOGO_RATIO = 2095 / 1025;
 
 export type Hair = "short" | "long" | "bun" | "curly" | "none";
 export type Pose = "stand" | "phone" | "sit" | "walk" | "wave";
@@ -218,6 +229,17 @@ const WifiBubble: React.FC<{ x: number; y: number; p: number; t: number; color: 
   flip,
 }) => {
   const s = p < 1 ? p * 1.15 : 1 + Math.sin(t * 4) * 0.04;
+  const logo = useContext(WispotWifi);
+  if (logo)
+    return (
+      // o personagem virado espelha o balão; o -1 desfaz, para o logo ler certo
+      <g transform={`translate(${x} ${y}) scale(${(flip ? -1 : 1) * s} ${s})`} opacity={Math.min(1, p * 2)}>
+        <rect x={-52} y={-28} width={104} height={56} rx={28} fill="#fff" stroke={color} strokeWidth={3} />
+        <path d="M-10 26 L0 38 L10 26" fill="#fff" stroke={color} strokeWidth={3} strokeLinejoin="round" />
+        <rect x={-12} y={22} width={24} height={6} fill="#fff" />
+        <SvgImg href={staticFile("brand/logo-blue.png")} x={-40} y={-40 / LOGO_RATIO / 2 - 2} width={80} height={80 / LOGO_RATIO} />
+      </g>
+    );
   return (
     <g transform={`translate(${x} ${y}) scale(${(flip ? -1 : 1) * s} ${s})`} opacity={Math.min(1, p * 2)}>
       <circle r={30} fill="#fff" stroke={color} strokeWidth={3} />
@@ -269,19 +291,28 @@ export const PendantLamp: React.FC<{ x: number; y: number; color?: string; len?:
   </g>
 );
 
-export const WifiSign: React.FC<{ x: number; y: number; color?: string }> = ({ x, y, color = "#25A8E0" }) => (
-  <g transform={`translate(${x} ${y})`}>
-    <rect x={-70} y={-50} width={140} height={100} rx={10} fill="#fff" stroke="#C9CED6" strokeWidth={4} />
-    <g fill="none" stroke={color} strokeWidth={6} strokeLinecap="round">
-      <path d="M-22 -14 A30 30 0 0 1 22 -14" />
-      <path d="M-11 -2 A15 15 0 0 1 11 -2" />
+export const WifiSign: React.FC<{ x: number; y: number; color?: string }> = ({ x, y, color = "#25A8E0" }) => {
+  const logo = useContext(WispotWifi);
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <rect x={-70} y={-50} width={140} height={100} rx={10} fill="#fff" stroke="#C9CED6" strokeWidth={4} />
+      {logo ? (
+        <SvgImg href={staticFile("brand/logo-blue.png")} x={-54} y={-44} width={108} height={108 / LOGO_RATIO} />
+      ) : (
+        <>
+          <g fill="none" stroke={color} strokeWidth={6} strokeLinecap="round">
+            <path d="M-22 -14 A30 30 0 0 1 22 -14" />
+            <path d="M-11 -2 A15 15 0 0 1 11 -2" />
+          </g>
+          <circle cx={0} cy={9} r={5} fill={color} />
+        </>
+      )}
+      <Txt x={0} y={38} size={20} color="#2F3640" ls={2}>
+        Wi-Fi ZONE
+      </Txt>
     </g>
-    <circle cx={0} cy={9} r={5} fill={color} />
-    <Txt x={0} y={38} size={20} color="#2F3640" ls={2}>
-      Wi-Fi ZONE
-    </Txt>
-  </g>
-);
+  );
+};
 
 export const Shelf: React.FC<{ x: number; y: number; w: number; h: number; colors: string[] }> = ({ x, y, w, h, colors }) => {
   const rows = 4;

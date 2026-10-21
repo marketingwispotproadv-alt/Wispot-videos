@@ -8,7 +8,7 @@ import { FONT_FAMILY } from "../brand";
 import { MusicBed } from "../components/MusicBed";
 import { Phone, PhoneNotification } from "../demos/kit";
 import { Icon, IconName, LogoId, NavyBg, ProductLogo, WispotLogo } from "../explainers/ex-kit";
-import { Backdrop, Front, Mood, Person, PersonProps, Place } from "../explainers/people";
+import { Backdrop, Front, Mood, Person, PersonProps, Place, WispotWifi } from "../explainers/people";
 import { Camera, CamKey, cut, CutKind, DUR, EASE, Kinetic, pop, tween, useSeconds } from "./motion";
 import { WaveSting3D } from "./three3d";
 
@@ -80,7 +80,9 @@ export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => 
   });
   return (
     <AbsoluteFill style={{ background: "#25A8E0" }}>
-      <TransitionSeries>{items}</TransitionSeries>
+      <WispotWifi.Provider value>
+        <TransitionSeries>{items}</TransitionSeries>
+      </WispotWifi.Provider>
       {/* trilha baixa sob a voz; sobe no último segundo, depois da assinatura */}
       <MusicBed totalFrames={total} endCardFrom={total - Math.round(1.9 * fps)} fps={fps} level={0.16} />
     </AbsoluteFill>
@@ -91,7 +93,7 @@ export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => 
 /* Capas                                                               */
 /* ------------------------------------------------------------------ */
 
-/** Capa de abertura: "uma história", o título e o produto. Serve de thumbnail. */
+/** Capa de abertura: "conheça", o título e o produto. Serve de thumbnail. */
 export const OpeningCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
   const t = useSeconds();
   const logo = tween(t, 0.05, DUR.std);
@@ -227,7 +229,7 @@ const EndShot: React.FC<{ c: StoryConfig }> = ({ c }) => {
   const t = useSeconds();
   const logo = tween(t, 0.1, DUR.std);
   const services: { icon: IconName; label: string }[] = [
-    { icon: "wifi", label: "Captive portal com a sua marca" },
+    { icon: "wispot", label: "Captive portal com a sua marca" },
     { icon: "shield", label: "Dados de acordo com a LGPD" },
     { icon: "link", label: "Integração com os seus sistemas" },
   ];
@@ -266,7 +268,7 @@ const EndShot: React.FC<{ c: StoryConfig }> = ({ c }) => {
           return (
             <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 14, opacity: p, transform: `translateY(${(1 - p) * 20}px)` }}>
               <span style={{ width: 58, height: 58, borderRadius: 99, border: "3px solid #fff", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon name={s.icon} size={32} />
+                <Icon name={s.icon} size={s.icon === "wispot" ? 48 : 32} />
               </span>
               <span style={{ fontFamily: FONT_FAMILY, fontWeight: 600, fontSize: 27, color: "rgba(255,255,255,0.92)", width: 270, lineHeight: 1.2 }}>{s.label}</span>
             </div>
