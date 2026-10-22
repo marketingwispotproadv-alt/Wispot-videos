@@ -425,7 +425,7 @@ const Return: React.FC = () => (
 export const sendingStory: StoryConfig = {
   logo: "sending",
   narration: "sending",
-  title: ["A cliente", "que *sumiu*"],
+  title: ["Seu cliente *não* *voltou*.", "O que você fez para", "trazê-lo de volta?"],
   sector: "Cafeterias",
   name: "Sending",
   accent: ORANGE,

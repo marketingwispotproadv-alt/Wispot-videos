@@ -125,7 +125,7 @@ export const OpeningCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
       >
         CONHEÇA
       </div>
-      <Kinetic lines={c.title} at={0.25} size={140} accent={c.accent} top={c.title.length > 1 ? 370 : 430} />
+      <Kinetic lines={c.title} at={0.25} size={c.title.length > 2 ? 100 : 128} accent={c.accent} top={c.title.length > 2 ? 365 : 390} />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "flex-end", paddingBottom: 170 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 28, transform: `scale(${Math.max(0, product)})` }}>
           <ProductLogo id={c.logo} white height={c.logo === "sending" ? 130 : 110} />
@@ -175,7 +175,7 @@ export const ClosingCover: React.FC<{ c: StoryConfig }> = ({ c }) => {
           INTERAÇÃO E EXPERIÊNCIA EM WI-FI
         </div>
         <div style={{ marginTop: 34, display: "flex", gap: 22, opacity: contact, transform: `translateY(${(1 - contact) * 20}px)` }}>
-          {["wispot.com.br", "(11) 94020-0547"].map((s) => (
+          {["wispot.com.br"].map((s) => (
             <span key={s} style={{ padding: "14px 30px", borderRadius: 999, background: "#fff", fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 32, color: "#0B91C1" }}>
               {s}
             </span>
@@ -224,7 +224,7 @@ export const StingShot: React.FC<{ logo: LogoId; color: string; line: string[] }
   );
 };
 
-/** Fechamento: logo, frase, setores atendidos, serviços Wispot e o site. */
+/** Fechamento: logo, frase, setores atendidos, serviços Wispot e o logo. */
 const EndShot: React.FC<{ c: StoryConfig }> = ({ c }) => {
   const t = useSeconds();
   const logo = tween(t, 0.1, DUR.std);
@@ -277,7 +277,6 @@ const EndShot: React.FC<{ c: StoryConfig }> = ({ c }) => {
       </div>
       <div style={{ position: "absolute", right: 140, bottom: 110, textAlign: "right", opacity: tween(t, 2.0, DUR.std) }}>
         <WispotLogo width={300} style={{ marginLeft: "auto" }} />
-        <div style={{ marginTop: 18, fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 34, letterSpacing: 6, color: "#fff" }}>WWW.WISPOT.COM.BR</div>
       </div>
     </NavyBg>
   );

@@ -285,11 +285,12 @@ função do quadro atual, para o render ser determinístico. O container não te
 GPU, então o WebGL roda por software (`Config.setChromiumOpenGlRenderer
 ("swangle")` em `remotion.config.ts`); com GPU dá para trocar por `angle`.
 
-**Capas.** Cada história abre com uma capa ("conheça", o título, o logo
-do produto e o setor) e fecha com a assinatura da Wispot (slogan, site,
-telefone e as outras quatro ferramentas). As duas ficam em
-`src/stories/story-kit.tsx` (`OpeningCover` e `ClosingCover`); o título de
-cada capa é o campo `title` da história.
+**Capas.** Cada história abre com uma capa ("conheça", a pergunta da história,
+o logo do produto e o setor) e fecha com a assinatura da Wispot (slogan, site
+e as outras quatro ferramentas). As duas ficam em `src/stories/story-kit.tsx`
+(`OpeningCover` e `ClosingCover`); a pergunta de cada capa é o campo `title`
+da história. Os títulos das capas e dos vídeos no YouTube estão em
+`renders/historias/TITULOS.md`.
 
 **Narração.** A voz é a Francisca (`pt-BR-FranciscaNeural`), uma das vozes
 neurais da Microsoft. O roteiro está em `src/stories/narracao.json`, na grafia

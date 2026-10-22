@@ -215,7 +215,7 @@ const After: React.FC = () => {
 export const wimapStory: StoryConfig = {
   logo: "wimap",
   narration: "wimap",
-  title: ["O mistério", "da *vitrine*"],
+  title: ["Sua loja recebe visitantes,", "mas as vendas", "não *acompanham*?"],
   sector: "Shoppings",
   name: "Wimap",
   accent: PURPLE,
