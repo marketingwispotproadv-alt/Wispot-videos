@@ -268,7 +268,7 @@ const EndShot: React.FC<{ c: StoryConfig }> = ({ c }) => {
           return (
             <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 14, opacity: p, transform: `translateY(${(1 - p) * 20}px)` }}>
               <span style={{ width: 58, height: 58, borderRadius: 99, border: "3px solid #fff", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon name={s.icon} size={s.icon === "wispot" ? 48 : 32} />
+                <Icon name={s.icon} size={32} />
               </span>
               <span style={{ fontFamily: FONT_FAMILY, fontWeight: 600, fontSize: 27, color: "rgba(255,255,255,0.92)", width: 270, lineHeight: 1.2 }}>{s.label}</span>
             </div>

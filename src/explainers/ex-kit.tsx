@@ -155,14 +155,14 @@ export const Icon: React.FC<{ name: IconName; size: number; color?: string; stro
 }) => {
   const s = { fill: "none", stroke: color, strokeWidth: stroke, strokeLinecap: "round", strokeLinejoin: "round" } as const;
   const paths: Record<IconName, React.ReactNode> = {
-    // o logo da Wispot no lugar do Wi-Fi: branco sobre fundo escuro, azul nos demais
+    // o símbolo de Wi-Fi da Wispot: branco sobre fundo escuro, azul nos demais
     wispot: (
       <SvgImg
-        href={staticFile(`brand/logo-${color.toLowerCase() === "#fff" || color.toLowerCase() === "#ffffff" ? "white" : "blue"}.png`)}
-        x={0}
-        y={12 - 12 / (2095 / 1025)}
-        width={24}
-        height={24 / (2095 / 1025)}
+        href={staticFile(`brand/icon-${color.toLowerCase() === "#fff" || color.toLowerCase() === "#ffffff" ? "white" : "blue"}.png`)}
+        x={1}
+        y={12 - 11 / (1315 / 839)}
+        width={22}
+        height={22 / (1315 / 839)}
       />
     ),
     wifi: (

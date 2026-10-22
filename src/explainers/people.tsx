@@ -13,13 +13,14 @@ import { SvgImg } from "./svg-img";
  */
 
 /**
- * Nas histórias, o símbolo de Wi-Fi dos balões e das placas vira o logo da
- * Wispot. Os explainers continuam com o símbolo genérico.
+ * Nas histórias, o símbolo de Wi-Fi dos balões e das placas vira o símbolo
+ * de Wi-Fi da marca Wispot (os arcos do logo, sem o nome). Os explainers
+ * continuam com o símbolo genérico.
  */
 export const WispotWifi = React.createContext(false);
 
-/** proporção do logo da Wispot (largura / altura) */
-const LOGO_RATIO = 2095 / 1025;
+/** proporção do símbolo da Wispot (largura / altura) */
+const ICON_RATIO = 1315 / 839;
 
 export type Hair = "short" | "long" | "bun" | "curly" | "none";
 export type Pose = "stand" | "phone" | "sit" | "walk" | "wave";
@@ -234,10 +235,10 @@ const WifiBubble: React.FC<{ x: number; y: number; p: number; t: number; color: 
     return (
       // o personagem virado espelha o balão; o -1 desfaz, para o logo ler certo
       <g transform={`translate(${x} ${y}) scale(${(flip ? -1 : 1) * s} ${s})`} opacity={Math.min(1, p * 2)}>
-        <rect x={-52} y={-28} width={104} height={56} rx={28} fill="#fff" stroke={color} strokeWidth={3} />
-        <path d="M-10 26 L0 38 L10 26" fill="#fff" stroke={color} strokeWidth={3} strokeLinejoin="round" />
-        <rect x={-12} y={22} width={24} height={6} fill="#fff" />
-        <SvgImg href={staticFile("brand/logo-blue.png")} x={-40} y={-40 / LOGO_RATIO / 2 - 2} width={80} height={80 / LOGO_RATIO} />
+        <circle r={30} fill="#fff" stroke={color} strokeWidth={3} />
+        <path d="M-10 26 L0 36 L10 26" fill="#fff" stroke={color} strokeWidth={3} strokeLinejoin="round" />
+        <rect x={-10} y={22} width={20} height={8} fill="#fff" />
+        <SvgImg href={staticFile("brand/icon-blue.png")} x={-19} y={-19 / ICON_RATIO - 1} width={38} height={38 / ICON_RATIO} />
       </g>
     );
   return (
@@ -297,7 +298,7 @@ export const WifiSign: React.FC<{ x: number; y: number; color?: string }> = ({ x
     <g transform={`translate(${x} ${y})`}>
       <rect x={-70} y={-50} width={140} height={100} rx={10} fill="#fff" stroke="#C9CED6" strokeWidth={4} />
       {logo ? (
-        <SvgImg href={staticFile("brand/logo-blue.png")} x={-54} y={-44} width={108} height={108 / LOGO_RATIO} />
+        <SvgImg href={staticFile("brand/icon-blue.png")} x={-26} y={-38} width={52} height={52 / ICON_RATIO} />
       ) : (
         <>
           <g fill="none" stroke={color} strokeWidth={6} strokeLinecap="round">
