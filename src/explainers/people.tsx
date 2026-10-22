@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { staticFile } from "remotion";
-import { FONT_FAMILY } from "../brand";
+import { COLORS, FONT_FAMILY } from "../brand";
 import { SvgImg } from "./svg-img";
 
 /**
@@ -308,9 +308,16 @@ export const WifiSign: React.FC<{ x: number; y: number; color?: string }> = ({ x
           <circle cx={0} cy={9} r={5} fill={color} />
         </>
       )}
-      <Txt x={0} y={38} size={20} color="#2F3640" ls={2}>
-        Wi-Fi ZONE
-      </Txt>
+      {logo ? (
+        // nas histórias: "Wi-Fi Grátis" na fonte e no azul institucional da Wispot
+        <Txt x={0} y={38} size={20} color={COLORS.blue} weight={800} ls={0.5}>
+          Wi-Fi Grátis
+        </Txt>
+      ) : (
+        <Txt x={0} y={38} size={20} color="#2F3640" ls={2}>
+          Wi-Fi ZONE
+        </Txt>
+      )}
     </g>
   );
 };
