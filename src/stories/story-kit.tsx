@@ -40,7 +40,7 @@ export type StoryConfig = {
 /** emendas curtas: 9 quadros (0,3 s), dentro da faixa de troca de contexto */
 const CUT_FRAMES = 9;
 export const END_SECONDS = 4.4;
-const COVER_SECONDS = 2.6;
+const COVER_SECONDS = 4;
 const SIGN_OFF_SECONDS = 4.4;
 /** a fala entra 0,2 s depois do corte e termina antes da emenda seguinte */
 const VO_LEAD = 0.2;
