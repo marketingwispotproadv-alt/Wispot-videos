@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { FONT_FAMILY } from "../brand";
-import { Cursor, INK, MUTED, Phone, Tap, typed } from "../demos/kit";
+import { Cursor, INK, MUTED, Phone, Tap } from "../demos/kit";
 import { DashboardShell, Icon, IconName, Laptop, NavyBg, ProductLogo, WispotLogo } from "../explainers/ex-kit";
 import { SKINS } from "../explainers/people";
 import { DUR, EASE, Kinetic, pop, Tag, tween, useSeconds } from "../stories/motion";
@@ -28,12 +28,12 @@ const MENU: { icon: IconName; label: string }[] = [
 ];
 
 const ESTUDANTES = [
-  { x: 470, y: 790, scale: 1.0, skin: SKINS[1], hair: "long" as const, hairColor: "#2A1C14", top: "#C94F7C", bottom: "#2E3440", pose: "sit" as const, behind: true, wifiAt: 0.5 },
-  { x: 720, y: 790, scale: 1.0, skin: SKINS[2], hair: "short" as const, hairColor: "#1F1A17", top: "#3F8FD0", bottom: "#3B3F4A", pose: "sit" as const, behind: true, flip: true, wifiAt: 0.8, glasses: true },
-  { x: 1230, y: 790, scale: 1.0, skin: SKINS[4], hair: "bun" as const, hairColor: "#8A5A35", top: "#4FAE84", bottom: "#4B5D78", pose: "sit" as const, behind: true, wifiAt: 1.1 },
-  { x: 1480, y: 790, scale: 1.0, skin: SKINS[0], hair: "curly" as const, hairColor: "#5A3825", top: "#F2B33D", bottom: "#2E3440", pose: "sit" as const, behind: true, flip: true, wifiAt: 1.4 },
-  { x: 250, y: 1000, scale: 1.2, skin: SKINS[3], hair: "short" as const, hairColor: "#1B1410", top: "#E36B4C", bottom: "#2E3440", pose: "phone" as const, wifiAt: 1.7 },
-  { x: 1700, y: 1000, scale: 1.2, skin: SKINS[1], hair: "long" as const, hairColor: "#C99A5B", top: "#6C5CE7", bottom: "#2E3440", pose: "phone" as const, flip: true, wifiAt: 2.0, dress: true },
+  { x: 420, y: 960, scale: 1.16, skin: SKINS[1], hair: "long" as const, hairColor: "#2A1C14", top: "#C94F7C", bottom: "#2E3440", pose: "sit" as const, wifiAt: 0.5 },
+  { x: 760, y: 960, scale: 1.16, skin: SKINS[2], hair: "short" as const, hairColor: "#1F1A17", top: "#3F8FD0", bottom: "#3B3F4A", pose: "sit" as const, flip: true, wifiAt: 0.8, glasses: true },
+  { x: 1180, y: 960, scale: 1.16, skin: SKINS[4], hair: "bun" as const, hairColor: "#8A5A35", top: "#4FAE84", bottom: "#4B5D78", pose: "sit" as const, wifiAt: 1.1 },
+  { x: 1520, y: 960, scale: 1.16, skin: SKINS[0], hair: "curly" as const, hairColor: "#5A3825", top: "#F2B33D", bottom: "#2E3440", pose: "sit" as const, flip: true, wifiAt: 1.4 },
+  { x: 160, y: 1010, scale: 1.2, skin: SKINS[3], hair: "short" as const, hairColor: "#1B1410", top: "#E36B4C", bottom: "#2E3440", pose: "phone" as const, wifiAt: 1.7 },
+  { x: 1780, y: 1010, scale: 1.2, skin: SKINS[1], hair: "long" as const, hairColor: "#C99A5B", top: "#6C5CE7", bottom: "#2E3440", pose: "phone" as const, flip: true, wifiAt: 2.0, dress: true },
 ];
 
 /* capa · o gancho, sem logo ----------------------------------------------- */
@@ -45,13 +45,13 @@ const Hook: React.FC = () => {
       place="library"
       accent={BLUE}
       cast={ESTUDANTES}
-      back={<WallClock x={960} y={420} r={58} h={18} m={10} speed={500} t={t} />}
+      back={<WallClock x={960} y={440} r={54} h={18} m={10} speed={500} t={t} />}
       keys={[
         { t: 0, x: 960, y: 560, z: 1.25 },
         { t: 4, x: 960, y: 540, z: 1.1 },
       ]}
     >
-      <Kinetic lines={["Você sabe em qual horário", "a *biblioteca* da sua faculdade lota?"]} at={0.15} size={74} accent={BLUE} color={INKC} shadow={false} plate="#fff" top={830} />
+      <Kinetic lines={["Você sabe em qual horário", "a *biblioteca* da sua faculdade lota?"]} at={0.15} size={74} accent={BLUE} color={INKC} shadow={false} plate="#fff" top={120} />
     </IllustratedShot>
   );
 };
@@ -250,7 +250,7 @@ const TitleCard: React.FC = () => {
   );
 };
 
-/* 4 · login no portal ------------------------------------------------------- */
+/* o captive portal, no modelo de portal da Wispot ---------------------------- */
 
 const SchoolMark: React.FC<{ size?: number }> = ({ size = 1 }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 14 * size, fontFamily: FONT_FAMILY }}>
@@ -264,75 +264,317 @@ const SchoolMark: React.FC<{ size?: number }> = ({ size = 1 }) => (
   </div>
 );
 
-const LOGIN = { profile: 3.3, typing: 3.8, enter: 5.6 };
-const MATRICULA = "2026 0418";
+const NETWORK = "HORIZONTE_CAMPUS";
+const BAND = "#2A7A92";
+const PORTAL_BG = "linear-gradient(180deg, #EAF5FB 0%, #D5EAF4 38%, #7FB6CE 62%, #2F7FA0 80%, #1F5F7C 100%)";
 
-const PortalLogin: React.FC<{ t: number }> = ({ t }) => {
-  const done = t > LOGIN.enter + 0.15;
+const APPLE = "M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.2.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.5 1.3-2.6 0 0-2.5-1-2.5-3.7zM14.1 5.8c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z";
+const BIRD = "M22 5.9c-.7.3-1.5.5-2.4.6.9-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1-.8-.8-1.8-1.3-3-1.3-2.3 0-4.1 1.8-4.1 4.1 0 .3 0 .6.1.9-3.4-.2-6.4-1.8-8.4-4.3-.4.6-.6 1.3-.6 2.1 0 1.4.7 2.7 1.8 3.4-.7 0-1.3-.2-1.9-.5 0 2 1.4 3.6 3.3 4-.3.1-.7.1-1.1.1-.3 0-.5 0-.8-.1.5 1.6 2 2.8 3.8 2.8-1.4 1.1-3.2 1.8-5.1 1.8H2c1.8 1.2 4 1.8 6.3 1.8 7.5 0 11.7-6.2 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z";
+
+const glyph = (kind: string, color: string) => {
+  if (kind === "apple" || kind === "bird")
+    return (
+      <svg width={18} height={18} viewBox="0 0 24 24">
+        <path d={kind === "apple" ? APPLE : BIRD} fill={color} />
+      </svg>
+    );
+  if (kind === "phone")
+    return (
+      <svg width={14} height={18} viewBox="0 0 14 20">
+        <rect x={1.5} y={1.5} width={11} height={17} rx={2.5} fill="none" stroke={color} strokeWidth={2} />
+      </svg>
+    );
+  return <span style={{ fontWeight: 900, fontSize: kind === "in" ? 16 : 18, width: 18, textAlign: "center", textTransform: "none" }}>{kind}</span>;
+};
+
+const LOGINS = [
+  { label: "Conecte-se com Facebook", bg: "#3B5998", fg: "#fff", icon: "f" },
+  { label: "Conecte-se com Google", bg: "#DB4437", fg: "#fff", icon: "G" },
+  { label: "Conecte-se com LinkedIn", bg: "#1E6DA8", fg: "#fff", icon: "in" },
+  { label: "Conecte-se com Apple", bg: "#1E1E1E", fg: "#fff", icon: "apple" },
+  { label: "Entrar com Twitter", bg: "#1DA1F2", fg: "#fff", icon: "bird" },
+  { label: "Conecte-se com celular", bg: "#FFFFFF", fg: INKC, icon: "phone" },
+];
+
+/** espaço da marca, no lugar do "SUA MARCA" do modelo */
+const BrandBox: React.FC<{ p?: number }> = ({ p = 1 }) => (
+  <div
+    style={{
+      position: "absolute",
+      left: 104,
+      top: 104,
+      width: 320,
+      height: 110,
+      borderRadius: 14,
+      background: "rgba(255,255,255,0.85)",
+      border: "3px solid rgba(120,150,170,0.55)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      transform: `scale(${0.85 + 0.15 * p})`,
+      opacity: p,
+    }}
+  >
+    <SchoolMark size={0.82} />
+  </div>
+);
+
+const Flag: React.FC = () => (
+  <svg width={34} height={34} viewBox="0 0 34 34" style={{ position: "absolute", right: 24, top: 84 }}>
+    <circle cx={17} cy={17} r={16} fill="#2F9E44" stroke="#fff" strokeWidth={2} />
+    <path d="M17 6 L29 17 L17 28 L5 17 Z" fill="#F2C94C" />
+    <circle cx={17} cy={17} r={6.5} fill="#1F4AA8" />
+  </svg>
+);
+
+/** barra do navegador, com o endereço do portal */
+const SafariBar: React.FC = () => (
+  <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 176, background: "rgba(20,70,92,0.92)", fontFamily: FONT_FAMILY }}>
+    <div style={{ position: "absolute", left: 26, right: 26, top: 22, height: 66, borderRadius: 33, background: "rgba(8,40,56,0.8)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 24 }}>
+      app.wispot.com.br
+    </div>
+    <div style={{ position: "absolute", left: 50, right: 50, top: 112, display: "flex", justifyContent: "space-between", color: "rgba(255,255,255,0.75)", fontSize: 30, fontWeight: 700 }}>
+      <span>‹</span>
+      <span>›</span>
+      <span>⇪</span>
+      <span>❐</span>
+      <span>⧉</span>
+    </div>
+  </div>
+);
+
+const TopBand: React.FC<{ color?: string }> = ({ color = BAND }) => <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 64, background: color }} />;
+
+/** o portal: marca da instituição no alto, conteúdo no meio, botões de login e o navegador */
+const PortalScreen: React.FC<{
+  t: number;
+  children?: React.ReactNode;
+  buttons?: boolean;
+  pick?: { index: number; at: number };
+  connectingAt?: number;
+  brandAt?: number;
+}> = ({ t, children, buttons = true, pick, connectingAt, brandAt = -1 }) => {
+  const connecting = connectingAt === undefined ? 0 : tween(t, connectingAt, DUR.quick);
   return (
-    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #EAF1FA 0%, #FFFFFF 40%)", padding: "120px 40px 0", boxSizing: "border-box", fontFamily: FONT_FAMILY }}>
-      <SchoolMark />
-      <div style={{ marginTop: 50, fontWeight: 900, fontSize: 44, color: INKC, letterSpacing: -1, lineHeight: 1.1 }}>Wi-Fi do campus</div>
-      <div style={{ marginTop: 8, fontWeight: 600, fontSize: 22, color: MUTED }}>Entre com o seu perfil</div>
-      <div style={{ marginTop: 34, display: "flex", background: "#EEF1F5", borderRadius: 18, padding: 6 }}>
-        {["Aluno", "Professor", "Visitante"].map((p, i) => {
-          const on = i === 0 && t > LOGIN.profile;
+    <div style={{ position: "absolute", inset: 0, background: PORTAL_BG, fontFamily: FONT_FAMILY, overflow: "hidden" }}>
+      <TopBand />
+      <Flag />
+      <BrandBox p={tween(t, brandAt, DUR.std)} />
+      <div style={{ position: "absolute", left: 32, right: 32, top: 240, bottom: buttons ? 640 : 230 }}>{children}</div>
+      {buttons && (
+        <div style={{ position: "absolute", left: 50, right: 50, top: 488, display: "flex", flexDirection: "column", gap: 11 }}>
+          {LOGINS.map((b, i) => {
+            const on = pick && pick.index === i && t > pick.at;
+            return (
+              <div
+                key={b.label}
+                style={{
+                  height: 54,
+                  borderRadius: 6,
+                  background: b.bg,
+                  color: b.fg,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  padding: "0 18px",
+                  fontWeight: 700,
+                  fontSize: 18,
+                  textTransform: "uppercase",
+                  boxShadow: on ? "0 0 0 4px #fff" : "none",
+                  transform: `scale(${on && t < pick.at + 0.15 ? 0.97 : 1})`,
+                }}
+              >
+                {glyph(b.icon, b.fg)}
+                {b.label}
+                {on && <span style={{ marginLeft: "auto", width: 24, height: 24, borderRadius: 12, background: "#fff", boxShadow: "inset 0 0 0 4px rgba(0,0,0,0.15)" }} />}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {buttons && (
+        <div style={{ position: "absolute", left: 0, right: 0, top: 892, textAlign: "center", fontWeight: 600, fontSize: 17, color: "rgba(255,255,255,0.92)" }}>
+          Termos e Condições, e Política de Privacidade
+        </div>
+      )}
+      <SafariBar />
+      {pick && <Tap x={150} y={488 + pick.index * 65 + 27} at={pick.at} />}
+      {connecting > 0 && (
+        <div style={{ position: "absolute", inset: 0, background: `rgba(16,62,82,${0.62 * connecting})`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18, opacity: connecting }}>
+          <svg width={90} height={90} viewBox="0 0 90 90" style={{ transform: `rotate(${t * 400}deg)` }}>
+            <circle cx={45} cy={45} r={36} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={7} />
+            <path d="M45 9 A36 36 0 0 1 81 45" fill="none" stroke="#fff" strokeWidth={7} strokeLinecap="round" />
+          </svg>
+          <div style={{ fontWeight: 700, fontSize: 26, color: "#fff" }}>Conectando…</div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/** lista de redes do celular, com a rede da faculdade conectando */
+const WifiListScreen: React.FC<{ t: number; tapAt: number }> = ({ t, tapAt }) => {
+  const nets = ["Rede_Convidados", NETWORK, "Rede_Administrativa", "Wi-Fi_Visitantes"];
+  const on = t > tapAt;
+  const open = tween(t, tapAt + 0.3, DUR.std);
+  return (
+    <div style={{ position: "absolute", inset: 0, background: "#EEF1F4", fontFamily: FONT_FAMILY }}>
+      <TopBand />
+      <div style={{ position: "absolute", left: 0, right: 0, top: 64, height: 90, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 34, color: INKC }}>Wi-Fi</div>
+      <div style={{ position: "absolute", left: 22, right: 22, top: 180, display: "flex", flexDirection: "column", gap: 14 }}>
+        {nets.map((n, i) => {
+          const hot = i === 1 && on;
           return (
-            <div key={p} style={{ flex: 1, height: 64, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 22, background: on ? "#14365F" : "transparent", color: on ? "#fff" : INKC }}>
-              {p}
+            <div key={n} style={{ height: 88, borderRadius: 16, background: hot ? "#E6F5FC" : "#fff", border: `3px solid ${hot ? "#2BA6DE" : "transparent"}`, display: "flex", alignItems: "center", padding: "0 22px" }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 800, fontSize: 26, color: hot ? "#1593CC" : INKC }}>{n}</div>
+                <div style={{ fontWeight: 600, fontSize: 17, color: hot ? "#1593CC" : MUTED }}>{hot ? "Conectando…" : "Rede aberta"}</div>
+              </div>
+              {hot ? (
+                <svg width={40} height={40} viewBox="0 0 40 40" style={{ transform: `rotate(${t * 400}deg)` }}>
+                  <circle cx={20} cy={20} r={15} fill="none" stroke="#C9D7E0" strokeWidth={4} />
+                  <path d="M20 5 A15 15 0 0 1 35 20" fill="none" stroke="#1B2430" strokeWidth={4} strokeLinecap="round" />
+                </svg>
+              ) : (
+                <Icon name="wifi" size={34} color="#9AA3AE" stroke={2} />
+              )}
             </div>
           );
         })}
       </div>
-      <div style={{ marginTop: 26, fontWeight: 700, fontSize: 20, color: MUTED }}>Matrícula</div>
-      <div style={{ marginTop: 8, height: 70, borderRadius: 16, border: `3px solid ${t > LOGIN.typing && !done ? "#14365F" : "#D3D9E0"}`, display: "flex", alignItems: "center", padding: "0 20px", fontWeight: 800, fontSize: 30, color: INKC, letterSpacing: 2 }}>
-        {typed(MATRICULA, t, LOGIN.typing, 12)}
+      <Tap x={260} y={180 + 102 + 44} at={tapAt} />
+      <div style={{ position: "absolute", left: 22, right: 22, bottom: 70, height: 100, borderRadius: 16, background: "#fff", padding: "20px 26px", boxSizing: "border-box", opacity: open, transform: `translateY(${(1 - open) * 30}px)` }}>
+        <div style={{ textAlign: "center", fontWeight: 700, fontSize: 22, color: INKC }}>Abrindo portal de acesso</div>
+        <div style={{ marginTop: 14, height: 8, borderRadius: 4, background: "#E3E8EE" }}>
+          <div style={{ width: `${tween(t, tapAt + 0.4, 1.4, EASE.move) * 100}%`, height: "100%", borderRadius: 4, background: "#2BA6DE" }} />
+        </div>
       </div>
-      <div
-        style={{
-          marginTop: 30,
-          height: 80,
-          borderRadius: 18,
-          background: done ? "#2FA37A" : "#14365F",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 900,
-          fontSize: 30,
-          transform: `scale(${t > LOGIN.enter && t < LOGIN.enter + 0.15 ? 0.96 : 1})`,
-        }}
-      >
-        {done ? "✓ Conectado" : "Entrar"}
-      </div>
-      <div style={{ marginTop: 22, fontWeight: 600, fontSize: 17, color: MUTED, lineHeight: 1.4 }}>Ao entrar, você aceita os termos de uso e a política de privacidade (LGPD).</div>
-      <Tap x={95} y={430} at={LOGIN.profile} />
-      <Tap x={264} y={668} at={LOGIN.enter} />
     </div>
   );
 };
+
+/** termos de uso e política de privacidade, antes do portal */
+const TermsScreen: React.FC<{ t: number; checkAt: number; continueAt: number }> = ({ t, checkAt, continueAt }) => {
+  const checked = t > checkAt;
+  return (
+    <div style={{ position: "absolute", inset: 0, background: PORTAL_BG, fontFamily: FONT_FAMILY }}>
+      <TopBand />
+      <div style={{ position: "absolute", left: 24, right: 24, top: 96, height: 600, borderRadius: 6, background: "#fff", padding: "40px 40px 0", boxSizing: "border-box", textAlign: "center" }}>
+        <div style={{ position: "absolute", right: 16, top: 6, fontSize: 40, color: "#5A6470", fontWeight: 300 }}>×</div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <WispotLogo width={250} white={false} />
+        </div>
+        <div style={{ marginTop: 22, fontWeight: 900, fontSize: 21, color: INKC, lineHeight: 1.3 }}>
+          TERMOS DE USO E POLÍTICA
+          <br />
+          DE PRIVACIDADE DA WISPOT
+        </div>
+        <div style={{ marginTop: 12, height: 130, overflow: "hidden", fontWeight: 500, fontSize: 18, lineHeight: 1.45, color: "#2B3440", textAlign: "justify", WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent 100%)" }}>
+          A WISPOT é uma empresa inovadora na área de tecnologia, especializada na criação de soluções através de projetos Wi-Fi, com o objetivo de aproximar os clientes e as corporações.
+        </div>
+        <div style={{ marginTop: 26, display: "flex", gap: 12, textAlign: "left", fontWeight: 500, fontSize: 18, lineHeight: 1.4, color: "#2B3440" }}>
+          <span style={{ flexShrink: 0, width: 26, height: 26, marginTop: 2, borderRadius: 5, border: `2px solid ${checked ? "#2BA6DE" : "#8A94A3"}`, background: checked ? "#2BA6DE" : "#fff", color: "#fff", fontSize: 18, fontWeight: 900, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {checked ? "✓" : ""}
+          </span>
+          <span>Declaro que li e estou de acordo com os Termos de Uso e Política de Privacidade do(a) WISPOT</span>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          left: 120,
+          right: 120,
+          top: 750,
+          height: 60,
+          borderRadius: 4,
+          background: checked ? "#2BA6DE" : "rgba(220,226,232,0.9)",
+          color: checked ? "#fff" : "#7A8591",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontWeight: 800,
+          fontSize: 20,
+          transform: `scale(${t > continueAt && t < continueAt + 0.15 ? 0.96 : 1})`,
+        }}
+      >
+        → CONTINUE
+      </div>
+      <SafariBar />
+      <Tap x={77} y={516} at={checkAt} />
+      <Tap x={264} y={780} at={continueAt} />
+    </div>
+  );
+};
+
+/** a tela de conectado, no modelo */
+const ConnectedScreen: React.FC<{ t: number; at: number }> = ({ t, at }) => {
+  const p = pop(t, at);
+  return (
+    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #2BA6DE 0%, #1592CB 100%)", fontFamily: FONT_FAMILY, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ position: "relative", width: 330, height: 330, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {[330, 250, 180].map((d, i) => (
+          <div key={d} style={{ position: "absolute", width: d, height: d, borderRadius: d, border: "2px solid rgba(255,255,255,0.85)", transform: `scale(${Math.max(0, pop(t, at + i * 0.08))})` }} />
+        ))}
+        <div style={{ width: 130, height: 130, borderRadius: 65, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${Math.max(0, p)})` }}>
+          <svg width={70} height={70} viewBox="0 0 24 24">
+            <path d="M5 12.5 L10 17 L19 7" fill="none" stroke="#2BA6DE" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
+      <div style={{ marginTop: -40, fontWeight: 900, fontSize: 40, color: "#fff", opacity: tween(t, at + 0.15, DUR.std) }}>CONECTADO!</div>
+      <div style={{ marginTop: 4, fontWeight: 700, fontSize: 20, color: "rgba(255,255,255,0.9)", letterSpacing: 1, opacity: tween(t, at + 0.2, DUR.std) }}>{NETWORK}</div>
+    </div>
+  );
+};
+
+/** troca de tela no celular: a nova entra por cima, deslizando de leve */
+const Swap: React.FC<{ t: number; at: number; children: React.ReactNode }> = ({ t, at, children }) => {
+  const p = tween(t, at, DUR.std);
+  if (p <= 0) return null;
+  return <div style={{ position: "absolute", inset: 0, opacity: p, transform: `translateY(${(1 - p) * 40}px)` }}>{children}</div>;
+};
+
+/* 4 · login no portal ------------------------------------------------------- */
+
+const LOGIN = { network: 2.0, terms: 2.7, check: 3.7, cont: 4.3, portal: 4.6, brand: 4.9, pick: 6.4, connecting: 6.7, done: 7.3 };
+
+const STEPS = [
+  { n: "1", label: "Escolhe a rede da faculdade", at: 1.7 },
+  { n: "2", label: "Aceita os termos", at: 3.6 },
+  { n: "3", label: "Entra pelo portal da marca", at: 4.8 },
+];
 
 const Login: React.FC = () => {
   const t = useSeconds();
   const phone = tween(t, 0.1, DUR.slow);
   return (
-    <SoftBg accent={BLUE}>
-      <Phone left={250} top={60 + (1 - phone) * 80} scale={0.84} style={{ transform: "scale(0.84)", opacity: phone }}>
-        <PortalLogin t={t} />
+    <NavyBg>
+      <Phone left={250} top={60 + (1 - phone) * 80} scale={0.84} darkStatus={false} style={{ transform: "scale(0.84)", opacity: phone }}>
+        <WifiListScreen t={t} tapAt={LOGIN.network} />
+        <Swap t={t} at={LOGIN.terms}>
+          <TermsScreen t={t} checkAt={LOGIN.check} continueAt={LOGIN.cont} />
+        </Swap>
+        <Swap t={t} at={LOGIN.portal}>
+          <PortalScreen t={t} brandAt={LOGIN.brand} pick={{ index: 1, at: LOGIN.pick }} connectingAt={LOGIN.connecting} />
+        </Swap>
+        <Swap t={t} at={LOGIN.done}>
+          <ConnectedScreen t={t} at={LOGIN.done + 0.05} />
+        </Swap>
       </Phone>
-      <Tag text="1 · Login no portal" at={0.2} accent={BLUE} left={980} top={250} />
-      <Kinetic lines={["Login *identificado*", "por perfil."]} at={0.6} size={92} accent={BLUE} color={INKC} shadow={false} align="left" left={980} top={330} width={900} />
-      <div style={{ position: "absolute", left: 980, top: 600, display: "flex", gap: 14, fontFamily: FONT_FAMILY }}>
-        {["Marca da faculdade", "Aluno · Professor · Visitante"].map((c, i) => {
-          const p = tween(t, 2.2 + i * 0.5, DUR.std);
+      <Tag text="1 · Login no portal" at={0.2} accent="#fff" dark left={980} top={230} />
+      <Kinetic lines={["Tudo começa", "no *login*."]} at={0.3} size={92} accent={BLUE} align="left" left={980} top={300} width={900} />
+      <div style={{ position: "absolute", left: 980, top: 560, display: "flex", flexDirection: "column", gap: 16, fontFamily: FONT_FAMILY }}>
+        {STEPS.map((s) => {
+          const p = tween(t, s.at, DUR.std);
           return (
-            <span key={c} style={{ padding: "12px 24px", borderRadius: 999, background: "#fff", color: INKC, fontWeight: 800, fontSize: 26, boxShadow: "0 10px 24px rgba(0,0,0,0.08)", opacity: p, transform: `translateY(${(1 - p) * 16}px)` }}>
-              {c}
-            </span>
+            <div key={s.n} style={{ display: "flex", alignItems: "center", gap: 18, opacity: p, transform: `translateX(${(1 - p) * 30}px)` }}>
+              <span style={{ width: 54, height: 54, borderRadius: 27, background: "#fff", color: BLUE, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 28 }}>{s.n}</span>
+              <span style={{ fontWeight: 800, fontSize: 36, color: "#fff" }}>{s.label}</span>
+            </div>
           );
         })}
       </div>
-    </SoftBg>
+    </NavyBg>
   );
 };
 
@@ -344,58 +586,51 @@ const NOTICES: { icon: IconName; kicker: string; text: string; at: number; hot?:
   { icon: "book", kicker: "Semana de provas", text: "Biblioteca aberta até 22h", at: 3.9, hot: true },
 ];
 
-const PortalHome: React.FC<{ t: number }> = ({ t }) => (
-  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #14365F 0%, #14365F 300px, #F4F6F9 300px)", padding: "110px 34px 0", boxSizing: "border-box", fontFamily: FONT_FAMILY }}>
-    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <div style={{ width: 54, height: 54, borderRadius: 16, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Icon name="cap" size={36} color="#14365F" stroke={2} />
-      </div>
-      <div style={{ fontWeight: 900, fontSize: 26, color: "#fff" }}>Faculdade Horizonte</div>
-    </div>
-    <div style={{ marginTop: 26, fontWeight: 900, fontSize: 40, color: "#fff", letterSpacing: -1 }}>Olá, Júlia!</div>
-    <div style={{ marginTop: 4, fontWeight: 600, fontSize: 20, color: "rgba(255,255,255,0.8)" }}>Você está conectada ao Wi-Fi do campus.</div>
-    <div style={{ marginTop: 60, display: "flex", flexDirection: "column", gap: 18 }}>
-      {NOTICES.map((n) => {
-        const p = tween(t, n.at, DUR.std);
-        return (
-          <div
-            key={n.text}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-              padding: "20px 20px",
-              borderRadius: 22,
-              background: n.hot ? "#FFF6DD" : "#fff",
-              border: `3px solid ${n.hot ? "#F2B33D" : "transparent"}`,
-              boxShadow: "0 10px 24px rgba(0,0,0,0.08)",
-              opacity: p,
-              transform: `translateY(${(1 - p) * 30}px)`,
-            }}
-          >
-            <div style={{ width: 58, height: 58, borderRadius: 16, background: n.hot ? "#F2B33D" : "#E6F5FC", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Icon name={n.icon} size={34} color={n.hot ? "#fff" : BLUE} stroke={2.2} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: 18, color: n.hot ? "#B07A00" : MUTED, textTransform: "uppercase", letterSpacing: 1 }}>{n.kicker}</div>
-              <div style={{ fontWeight: 800, fontSize: 24, color: INKC }}>{n.text}</div>
-            </div>
+const NoticeCards: React.FC<{ t: number }> = ({ t }) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: FONT_FAMILY }}>
+    {NOTICES.map((n) => {
+      const p = tween(t, n.at, DUR.std);
+      return (
+        <div
+          key={n.text}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            height: 70,
+            padding: "0 14px",
+            borderRadius: 14,
+            background: n.hot ? "#FFF6DD" : "#fff",
+            border: `3px solid ${n.hot ? "#F2B33D" : "transparent"}`,
+            boxShadow: "0 8px 18px rgba(16,60,90,0.12)",
+            opacity: p,
+            transform: `translateY(${(1 - p) * 24}px)`,
+          }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: n.hot ? "#F2B33D" : "#E6F5FC", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <Icon name={n.icon} size={26} color={n.hot ? "#fff" : BLUE} stroke={2.2} />
           </div>
-        );
-      })}
-    </div>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 14, color: n.hot ? "#B07A00" : MUTED, textTransform: "uppercase", letterSpacing: 1 }}>{n.kicker}</div>
+            <div style={{ fontWeight: 800, fontSize: 19, color: INKC }}>{n.text}</div>
+          </div>
+        </div>
+      );
+    })}
   </div>
 );
 
 const Notices: React.FC = () => {
   const t = useSeconds();
   return (
-    <SoftBg accent={BLUE}>
-      <Phone left={250} top={60} scale={0.84} style={{ transform: "scale(0.84)" }}>
-        <PortalHome t={t} />
+    <NavyBg>
+      <Phone left={250} top={60} scale={0.84} darkStatus={false} style={{ transform: "scale(0.84)" }}>
+        <PortalScreen t={t}>
+          <NoticeCards t={t} />
+        </PortalScreen>
       </Phone>
-      <Kinetic lines={["A página de acesso", "também *comunica*."]} at={0.4} size={88} accent={BLUE} color={INKC} shadow={false} align="left" left={980} top={360} width={900} />
-    </SoftBg>
+      <Kinetic lines={["A página de acesso", "também *comunica*."]} at={0.4} size={88} accent={BLUE} align="left" left={980} top={360} width={900} />
+    </NavyBg>
   );
 };
 
@@ -746,23 +981,37 @@ const HeatDay: React.FC = () => {
 const OPTIONS = ["Mais tomadas", "Mais horário", "Silêncio", "Wi-Fi mais rápido"];
 const VOTE_AT = 2.4;
 
-const SurveyScreen: React.FC<{ t: number }> = ({ t }) => (
-  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #FFF1E6 0%, #FFFFFF 40%)", padding: "120px 40px 0", boxSizing: "border-box", fontFamily: FONT_FAMILY }}>
-    <SchoolMark size={0.8} />
-    <div style={{ marginTop: 44, fontWeight: 800, fontSize: 20, color: "#F46904", letterSpacing: 1 }}>PESQUISA RÁPIDA · BIBLIOTECA</div>
-    <div style={{ marginTop: 14, fontWeight: 900, fontSize: 42, lineHeight: 1.12, color: INKC, letterSpacing: -1 }}>O que falta na biblioteca à noite?</div>
-    <div style={{ marginTop: 34, display: "flex", flexDirection: "column", gap: 14 }}>
+/** a pesquisa aparece no próprio portal, depois de conectar */
+const SurveyCard: React.FC<{ t: number }> = ({ t }) => (
+  <div style={{ background: "#fff", borderRadius: 16, padding: "26px 24px", boxShadow: "0 12px 26px rgba(16,60,90,0.16)", fontFamily: FONT_FAMILY }}>
+    <div style={{ fontWeight: 800, fontSize: 17, color: "#F46904", letterSpacing: 1 }}>PESQUISA RÁPIDA · BIBLIOTECA</div>
+    <div style={{ marginTop: 10, fontWeight: 900, fontSize: 32, lineHeight: 1.12, color: INKC, letterSpacing: -0.5 }}>O que falta na biblioteca à noite?</div>
+    <div style={{ marginTop: 22, display: "flex", flexDirection: "column", gap: 11 }}>
       {OPTIONS.map((o, i) => {
         const on = i === 0 && t > VOTE_AT;
         return (
-          <div key={o} style={{ height: 76, borderRadius: 18, border: `3px solid ${on ? "#F46904" : "#E7D9CF"}`, background: on ? "#F46904" : "#fff", display: "flex", alignItems: "center", padding: "0 24px", fontWeight: 800, fontSize: 26, color: on ? "#fff" : INKC }}>
+          <div
+            key={o}
+            style={{
+              height: 58,
+              borderRadius: 6,
+              background: on ? "#F46904" : "#F1F4F7",
+              color: on ? "#fff" : INKC,
+              display: "flex",
+              alignItems: "center",
+              padding: "0 18px",
+              fontWeight: 700,
+              fontSize: 19,
+              textTransform: "uppercase",
+              boxShadow: on ? "0 0 0 4px #fff, 0 0 0 6px #F46904" : "none",
+            }}
+          >
             {on ? "✓ " : ""}
             {o}
           </div>
         );
       })}
     </div>
-    <Tap x={240} y={477} at={VOTE_AT} />
   </div>
 );
 
@@ -770,16 +1019,19 @@ const Survey: React.FC = () => {
   const t = useSeconds();
   const logo = pop(t, 0.6);
   return (
-    <SoftBg accent="#F46904">
-      <Phone left={250} top={60} scale={0.84} style={{ transform: "scale(0.84)" }}>
-        <SurveyScreen t={t} />
+    <NavyBg>
+      <Phone left={250} top={60} scale={0.84} darkStatus={false} style={{ transform: "scale(0.84)" }}>
+        <PortalScreen t={t} buttons={false}>
+          <SurveyCard t={t} />
+          <Tap x={180} y={228 + 29} at={VOTE_AT} />
+        </PortalScreen>
       </Phone>
+      <Tag text="4 · Pesquisa pelo Wi-Fi" at={0.2} accent="#fff" dark left={980} top={150} />
       <div style={{ position: "absolute", left: 980, top: 230, transform: `scale(${Math.max(0, logo)})`, transformOrigin: "left center" }}>
-        <ProductLogo id="wiquest" height={84} />
+        <ProductLogo id="wiquest" white height={84} />
       </div>
-      <Tag text="4 · Pesquisa pelo Wi-Fi" at={0.2} accent="#F46904" left={980} top={150} />
-      <Kinetic lines={["Pergunte *direto*", "pelo Wi-Fi."]} at={1.0} size={92} accent="#F46904" color={INKC} shadow={false} align="left" left={980} top={370} width={900} />
-    </SoftBg>
+      <Kinetic lines={["Pergunte *direto*", "pelo Wi-Fi."]} at={1.0} size={92} accent="#F46904" align="left" left={980} top={370} width={900} />
+    </NavyBg>
   );
 };
 
@@ -986,7 +1238,7 @@ export const PAINEL_BEATS: Beat[] = fitBeats("painel", [
   { key: "1", seconds: 5.5, cut: "zoom", node: <Traditional /> },
   { key: "2", seconds: 6.0, cut: "flash", node: <Turn /> },
   { key: "3", seconds: 2.6, cut: "zoom", node: <TitleCard /> },
-  { key: "4", seconds: 6.5, cut: "whip", node: <Login /> },
+  { key: "4", seconds: 8.0, cut: "whip", node: <Login /> },
   { key: "5", seconds: 5.5, cut: "whip", node: <Notices /> },
   { key: "6", seconds: 6.0, cut: "zoom", node: <Profiles /> },
   { key: "7", seconds: 4.0, cut: "whip", node: <Hours /> },

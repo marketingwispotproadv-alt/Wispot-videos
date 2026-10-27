@@ -573,9 +573,25 @@ export const Backdrop: React.FC<{ place: Place; accent: string; sign?: string }>
           <Txt x={960} y={108} size={38} color="#fff" ls={8}>
             {sign === "SUA LOJA" ? "BIBLIOTECA" : sign}
           </Txt>
-          <WifiSign x={960} y={590} color={accent} />
+          <WifiSign x={960} y={600} color={accent} />
           <PendantLamp x={590} y={0} color="#2F3640" len={520} />
           <PendantLamp x={1350} y={0} color="#2F3640" len={520} />
+          {/* mesas de estudo ao fundo, com notebooks e luminárias; os alunos sentam na frente */}
+          {[590, 1350].map((x) => (
+            <g key={x}>
+              <rect x={x - 260} y={770} width={520} height={20} rx={6} fill="#B58F64" />
+              <rect x={x - 240} y={790} width={14} height={70} fill="#8A6A48" />
+              <rect x={x + 226} y={790} width={14} height={70} fill="#8A6A48" />
+              <rect x={x - 160} y={728} width={100} height={42} rx={4} fill="#3B4048" />
+              <rect x={x + 60} y={728} width={100} height={42} rx={4} fill="#3B4048" />
+              <rect x={x - 3} y={700} width={6} height={70} fill="#2F3640" />
+              <path d={`M${x - 28} 708 L${x + 28} 708 L${x + 16} 680 L${x - 16} 680 Z`} fill="#F2B33D" />
+            </g>
+          ))}
+          <Chair x={420} y={960} color="#5B6B85" />
+          <Chair x={760} y={960} color="#5B6B85" flip />
+          <Chair x={1180} y={960} color="#5B6B85" />
+          <Chair x={1520} y={960} color="#5B6B85" flip />
         </g>
       );
     case "restaurant":
@@ -604,23 +620,6 @@ export const Backdrop: React.FC<{ place: Place; accent: string; sign?: string }>
 
 /** o que fica na frente de quem trabalha atrás do balcão */
 export const Front: React.FC<{ place: Place }> = ({ place }) => {
-  if (place === "library")
-    return (
-      <g>
-        {/* mesas de estudo com notebooks e luminárias */}
-        {[590, 1350].map((x) => (
-          <g key={x}>
-            <rect x={x - 250} y={800} width={500} height={22} rx={6} fill="#B58F64" />
-            <rect x={x - 230} y={822} width={14} height={130} fill="#8A6A48" />
-            <rect x={x + 216} y={822} width={14} height={130} fill="#8A6A48" />
-            <rect x={x - 150} y={756} width={110} height={44} rx={4} fill="#3B4048" />
-            <rect x={x + 40} y={756} width={110} height={44} rx={4} fill="#3B4048" />
-            <rect x={x - 8} y={720} width={6} height={80} fill="#2F3640" />
-            <path d={`M${x - 34} ${730} L${x + 22} ${730} L${x + 10} ${700} L${x - 22} ${700} Z`} fill="#F2B33D" />
-          </g>
-        ))}
-      </g>
-    );
   if (place === "hotel") return <Counter x={1040} y={640} w={580} h={220} color="#3E5873" topColor="#2D4257" />;
   if (place === "cafe")
     return (
