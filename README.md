@@ -24,6 +24,7 @@ Projeto [Remotion](https://remotion.dev) para as peças de vídeo da Wispot.
 | `HistoriaSending` | 1920×1080 | ~35 s | História "A cliente que sumiu" (cafeterias) |
 | `HistoriaWimap` | 1920×1080 | ~35 s | História "O mistério da vitrine" (shoppings) |
 | `HistoriaWiquest` | 1920×1080 | ~35 s | História "A estrela que faltava" (restaurantes) |
+| `PainelWispot` | 1920×1080 | ~1min30 | "Por dentro do painel Wispot", o vídeo do post sobre gestão de conectividade em escolas e faculdades |
 
 ## Comandos
 
@@ -316,3 +317,23 @@ serviço oficial. Para uso comercial, as mesmas vozes estão no Azure Speech
 `pf_dora`), um modelo aberto que roda sem internet, mas soa mais robótico. Para
 trocar por um locutor de verdade, basta gravar os MP3 com os mesmos nomes e
 atualizar as durações em `narracao-tempos.json`.
+
+## Por dentro do painel Wispot
+
+O vídeo pedido na pauta do post de blog "Gestão de conectividade em escolas e
+faculdades", feito em motion graphics em vez de gravação de tela
+(`src/painel/PainelWispot.tsx`, composição `PainelWispot`, render em
+`renders/painel/`). Segue a pauta: abre com a pergunta "Você sabe em qual
+horário a biblioteca da sua faculdade lota?", sem logo, e mostra o login no
+portal, o painel de conexões por horário, o mapa de calor por espaço (WiMap)
+e uma pesquisa disparada pelo Wi-Fi (WiQuest), fechando com a comparação Wi-Fi
+tradicional × inteligente, os números da base Wispot e a chamada para a
+demonstração.
+
+A faculdade (Faculdade Horizonte) e os números das telas são de exemplo. Os
+números de fechamento (+30 mi usuários, +10 mi conexões por dia, +20 mil
+pontos de acesso) vêm do post, que pede para conferir se seguem atuais. A
+narração usa a mesma voz das histórias (chave `painel` em
+`src/stories/narracao.json`); para gerar só ela, `python3 scripts/narracao.py
+painel`. Como as histórias, o vídeo usa `NarratedVideo`, de
+`src/stories/story-kit.tsx`.
