@@ -3,7 +3,8 @@ Gera a narração das histórias a partir de src/stories/narracao.json.
 
     pip install edge-tts soundfile numpy   # motor "edge"
     pip install kokoro-onnx                # motor "kokoro", além dos de cima
-    python3 scripts/narracao.py
+    python3 scripts/narracao.py            # todas as narrações
+    python3 scripts/narracao.py painel     # só as que forem nomeadas
 
 O campo "motor" do roteiro escolhe a voz:
 
@@ -32,6 +33,7 @@ import os
 import re
 import ssl
 import subprocess
+import sys
 import tempfile
 import time
 import urllib.request
@@ -143,9 +145,10 @@ def main():
     say = edge(voice, speed) if script.get("motor", "kokoro") == "edge" else kokoro(voice, speed)
     words = script.get("pronuncia", {})
     cache: dict[str, np.ndarray] = {}
-    times: dict[str, dict[str, float]] = {}
+    only = set(sys.argv[1:])
+    times: dict[str, dict[str, float]] = json.loads(TIMES.read_text()) if only and TIMES.exists() else {}
     for story, lines in script.items():
-        if not isinstance(lines, dict) or "planos" not in lines:
+        if not isinstance(lines, dict) or "planos" not in lines or (only and story not in only):
             continue
         keys = {"capa": lines["capa"], "fim": lines["fim"], "assinatura": lines["assinatura"]}
         keys.update({str(i): t for i, t in enumerate(lines["planos"])})

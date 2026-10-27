@@ -9,7 +9,9 @@
     "Sending": "Sénding",
     "Wimap": "uimáp",
     "Wiquest": "uiquést",
-    "voucher": "vaucher"
+    "voucher": "vaucher",
+    "WiMap": "uimáp",
+    "WiQuest": "uiquést"
   },
   "horaPremiada": {
     "capa": "Conheça o Hora Premiada.",
@@ -126,5 +128,34 @@
       "Wispot.",
       "Interação e experiência em Wi-Fi."
     ]
+  },
+  "painel": {
+    "capa": "Você sabe em qual horário a biblioteca da sua faculdade lota?",
+    "planos": [
+      "Sala de aula, biblioteca, laboratório, auditório, área de convivência. Cada espaço tem o seu horário de pico.",
+      "Mas, no Wi-Fi tradicional, é uma senha só para todo mundo. E nenhuma informação sobre o uso.",
+      [
+        "Com a",
+        "Wispot.",
+        "O Wi-Fi passa a gerar informação: quem se conectou, quando, onde, e por quanto tempo."
+      ],
+      "Vem ver, por dentro do painel.",
+      "Tudo começa no login. O aluno entra pela página de acesso, com a marca da faculdade, e se identifica pelo perfil.",
+      "Na mesma página, a instituição já se comunica: avisos, eventos, e a semana de provas.",
+      "Alunos, professores e visitantes, cada um com o seu acesso. E tudo registrado, de acordo com a LGPD.",
+      "No painel, as conexões do campus aparecem hora a hora.",
+      "Filtrando a biblioteca, a resposta aparece: o pico é às sete da noite.",
+      "Com o WiMap, o mapa de calor mostra cada espaço do campus ao longo do dia.",
+      "De manhã, as salas de aula. No intervalo, a convivência. À noite, a biblioteca.",
+      "E com a WiQuest, a faculdade pergunta direto pelo Wi-Fi.",
+      "As respostas chegam ao painel em tempo real.",
+      "Com os dados da própria rede, a decisão deixa de ser baseada em reclamação.",
+      "Biblioteca aberta até mais tarde, mais tomadas, e a rede reforçada no horário certo."
+    ],
+    "fim": [
+      "Wispot.",
+      "Transformando conectividade em inteligência para a educação."
+    ],
+    "assinatura": "Quer ver isso na sua instituição? Agende uma demonstração."
   }
 }

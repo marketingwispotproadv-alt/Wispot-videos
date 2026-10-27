@@ -16,7 +16,8 @@ import { myGuestExplainer } from "./explainers/ExMyGuest";
 import { sendingExplainer } from "./explainers/ExSending";
 import { wimapExplainer } from "./explainers/ExWimap";
 import { wiquestExplainer } from "./explainers/ExWiquest";
-import { StoryConfig, StoryVideo, storyFrames } from "./stories/story-kit";
+import { beatFrames, NarratedVideo, StoryConfig, StoryVideo, storyFrames } from "./stories/story-kit";
+import { PAINEL_BEATS } from "./painel/PainelWispot";
 import { horaPremiadaStory } from "./stories/StoryHoraPremiada";
 import { myGuestStory } from "./stories/StoryMyGuest";
 import { sendingStory } from "./stories/StorySending";
@@ -34,6 +35,8 @@ const STORIES = [
   ...d,
   component: () => <StoryVideo config={d.config} />,
 }));
+
+const PainelWispot = () => <NarratedVideo narration="painel" beats={PAINEL_BEATS} />;
 
 /** Explainers 16:9 no estilo do institucional antigo da Wispot. */
 const EXPLAINERS = [
@@ -129,6 +132,15 @@ export const RemotionRoot: React.FC = () => {
           height={1080}
         />
       ))}
+      {/* "Por dentro do painel Wispot": o vídeo do post de blog sobre gestão de conectividade */}
+      <Composition
+        id="PainelWispot"
+        component={PainelWispot}
+        durationInFrames={beatFrames(PAINEL_BEATS, VIDEO.fps)}
+        fps={VIDEO.fps}
+        width={1920}
+        height={1080}
+      />
     </>
   );
 };

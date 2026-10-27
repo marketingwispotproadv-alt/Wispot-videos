@@ -46,34 +46,43 @@ const SIGN_OFF_SECONDS = 4.4;
 const VO_LEAD = 0.2;
 const VO_TAIL = 0.45;
 
-type Beat = { key: string; seconds: number; cut?: CutKind; node: React.ReactNode };
+export type Beat = { key: string; seconds: number; cut?: CutKind; node: React.ReactNode };
 
-/** planos da história com capa, fechamento e assinatura, já esticados para caber a fala */
-const beats = (c: StoryConfig): Beat[] => {
-  const vo = TEMPOS[c.narration] as Record<string, number>;
-  const fit = (key: string, seconds: number) => Math.max(seconds, VO_LEAD + (vo[key] ?? 0) + VO_TAIL);
-  return [
-    { key: "capa", seconds: fit("capa", COVER_SECONDS), node: <OpeningCover c={c} /> },
-    ...c.shots.map((s, i) => ({ key: String(i), seconds: fit(String(i), s.seconds), cut: s.cut, node: s.node })),
-    { key: "fim", seconds: fit("fim", END_SECONDS), cut: "zoom" as CutKind, node: <EndShot c={c} /> },
-    { key: "assinatura", seconds: fit("assinatura", SIGN_OFF_SECONDS), cut: "whip" as CutKind, node: <ClosingCover c={c} /> },
-  ];
+/** estica cada plano para caber a fala dele (chave do plano em narracao-tempos.json) */
+export const fitBeats = (narration: NarrationKey, list: Beat[]): Beat[] => {
+  const vo = TEMPOS[narration] as Record<string, number>;
+  return list.map((b) => ({ ...b, seconds: Math.max(b.seconds, VO_LEAD + (vo[b.key] ?? 0) + VO_TAIL) }));
 };
 
-export const storyFrames = (c: StoryConfig, fps: number) =>
-  beats(c).reduce((a, b) => a + Math.round(b.seconds * fps), 0) - (beats(c).length - 1) * CUT_FRAMES;
+export const beatFrames = (list: Beat[], fps: number) => list.reduce((a, b) => a + Math.round(b.seconds * fps), 0) - (list.length - 1) * CUT_FRAMES;
 
-export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => {
+/** planos da história com capa, fechamento e assinatura, já esticados para caber a fala */
+const beats = (c: StoryConfig): Beat[] =>
+  fitBeats(c.narration, [
+    { key: "capa", seconds: COVER_SECONDS, node: <OpeningCover c={c} /> },
+    ...c.shots.map((s, i) => ({ key: String(i), seconds: s.seconds, cut: s.cut, node: s.node })),
+    { key: "fim", seconds: END_SECONDS, cut: "zoom", node: <EndShot c={c} /> },
+    { key: "assinatura", seconds: SIGN_OFF_SECONDS, cut: "whip", node: <ClosingCover c={c} /> },
+  ]);
+
+export const storyFrames = (c: StoryConfig, fps: number) => beatFrames(beats(c), fps);
+
+/**
+ * Vídeo narrado: os planos em sequência com as emendas, a fala de cada plano
+ * entrando logo depois do corte e a trilha baixa por baixo. Nos vídeos
+ * narrados, o símbolo de Wi-Fi das ilustrações é o da Wispot.
+ */
+export const NarratedVideo: React.FC<{ narration: NarrationKey; beats: Beat[] }> = ({ narration, beats: list }) => {
   const { fps } = useVideoConfig();
-  const total = storyFrames(c, fps);
+  const total = beatFrames(list, fps);
   const items: React.ReactNode[] = [];
-  beats(c).forEach((b, i) => {
+  list.forEach((b, i) => {
     if (i) items.push(<TransitionSeries.Transition key={`t${i}`} presentation={cut(b.cut ?? "whip")} timing={linearTiming({ durationInFrames: CUT_FRAMES })} />);
     items.push(
       <TransitionSeries.Sequence key={b.key} durationInFrames={Math.round(b.seconds * fps)}>
         {b.node}
         <Sequence from={Math.round(VO_LEAD * fps)} layout="none">
-          <Audio src={staticFile(`audio/narracao/${c.narration}/${b.key}.mp3`)} />
+          <Audio src={staticFile(`audio/narracao/${narration}/${b.key}.mp3`)} />
         </Sequence>
       </TransitionSeries.Sequence>,
     );
@@ -88,6 +97,8 @@ export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => 
     </AbsoluteFill>
   );
 };
+
+export const StoryVideo: React.FC<{ config: StoryConfig }> = ({ config: c }) => <NarratedVideo narration={c.narration} beats={beats(c)} />;
 
 /* ------------------------------------------------------------------ */
 /* Capas                                                               */

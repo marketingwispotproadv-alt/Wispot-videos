@@ -124,6 +124,12 @@ export const Caption: React.FC<{ lines: Line[]; big?: boolean }> = ({ lines, big
 export type IconName =
   | "wifi"
   | "wispot"
+  | "book"
+  | "flask"
+  | "mic"
+  | "coffee"
+  | "board"
+  | "cap"
   | "dollar"
   | "chart"
   | "ticket"
@@ -164,6 +170,42 @@ export const Icon: React.FC<{ name: IconName; size: number; color?: string; stro
         width={22}
         height={22 / (1315 / 839)}
       />
+    ),
+    book: (
+      <>
+        <path d="M12 6.5 C10 5 7 4.5 3.5 5 V18.5 C7 18 10 18.5 12 20 C14 18.5 17 18 20.5 18.5 V5 C17 4.5 14 5 12 6.5 Z" {...s} />
+        <path d="M12 6.5 V20" {...s} />
+      </>
+    ),
+    flask: (
+      <>
+        <path d="M9.5 3.5 H14.5 M10.5 3.5 V9.5 L5 18.5 C4.4 19.6 5.1 20.5 6.3 20.5 H17.7 C18.9 20.5 19.6 19.6 19 18.5 L13.5 9.5 V3.5" {...s} />
+        <path d="M7.5 15 H16.5" {...s} />
+      </>
+    ),
+    mic: (
+      <>
+        <rect x={9} y={3} width={6} height={11} rx={3} {...s} />
+        <path d="M5.5 11 A6.5 6.5 0 0 0 18.5 11 M12 17.5 V21 M8.5 21 H15.5" {...s} />
+      </>
+    ),
+    coffee: (
+      <>
+        <path d="M4.5 9 H16.5 V14 A5 5 0 0 1 11.5 19 H9.5 A5 5 0 0 1 4.5 14 Z" {...s} />
+        <path d="M16.5 10.5 H18 A2.5 2.5 0 0 1 18 15.5 H16.5 M8 3.5 V6 M11.5 3.5 V6" {...s} />
+      </>
+    ),
+    board: (
+      <>
+        <rect x={3.5} y={4} width={17} height={12} rx={1.5} {...s} />
+        <path d="M8 20.5 L10 16 M16 20.5 L14 16 M7 8 H13 M7 11.5 H11" {...s} />
+      </>
+    ),
+    cap: (
+      <>
+        <path d="M2.5 9.5 L12 5 L21.5 9.5 L12 14 Z" {...s} />
+        <path d="M6.5 11.5 V16 C8 17.8 10 18.5 12 18.5 C14 18.5 16 17.8 17.5 16 V11.5 M21.5 9.5 V14.5" {...s} />
+      </>
     ),
     wifi: (
       <>
@@ -564,7 +606,8 @@ export const Bullet: React.FC<{ icon: IconName; title: string; text: string; at:
  * Wispot e menu lateral com ícones. O conteúdo ocupa 1080 × 736.
  */
 export const DashboardShell: React.FC<{
-  logo: LogoId;
+  /** produto no canto do cabeçalho; sem ele, só a Wispot */
+  logo?: LogoId;
   menu: { icon: IconName; label: string }[];
   active: number;
   title: string;
@@ -573,7 +616,7 @@ export const DashboardShell: React.FC<{
   <div style={{ position: "absolute", inset: 0, background: "#F2F4F7", fontFamily: FONT_FAMILY }}>
     <div style={{ height: 64, background: NAVY, display: "flex", alignItems: "center", padding: "0 28px", justifyContent: "space-between" }}>
       <WispotLogo width={130} />
-      <ProductLogo id={logo} white height={38} />
+      {logo && <ProductLogo id={logo} white height={38} />}
     </div>
     <div style={{ position: "absolute", top: 64, left: 0, bottom: 0, width: 180, background: "#fff", borderRight: "1px solid #E1E5EB" }}>
       {menu.map((m, i) => (

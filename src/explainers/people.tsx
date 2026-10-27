@@ -404,7 +404,7 @@ export const Luggage: React.FC<{ x: number; y: number; color: string }> = ({ x, 
 /* Cenários                                                             */
 /* ------------------------------------------------------------------ */
 
-export type Place = "store" | "hotel" | "cafe" | "street" | "restaurant";
+export type Place = "store" | "hotel" | "cafe" | "street" | "restaurant" | "library";
 
 export const SKINS = ["#F2C7A5", "#D9A27A", "#A86E4B", "#7A4A30", "#F6D3BC"];
 
@@ -438,6 +438,12 @@ const CAST: Record<Place, Cast[]> = {
     { x: 640, y: 990, scale: 1.16, skin: SKINS[3], hair: "long", hairColor: "#1B1410", top: "#E25D6A", bottom: "#4B5D78", pose: "phone", wifiAt: 1.4, dress: true, flip: true },
     { x: 1500, y: 1000, scale: 1.2, skin: SKINS[1], hair: "bun", hairColor: "#2A1C14", top: "#F2B33D", bottom: "#2E3440", pose: "walk", phase: 1.5, flip: true },
     { x: 1780, y: 1020, scale: 1.24, skin: SKINS[4], hair: "short", hairColor: "#7A4B2A", top: "#2FA37A", bottom: "#3B3F4A", pose: "phone", wifiAt: 2.0, flip: true, glasses: true },
+  ],
+  library: [
+    { x: 420, y: 960, scale: 1.16, skin: SKINS[1], hair: "long", hairColor: "#2A1C14", top: "#C94F7C", bottom: "#2E3440", pose: "sit", wifiAt: 1.0 },
+    { x: 760, y: 960, scale: 1.16, skin: SKINS[2], hair: "short", hairColor: "#1F1A17", top: "#3F8FD0", bottom: "#3B3F4A", pose: "sit", flip: true, wifiAt: 1.3, glasses: true },
+    { x: 1180, y: 960, scale: 1.16, skin: SKINS[4], hair: "bun", hairColor: "#8A5A35", top: "#4FAE84", bottom: "#4B5D78", pose: "sit", wifiAt: 1.6 },
+    { x: 1520, y: 960, scale: 1.16, skin: SKINS[0], hair: "curly", hairColor: "#5A3825", top: "#F2B33D", bottom: "#2E3440", pose: "sit", flip: true, wifiAt: 1.9 },
   ],
   restaurant: [
     { x: 430, y: 960, scale: 1.16, skin: SKINS[1], hair: "long", hairColor: "#2A1C14", top: "#C94F7C", bottom: "#2E3440", pose: "sit", wifiAt: 1.2 },
@@ -552,6 +558,26 @@ export const Backdrop: React.FC<{ place: Place; accent: string; sign?: string }>
           <circle cx={155} cy={590} r={22} fill="#FFE9A8" stroke="#3B4048" strokeWidth={6} />
         </g>
       );
+    case "library":
+      return (
+        <g>
+          <rect width={1920} height={1080} fill="#E9EEF5" />
+          <rect y={860} width={1920} height={220} fill="#C9D3E0" />
+          <rect y={852} width={1920} height={12} fill="#B3BFCF" />
+          <Shelf x={40} y={250} w={360} h={600} colors={["#3F8FD0", "#E25D6A", "#F2B33D", "#4FAE84", "#6C5CE7"]} />
+          <Shelf x={1520} y={250} w={360} h={600} colors={["#F2B33D", "#4FAE84", "#C94F7C", "#3F8FD0", "#E36B4C"]} />
+          <rect x={520} y={170} width={880} height={330} rx={10} fill="#BFE3F5" stroke="#9FB0C4" strokeWidth={10} />
+          <rect x={955} y={170} width={10} height={330} fill="#9FB0C4" />
+          <rect x={520} y={330} width={880} height={10} fill="#9FB0C4" />
+          <rect x={560} y={60} width={800} height={70} rx={12} fill={accent} />
+          <Txt x={960} y={108} size={38} color="#fff" ls={8}>
+            {sign === "SUA LOJA" ? "BIBLIOTECA" : sign}
+          </Txt>
+          <WifiSign x={960} y={590} color={accent} />
+          <PendantLamp x={590} y={0} color="#2F3640" len={520} />
+          <PendantLamp x={1350} y={0} color="#2F3640" len={520} />
+        </g>
+      );
     case "restaurant":
       return (
         <g>
@@ -578,6 +604,23 @@ export const Backdrop: React.FC<{ place: Place; accent: string; sign?: string }>
 
 /** o que fica na frente de quem trabalha atrás do balcão */
 export const Front: React.FC<{ place: Place }> = ({ place }) => {
+  if (place === "library")
+    return (
+      <g>
+        {/* mesas de estudo com notebooks e luminárias */}
+        {[590, 1350].map((x) => (
+          <g key={x}>
+            <rect x={x - 250} y={800} width={500} height={22} rx={6} fill="#B58F64" />
+            <rect x={x - 230} y={822} width={14} height={130} fill="#8A6A48" />
+            <rect x={x + 216} y={822} width={14} height={130} fill="#8A6A48" />
+            <rect x={x - 150} y={756} width={110} height={44} rx={4} fill="#3B4048" />
+            <rect x={x + 40} y={756} width={110} height={44} rx={4} fill="#3B4048" />
+            <rect x={x - 8} y={720} width={6} height={80} fill="#2F3640" />
+            <path d={`M${x - 34} ${730} L${x + 22} ${730} L${x + 10} ${700} L${x - 22} ${700} Z`} fill="#F2B33D" />
+          </g>
+        ))}
+      </g>
+    );
   if (place === "hotel") return <Counter x={1040} y={640} w={580} h={220} color="#3E5873" topColor="#2D4257" />;
   if (place === "cafe")
     return (
