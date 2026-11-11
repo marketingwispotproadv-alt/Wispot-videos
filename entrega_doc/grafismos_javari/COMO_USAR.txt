@@ -1,0 +1,16 @@
+GRAFISMOS DO BLOCO 1 (RUA JAVARI / JUVENTUS) PARA O PREMIERE — sem as fichas de memória
+Sequência: 1920x1080, 29,97 qps. Todos os arquivos já estão nesse formato.
+
+Arquivos *_ALFA.mov = ProRes 4444 com transparência. Arraste para uma trilha de vídeo ACIMA da imagem;
+o grafismo já está na posição certa da tela (não precisa mover nem redimensionar).
+- cartela_javari_ALFA.mov (8 s): cartela do bloco (jornal, bola quicando, carimbo, fechamento em círculo preto no fim).
+  Ponha por cima da fachada da Javari em sépia com grão (no filme usei o IMG_8998). Movimento em 12 qps, de propósito.
+  Som: SOM_cartela_javari.wav (começa junto: boings, carimbo, ruído de projetor).
+- gc_vinicius / gc_regis _ALFA.mov (5 s): GC de nome no terço inferior esquerdo; as versões _dir ficam à direita (usei as _dir no filme).
+- cred_*_ALFA.mov (4 s): créditos das fotos, canto inferior direito.
+
+Arquivo sem ALFA = tela cheia, opaco (ProRes 422 HQ):
+- conceito_halbwachs_javari.mov (6 s): intertítulo de cinema mudo que abre o Intervalo 2.
+
+Os .mov não tocam no navegador: são ProRes, formato de edição. Para assistir, use o PREVIA_grafismos_javari.mp4.
+Se o Premiere mostrar fundo preto num _ALFA: clique direito > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
