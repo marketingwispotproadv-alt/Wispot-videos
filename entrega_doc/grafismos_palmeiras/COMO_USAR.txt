@@ -1,0 +1,16 @@
+GRAFISMOS DO BLOCO 2 (NUBANK PARQUE / PALMEIRAS) PARA O PREMIERE
+Sequência: 1920x1080, 29,97 qps. Todos os arquivos já estão nesse formato.
+
+Arquivos *_ALFA.mov = ProRes 4444 com transparência. Importe e arraste para uma trilha de vídeo ACIMA da imagem;
+o fundo já é transparente e o grafismo já está na posição certa da tela (não precisa mover nem redimensionar).
+- cartela_nubank_ALFA.mov (8 s): cartela do bloco. Ponha por cima do IMG_3184 (close da agulha) escurecido e esverdeado. Som: SOM_cartela_nubank.wav (começa junto).
+- ficha_07 a ficha_12 _ALFA.mov (5,5 s cada): fichas de memória, canto inferior esquerdo. Som opcional: SOM_ficha_nubank.wav.
+- gc_sica / gc_gustavo / gc_porcao _ALFA.mov (5 s): GC de nome no terço inferior esquerdo; as versões _dir ficam à direita
+  (usei as _dir no filme, para não bater com as fichas).
+- cred_*_ALFA.mov (4 s): créditos das fotos da internet, canto inferior direito.
+
+Arquivos sem ALFA = tela cheia, opacos (ProRes 422 HQ):
+- conceito_nora_nubank.mov (6 s): cartela de conceito que abre o Intervalo 3.
+- hino_caderno.mov (9 s): lettering do hino no caderno (DOC_V1 19:50).
+
+Se o Premiere mostrar fundo preto num _ALFA: clique direito no clipe > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
