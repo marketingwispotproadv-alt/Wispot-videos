@@ -1,0 +1,16 @@
+GRAFISMOS DO BLOCO 3 (MORUMBIS / SÃO PAULO) PARA O PREMIERE — sem as fichas de memória
+Sequência: 1920x1080, 29,97 qps. Todos os arquivos já estão nesse formato.
+
+Arquivos *_ALFA.mov = ProRes 4444 com transparência. Arraste para uma trilha de vídeo ACIMA da imagem;
+o grafismo já está na posição certa da tela (não precisa mover nem redimensionar).
+- cartela_morumbis_ALFA.mov (8 s): cartela do bloco (selo, "MorumBIS" em rosa com sombra empilhada, contorno, linha do coração,
+  "MEMÓRIA A DOIS" e a faixa rosa). Ponha por cima de um vídeo do casal desfocado, bem escuro e em tom vinho
+  (no filme usei o IMG_2254). As listras verticais leves já estão no arquivo. Sem som próprio: só a trilha. Termina em corte seco.
+- gc_samara / gc_jonatas / gc_noivos _ALFA.mov (5 s cada): GCs de nome, terço inferior esquerdo
+  (Samara na linha 06, Jonatas na linha 13, os dois como noivos na linha 14).
+
+Arquivo sem ALFA = tela cheia, opaco (ProRes 422 HQ):
+- conceito_halbwachs_morumbis.mov (9 s): a citação do Halbwachs como carta, sobre preto, logo depois da linha 26.
+
+Os .mov não tocam no navegador: são ProRes, formato de edição. Para assistir, use o PREVIA_grafismos_morumbis.mp4.
+Se o Premiere mostrar fundo preto num _ALFA: clique direito > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
