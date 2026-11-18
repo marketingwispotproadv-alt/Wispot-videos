@@ -1,0 +1,19 @@
+TODOS OS GCs DE NOME DO DOCUMENTÁRIO, PARA O PREMIERE
+Sequência: 1920x1080, 29,97 qps. ProRes 4444 com transparência, 5 s cada (já com entrada e saída animadas).
+Arraste para uma trilha de vídeo ACIMA da imagem; o GC já está na posição certa (terço inferior), sem mover nem redimensionar.
+
+Sem sufixo = terço inferior ESQUERDO.  _dir = terço inferior DIREITO (para quando há ficha de memória à esquerda).
+
+gc_barbara    Bárbara Heller / pesquisadora de memória              (só no Intervalo 1)
+gc_vinicius   Vinícius Lordello / torcedor do Juventus              (+ _dir)
+gc_regis      Régis / pai de Vinícius · torcedor do Juventus        (+ _dir)
+gc_sica       Sica (Simone Carpes) / dona do estúdio de tatuagem    (+ _dir)
+gc_gustavo    Gustavo Gambi / torcedor do Palmeiras                 (+ _dir)
+gc_porcao     Felipe Garcia, o Porcão / torcedor do Palmeiras       (+ _dir)
+gc_samara     Samara / torcedora do São Paulo                       (linha 06)
+gc_jonatas    Jonatas / torcedor do São Paulo                       (linha 13)
+gc_noivos     Jonatas e Samara / Torcedores do São Paulo · noivos   (linha 14)
+
+Para encurtar um GC, corte o meio do clipe e mantenha o começo e o fim (a animação de entrada e de saída).
+Os .mov não tocam no navegador (são ProRes); para assistir, use o PREVIA_gcs.mp4.
+Se aparecer fundo preto: clique direito > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
