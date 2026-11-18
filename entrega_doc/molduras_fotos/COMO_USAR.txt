@@ -1,0 +1,19 @@
+MOLDURAS DE FOTO NO ESTILO DE CADA BLOCO (PNG 1920x1080 com transparência)
+A área da foto é TRANSPARENTE e tudo fora da moldura também. São imagens paradas: servem para qualquer duração.
+
+No Premiere:
+  V1 = fundo (a própria foto ampliada e desfocada, ou vídeo escurecido)
+  V2 = a foto, redimensionada para ficar um pouco MAIOR que a janela (a moldura cobre a sobra)
+  V3 = a moldura (PNG), sem mexer em escala nem posição
+Para a foto "se mexer": anime Escala (ex.: 100% -> 106%) e Posição só na foto (V2); a moldura fica parada.
+Para a moldura entrar animada: aninhe V2+V3 (clique direito > Aninhar) e anime Escala/Rotação/Opacidade do aninhado.
+
+Janela da foto (antes da leve inclinação da moldura):
+  paisagem: x=330, y=120, 1260x760 px        retrato: x=640, y=70, 640x860 px
+Como as molduras são levemente inclinadas (1 a 2 graus), deixe a foto uns 4% maior que a janela.
+
+Arquivos:
+  moldura_javari_paisagem / _retrato            jornal "Diário da Memória", papel rasgado, fita (bloco 1)
+  moldura_nubank_paisagem / _retrato            pichação verde com contorno preto, tinta escorrendo, estrela (bloco 2)
+  moldura_morumbis_rosa_paisagem / _retrato     retrô rosa e vinho com sombra empilhada e coração (bloco 3, identidade original)
+  moldura_morumbis_polaroid_paisagem / _retrato polaroid com fita e listras tricolores (bloco 3, identidade alternativa)
