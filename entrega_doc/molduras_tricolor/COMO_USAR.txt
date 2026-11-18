@@ -1,0 +1,13 @@
+MOLDURAS DE FOTO — ESTILO "ÁLBUM TRICOLOR" (identidade alternativa do MorumBIS)
+PNG 1920x1080 com transparência: a área da foto é transparente e tudo fora da moldura também. Imagens paradas, servem para qualquer duração.
+
+  moldura_tricolor_polaroid_paisagem / _retrato   polaroid com fita, listras tricolores e coração (a mesma da cartela)
+  moldura_tricolor_ingresso_paisagem / _retrato   ingresso: canhoto listrado, picote e cabeçalho "MEMÓRIA A DOIS"
+  moldura_tricolor_colada_paisagem / _retrato     foto colada com fita nos quatro cantos e etiqueta "MorumBIS" à mão
+  moldura_tricolor_dupla                          duas polaroids lado a lado ligadas por um coração (para duas fotos)
+
+No Premiere: V1 = fundo (foto desfocada/escurecida ou vídeo) · V2 = a foto · V3 = a moldura (sem mexer em escala nem posição).
+Janela da foto (antes da leve inclinação): paisagem x=330, y=120, 1260x760 · retrato x=640, y=70, 640x860
+Dupla: duas janelas de 560x640 — esquerda x=300, y=150 (inclinada -3,5 graus) · direita x=1060, y=190 (inclinada +3 graus).
+Deixe a foto uns 3% maior que a janela; na dupla, gire cada foto no mesmo ângulo da polaroid dela.
+Para a foto se mexer, anime Escala/Posição só na foto (V2). Para a moldura entrar animada, aninhe V2+V3 e anime o aninhado.
