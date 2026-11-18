@@ -1,0 +1,19 @@
+GCs DE NOME NO ESTILO DE CADA BLOCO, PARA O PREMIERE (a Bárbara continua com o GC neutro)
+Sequência: 1920x1080, 29,97 qps. ProRes 4444 com transparência, 5 s cada (entrada e saída animadas).
+Arraste para uma trilha de vídeo ACIMA da imagem; o GC já está na posição certa (terço inferior, a 96 px das bordas).
+
+JAVARI (recorte de jornal com fita, entra girando e quica, sai pela lateral; movimento em 12 qps de propósito)
+  gc_vinicius / gc_vinicius_dir   Vinícius Lordello / torcedor do Juventus
+  gc_regis / gc_regis_dir         Régis / pai de Vinícius · torcedor do Juventus
+NUBANK PARQUE (pichação: placa verde, nome em marcador se escrevendo, traço amarelo, estrela; o traço "ferve")
+  gc_sica / gc_sica_dir           Sica (Simone Carpes) / dona do estúdio de tatuagem
+  gc_gustavo / gc_gustavo_dir     Gustavo Gambi / torcedor do Palmeiras
+  gc_porcao / gc_porcao_dir       Felipe Garcia, o Porcão / torcedor do Palmeiras
+MORUMBIS (retrô rosa e vinho: nome em Pacifico com sombra empilhada, linha branca que fecha um coração)
+  gc_samara   Samara / torcedora do São Paulo
+  gc_jonatas  Jonatas / torcedor do São Paulo
+  gc_noivos   Jonatas e Samara / Torcedores do São Paulo · noivos
+
+Sem sufixo = terço inferior ESQUERDO.  _dir = terço inferior DIREITO.
+Os .mov não tocam no navegador (são ProRes); para assistir, use o PREVIA_gcs_estilizados.mp4.
+Se aparecer fundo preto: clique direito > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
