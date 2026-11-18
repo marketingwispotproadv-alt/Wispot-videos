@@ -1,0 +1,15 @@
+MORUMBIS — IDENTIDADE VISUAL ALTERNATIVA: "ÁLBUM TRICOLOR" (polaroid + ingresso + bilhete à mão)
+Cores: vermelho #D7141A, preto #141414, papel #F6F1E7, listras tricolores. Fontes (Google Fonts, gratuitas): Caveat (escrita à mão),
+Bebas Neue (títulos de ingresso), Special Elite (máquina de escrever).
+Sequência: 1920x1080, 29,97 qps. Arquivos _ALFA = ProRes 4444 com transparência, já na posição certa da tela.
+
+- ALT_cartela_morumbis_ALFA.mov (8 s): ingresso "Lugar de memória nº 3 · desde 1960" entra pela esquerda; uma polaroid cai e quica;
+  "MorumBIS" é escrito à mão em vermelho e a caneta fecha um coração; "MEMÓRIA A DOIS" carimba letra a letra;
+  a frase "O lugar que os dois escolheram para o pedido." é datilografada numa tira de papel; termina com um FLASH branco (como foto tirada).
+  A JANELA DA POLAROID É TRANSPARENTE: ponha por baixo o vídeo do casal (enquadre os dois na área da foto, à direita). Fica melhor com o fundo um pouco escurecido.
+- ALT_ficha_13 a ALT_ficha_17 _ALFA.mov (5,5 s): fichas de memória como canhoto de ingresso tricolor, canto inferior direito.
+- ALT_gc_samara / ALT_gc_jonatas / ALT_gc_noivos _ALFA.mov (5 s): GCs como etiqueta tricolor, terço inferior esquerdo.
+- ALT_conceito_halbwachs_morumbis.mov (9 s, tela cheia, opaco): a citação do Halbwachs como bilhete escrito à mão num cartão pautado, sobre preto.
+
+Os textos são os mesmos da identidade original (seção 6 do roteiro). Para assistir, use o PREVIA_morumbis_alternativa.mp4.
+Se aparecer fundo preto num _ALFA: clique direito > Modificar > Interpretar gravação > Canal alfa > desmarque "Ignorar canal alfa".
